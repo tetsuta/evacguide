@@ -1,0 +1,35 @@
+
+* todo
+  - 12/8までにデモを作る
+
+* reference
+  
+** 地図の表示には leafletを使う
+   https://leafletjs.com/
+
+   https://ktgis.net/service/leafletlearn/index.html
+
+** DB
+   DBには AWS dynamoDBを使う
+
+** location
+   https://blog.codecamp.jp/javascript-geolocation
+** AR.js
+   https://ar-js-org.github.io/AR.js-Docs/
+
+
+
+
+* Setting
+# ============================================================ #
+#+SEQ_TODO: TODO GOING WAITING PENDING DONE
+#+STARTUP: overview
+#+TAGS: OFFICE(o) CODING(c) RESEARCH(r) MAIL(m) THINK(t)
+#+STARTUP: hidestars
+#+OPTIONS:  num:2 H:5 toc:f TeX:f
+#+LaTeX_CLASS: jarticle
+#+HTML_HEAD: <link rel="stylesheet" type="text/css" href="org.css">
+# ============================================================ #
+   
+* end
+

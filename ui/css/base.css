@@ -1,0 +1,148 @@
+div#container {
+    width:90%;
+    height:100%;
+    margin:0 auto;
+    background:#FFFFFF;
+    /* border-left:#CCCCCC 1px solid; */
+    /* border-right:#CCCCCC 1px solid; */
+    padding:10px 10px 10px 10px;
+}
+
+div#result {
+	margin:10px 10px 10px 10px;
+	/* width: 80%; */
+	/* background:#FEFEEE; */
+	/* border-left:#CCCCCC 1px solid; */
+	/* border-right:#CCCCCC 1px solid; */
+	/* padding:10px 10px 20px 10px; */
+}
+
+div#inputId {
+    padding:10px 10px 10px 10px;
+    margin: 10px 10px 10px 10px;
+    /* background:#FEFEEE; */
+}
+
+div.indexpage {
+    font-size: 200%;
+}
+
+span#copybutton {
+  width: 40%;
+  background: #0776dd;
+  color: #fff;
+  margin:0px 0px 0px 10px;
+  text-align: center;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px -2px rgba(0,0,0,.4);
+  cursor: pointer;
+}
+
+input#selectedidval {
+    width: 80%;
+}
+
+div#selected_ids {
+    font-size: 150%;
+    margin:10px 10px 10px 10px;
+    background-color: #FF9999;
+    padding: 10px;
+}
+
+td.systemUtt {
+    background-color: #99FFFF;
+}
+
+p.systemUtt {
+    background-color: #99FFFF;
+}
+
+/* ================================================== */
+
+/*******************************
+* 左からの吹き出し
+********************************/
+.left_balloon {
+    position: relative;
+    background: #fff;
+    border: 1px solid #777;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    margin-right: 20%;
+    clear: both;
+    max-width: 500px;
+    float: left;
+}
+.left_balloon:after,
+.left_balloon:before {
+    right: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.left_balloon:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-right-color: #fff;
+    border-width: 7px;
+    margin-top: -7px;
+}
+.left_balloon:before {
+    border-color: rgba(0, 0, 0, 0);
+    border-right-color: #000;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+/*******************************
+* 右からの吹き出し
+********************************/
+.right_balloon {
+    position: relative;
+    background: #85e249;
+    border: 1px solid #777;
+    margin: 10px;
+    padding: 10px;
+    border-radius: 15px;
+    margin-left: 20%;
+    clear: both;
+    max-width: 500px;
+    float: right;
+}
+.right_balloon:after,
+.right_balloon:before {
+    left: 100%;
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.right_balloon:after {
+    border-color: rgba(133, 226, 73, 0);
+    border-left-color: #85e249;
+    border-width: 7px;
+    margin-top: -7px;
+}
+.right_balloon:before {
+    border-color: rgba(119, 119, 119, 0);
+    border-left-color: #777;
+    border-width: 8px;
+    margin-top: -8px;
+}
+
+/*******************************
+* 割り込みを解除
+********************************/
+.clear_balloon{
+  clear: both;
+}
+
+
+
