@@ -1,10 +1,22 @@
 @charset "UTF-8";
 
-h1{
-    color: black;
+div#container {
+    width:95%;
+    height:100%;
+    margin:0 auto;
+    background:#FFFFFF;
+    /* border-left:#CCCCCC 1px solid; */
+    /* border-right:#CCCCCC 1px solid; */
+    padding:10px 10px 10px 10px;
 }
 
 div#map{
     width: 800px;
-    height: 600px; 
+    height: 600px;
+
+    /* position:absolute; */
+    /* top:0; */
+    /* left:0; */
+    /* right:0; */
+    /* contentbottom:0 */
 }

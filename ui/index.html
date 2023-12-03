@@ -6,6 +6,9 @@
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html">
 
+  <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css">
+  <script type="text/javascript" src="js/bootstrap.min.js"></script>
+
   <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
   <link rel="stylesheet" href="css/base.css" />
 
@@ -16,8 +19,26 @@
 </head>
 
 <body>
-  <h1>Map</h1>
-  <div id="map"></div>
+  <div class="container">
+    <div class="maparea">
+
+      <h1>Map</h1>
+
+      <!-- 全画面表示 -->
+      <!-- <div id="map" style="position:absolute;top:0;left:0;right:0;bottom:0;"></div> -->
+      <div id="map"></div>
+
+    </div><!-- /maparea -->
+
+
+
+    <div class="controller">
+
+      <div id="monitor"></div>
+
+    </div><!-- /controller -->
+
+  </div><!-- /container -->
 
 </body>
 </html>
