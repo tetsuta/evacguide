@@ -1,4 +1,6 @@
 var Evacquide = function() {
+    var map;
+
     function main() {
 	var on_shit;
 	var on_control;
@@ -7,7 +9,7 @@ var Evacquide = function() {
 
 
 	setupControlls();
-	var map = L.map('map')
+	map = L.map('map');
 
 	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
@@ -21,12 +23,20 @@ var Evacquide = function() {
 
 
 	map.on('click', function(e) {
+	    lat = e.latlng.lat;
+	    lng = e.latlng.lng;
+
 	    // shift-clickで座標を表示する
 	    if (on_shift == true) {
-		lat = e.latlng.lat;
-		lng = e.latlng.lng;
 		alert("lat: " + lat + ", lng: " + lng);
-	    }
+		return;
+	    } 
+
+	    // clickでマーカーを載せる
+	    var report_detail = "timestamp<br><img src='https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1' width='500' height='375'>";
+	    var popup1 = L.popup({ maxWidth: 550 }).setContent(report_detail);
+	    var marker = L.marker([lat, lng]).bindPopup(popup1).bindTooltip("report on timestamp").addTo(map);
+
 	});
 
 	map.on('move', function(e) {
