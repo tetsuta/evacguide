@@ -64,6 +64,9 @@
 
      aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r3"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
 
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r5"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
+
+
      同じ primary keyで put-itemすると、重複するものは上書きされる
 
 
@@ -111,8 +114,8 @@
 
      return:
      {
-       report: list of report
-       cross: list of cross
+       reports: list of report
+       crosses: list of cross
      }
 
 **** getUpdateReport
@@ -122,17 +125,22 @@
      list of report
 
 **** putCross
+     userInput["lat"]
+     userInput["lng"]
+
      クロスマークの情報を AWSにアップロードする
 
      return:
+     cross_id
      html (セットしたクロスマークを表示するテーブル)
 
 **** removeCross
-     クロスマークの情報を AWSから削除する
+     userInput["cross_id"]
+
+     指定されたクロスマークの情報を AWSから削除する
 
      return:
      html (セットしたクロスマークを表示するテーブル)
-
     
 *** 設定
     config.rbで以下を指定

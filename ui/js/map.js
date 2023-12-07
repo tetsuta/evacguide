@@ -71,22 +71,30 @@ var Evacquide = function() {
 
     function setupControlls() {
 	$(window).keyup(function(e) {
+	    // mon(e.key);
+
 	    if (e.key == "Control") {
 		on_control = false;
 	    }
 	    if (e.key == "Shift") {
 		on_shift = false;
+		$('#map').css('cursor', 'grab');
+	    }
+	    if (e.key == "a") {
+	    }
+	    if (e.key == "b") {
 	    }
 	});
 
 	$(window).keydown(function(e) {
 	    if (e.key == "Control") {
 		on_control = true;
-		mon("control");
+		// mon("control");
 	    }
 	    if (e.key == "Shift") {
 		on_shift = true;
-		mon("shift");
+		$('#map').css('cursor', 'pointer');
+		// mon("shift");
 	    }
 	});
 

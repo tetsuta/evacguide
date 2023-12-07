@@ -64,8 +64,6 @@ s.mount_proc('/'){|request, response|
   errormsg = "request body error."
   begin
     data = Hash::new
-    data["text"] = ""
-    data["html"] = ""
 
     if (request.request_method != "POST")
       errormsg = "HTTP method error."
@@ -84,17 +82,32 @@ s.mount_proc('/'){|request, response|
     mode = userInput["mode"]
 
     case mode
-    when "getAllReport"
+    when "getAllInfo"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("getAllReport")
-      data[reports] = eg.get_reports()
+      $logger.info("getAllInfo")
+      all_info = eg.getAllInfo()
+      data["reports"] = all_info["reports"]
+      data["crosses"] = all_info["crosses"]
+      response.body = JSON.generate(data)
+
+    when "getUpdateReport"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("getUpdateReport")
+      data["reports"] = eg.getUpdateReport()
       response.body = JSON.generate(data)
 
     when "putCross"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("putCross: #{userInput["lat"]}, #{userInput["lng"]}")
-      data["html"] = mg.put_cross(userInput["lat"], userInput["lng"])
+      data["html"] = eg.putCross(userInput["lat"], userInput["lng"])
       response.body = JSON.generate(data)
+
+    when "removeCross"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("putCross: #{userInput["lat"]}, #{userInput["lng"]}")
+      data["html"] = eg.removeCross(userInput["id"])
+      response.body = JSON.generate(data)
+
     end
 
   rescue Exception => e

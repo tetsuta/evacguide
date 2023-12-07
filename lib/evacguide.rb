@@ -1,40 +1,83 @@
 # coding: utf-8
 require 'json'
+require_relative 'aws'
 
 class EVACGUIDE
   def initialize()
+    @reportdb = AWSD.new("eg_report")
+    @crossdb = AWSD.new("eg_cross")
+
+    @report_list = []
     @cross_list = []
-  end
 
-  def get_reports()
-    report_list = []
-    report_list.push({
-                       timestamp: Time.new(2023,12,3,10,3,0),
-                       img: 'https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1',
-                       lat: 36.94891755154147,
-                       lng: 140.90274810791018
-                     })
-    report_list.push({
-                       timestamp: Time.new(2023,12,3,10,4,0),
-                       img: 'https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1',
-                       lat: 36.94812872265479,
-                       lng: 140.90515136718753
-                     })
-    report_list.push({
-                       timestamp: Time.new(2023,12,3,10,5,0),
-                       img: 'https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1',
-                       lat: 36.947511372610805,
-                       lng: 140.90772628784183
-                     })
-    return report_list
+    @sent_report_id_list = []
+    @cross_index = 0
   end
 
 
-  def put_cross(lat, lng)
-    @cross_list.push({
-                      lat: lat,
-                      lng: lng
-                    })
+  def getAllInfo()
+    @report_list = @reportdb.get_all_items
+    @cross_list = @crossdb.get_all_items
+    data = {
+      "reports" => @report_list,
+      "crosses" => @cross_list
+    }
+
+    @sent_report_id_list = []
+    @report_list.each{|report|
+      @sent_report_id_list.push(report["id"])
+    }
+
+    id_list = []
+    @cross_list.each{|cross|
+      if cross["id"] =~ /([0-9]+)/
+        id_list.push($1.to_i)
+      end
+    }
+    @cross_index = id_list.max + 1
+
+    return data
+  end
+
+
+  def getUpdateReport()
+    update_report_list = []
+    @report_list = @reportdb.get_all_items
+    @report_list.each{|report|
+      if @sent_report_id_list.index(report["id"]) == nil
+        update_report_list.push(report)
+        @sent_report_id_list.push(report["id"])
+      end
+    }
+
+    return update_report_list
+  end
+
+
+  def putCross(lat, lng)
+    id = "c#{@cross_index}"
+    @cross_index += 1
+
+    data = {
+      id: id,
+      lat: lat,
+      lng: lng
+    }
+
+    @cross_list.push(data)
+    @crossdb.put(data)
+    return cross_table()
+  end
+
+
+  def removeCross(id)
+    @crossdb.delete({id: id})
+
+    @cross_list.each{|cross|
+      if cross["id"] == id
+        @cross_list.delete(cross)
+      end
+    }
 
     return cross_table()
   end
@@ -47,18 +90,10 @@ class EVACGUIDE
   def cross_table()
     buffer = ""
     @cross_list.each{|cross|
-      buffer << "#{cross.lat}, #{cross.lng} <br>\n"
+      buffer << "#{cross["id"]}, #{cross["lat"]}, #{cross["lng"]} <br>\n"
     }
     return buffer
   end
 
 end
-
-eg = EVACGUIDE.new()
-p eg.get_reports()
-
-
-
-# mg.put_cross(36.957683077113025, 140.9071254730225)
-
 
