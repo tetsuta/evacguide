@@ -17,7 +17,7 @@ crossdb = AWSD.new("eg_cross")
 
 # p reportdb.get({id: "r3"})
 
-# p reportdb.delete({id: "r5"})
+p reportdb.delete({id: "r5"})
 
 # reportdb.get_all_items.each{|item|
 #   puts "---"
@@ -41,7 +41,7 @@ crossdb = AWSD.new("eg_cross")
 
 
 # ==================================================
-eg = EVACGUIDE.new()
+# eg = EVACGUIDE.new()
 
 # p eg.removeCross("c2")
 

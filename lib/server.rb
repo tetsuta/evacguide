@@ -4,7 +4,6 @@
 require 'getoptlong'
 require 'webrick'
 require 'net/protocol'
-# require 'securerandom'
 require 'logger'
 
 require_relative './config'
