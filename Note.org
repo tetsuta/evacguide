@@ -7,6 +7,141 @@
 ** 12/8までにデモを作る
 ** DONE ×を置くアクションを設定
 
+* setup
+** ruby
+   sudo gem install aws-sdk-dynamodb
+
+
+* spec
+** ui
+*** 初期座標
+    index.html内で指定
+
+** AWS dynamoDB
+
+*** tables
+**** eg_report
+     {
+       id (string) primary
+       lat (float)
+       lng (float)
+       image_url (string)
+       time (string) or (int)
+     }
+
+**** eg_cross
+     {
+       id (string) primary
+       lat (float)
+       lng (float)
+     }
+
+*** CLI
+
+**** install
+     sudo apt install awscli
+
+**** configure
+     ./aws configure
+
+     AWS --> IAM --> ユーザ
+     AWS Access Key ID [None]: **********        // アクセスキーID
+     AWS Secret Access Key [None]: **********    // シークレットアクセスキー
+     Default region name [None]: ap-northeast-1　// 接続するDynamoDBのregion name
+     Default output format [None]: json          // 結果を出力するフォーマット
+
+**** list-tables
+     aws dynamodb list-tables
+
+**** describe-table
+     aws dynamodb describe-table --table-name eg_cross
+     aws dynamodb describe-table --table-name eg_report
+
+**** put-item
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r1"}, "lat": {"N": "36.94891755154147"}, "lng": {"N": "140.90274810791018"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:57:00"} }'
+
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r2"}, "lat": {"N": "36.94812872265479"}, "lng": {"N": "140.90515136718753"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:58:00"} }'
+
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r3"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
+
+     同じ primary keyで put-itemすると、重複するものは上書きされる
+
+
+
+**** scan
+     aws dynamodb scan --table-name eg_report
+
+
+**** get-item
+     aws dynamodb get-item --table-name eg_report  --key '{"user_id":{"N":"1"}}'
+
+**** delete-item
+     aws dynamodb delete-item --table-name eg_report  --key '{"key": {"S": "t0924"}}'
+
+
+**** reference
+     https://qiita.com/ekzemplaro/items/93c0aef433a2b633ab4a
+     https://www.wakuwakubank.com/posts/675-aws-cli-dynamodb/
+
+
+** server
+*** endpoint
+    '/'のみとし、JSONで渡された request.body内の modeによって
+    処理を切り分ける
+
+*** data type
+**** report
+     {
+       lat (float)
+       lng (float)
+       image_url (string)
+       time (string)
+     }
+
+**** cross
+     {
+       id (string)
+       lat (float)
+       lng (float)
+     }
+
+*** mode
+**** getAllInfo
+     AWSからすべての reportと crossのデータを取得して返す
+
+     return:
+     {
+       report: list of report
+       cross: list of cross
+     }
+
+**** getUpdateReport
+     最後に取得したデータの後に追加されたデータを返す
+
+     return:
+     list of report
+
+**** putCross
+     クロスマークの情報を AWSにアップロードする
+
+     return:
+     html (セットしたクロスマークを表示するテーブル)
+
+**** removeCross
+     クロスマークの情報を AWSから削除する
+
+     return:
+     html (セットしたクロスマークを表示するテーブル)
+
+    
+*** 設定
+    config.rbで以下を指定
+    - ログファイル
+    - ポート番号
+
+
+** client
+
 * function
   
 

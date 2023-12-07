@@ -33,9 +33,10 @@ var Evacquide = function() {
 	    lat = e.latlng.lat;
 	    lng = e.latlng.lng;
 
-	    // shift-clickで座標を表示する
 	    if (on_shift == true) {
+		// shift-clickで座標を表示する
 		alert("lat: " + lat + ", lng: " + lng);
+
 	    } else {
 		// clickでバツを表示する
 		// 再度クリックしたら消す
@@ -58,7 +59,7 @@ var Evacquide = function() {
     }
 
     function report(lat, lng){
-	var report_detail = "timestamp<br><img src='https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1' width='500' height='375'>";
+	var report_detail = "timestamp<br><img src='https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1' width='400'>";
 	var popup = L.popup({ maxWidth: 550 }).setContent(report_detail);
 	var marker = L.marker([lat, lng]).bindPopup(popup).bindTooltip("report on timestamp").addTo(map);
     }
