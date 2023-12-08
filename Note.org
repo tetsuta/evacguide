@@ -1,7 +1,6 @@
 
 * todo
-** 地図上で座標を取る機能を追加する
-** AWSDの initializeで regionを取るようにする
+** DONE AWSDの initializeで regionを取るようにする
 ** reportには idを持たせるようにして、すでに置かれている idの reportは置かないようにする
    updateを使えばよいか。
    updateAllInfo()をする前は、マークを消すようにする
@@ -44,6 +43,8 @@ else
     	 --update-expression 'SET lat = :ok' \
     	 --expression-attribute-values '{":ok": {"N": "-800"}}'
 fi
+
+** DONE 地図上で座標を取る機能を追加する
 
 ** DONE evacguide.rbの DB名を configから取るようにする
 

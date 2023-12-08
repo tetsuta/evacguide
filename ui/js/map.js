@@ -7,11 +7,10 @@ var Evacquide = function() {
     var on_get_coordinates = false;
     var on_auto_update = false;
 
+    var on_shift = false;
+    var on_control = false;
+
     function main() {
-	var on_shift = false;
-	var on_control = false;
-
-
 	setupControlls();
 	map = L.map('map', {
 	    // trackResize: true,
@@ -26,7 +25,8 @@ var Evacquide = function() {
 	$('#map').css('width', mapwidth);
 	$('#map').css('height', mapheight);
 
-	map.setView([33.581, 130.340], 15);
+	map.setView([33.5808303, 130.340], 18);
+
 	// open street map
 	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -117,11 +117,7 @@ var Evacquide = function() {
 	    }
 	    if (e.key == "Shift") {
 		on_shift = false;
-		$('#map').css('cursor', 'grab');
-	    }
-	    if (e.key == "a") {
-	    }
-	    if (e.key == "b") {
+		// $('#map').css('cursor', 'grab');
 	    }
 	});
 
@@ -132,7 +128,7 @@ var Evacquide = function() {
 	    }
 	    if (e.key == "Shift") {
 		on_shift = true;
-		$('#map').css('cursor', 'pointer');
+		// $('#map').css('cursor', 'pointer');
 		// mon("shift");
 	    }
 	});
