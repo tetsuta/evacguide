@@ -98,8 +98,8 @@ var Evacquide = function() {
     }
 
     function report(anreport){
-	var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' height='250'></a>";
-	var popup = L.popup({ maxWidth: 300, maxHeight: 300 }).setContent(report_detail);
+	var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='100' height='300'></a>";
+	var popup = L.popup({ maxWidth: 100, maxHeight: 300 }).setContent(report_detail);
 	var tooltip_text = "report on " + anreport.table;
 	var marker = L.marker([anreport.lat, anreport.lon]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
     }
