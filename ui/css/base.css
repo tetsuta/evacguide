@@ -1,14 +1,25 @@
 @charset "UTF-8";
 
-div#container {
+/* div#container { */
+/*     width:95%; */
+/*     height:100%; */
+/*     margin:0 auto; */
+/*     background:#FFFFFF; */
+/*     /\* border-left:#CCCCCC 1px solid; *\/ */
+/*     /\* border-right:#CCCCCC 1px solid; *\/ */
+/*     padding:10px 10px 10px 10px; */
+/* } */
+
+div.controller {
     width:95%;
     height:100%;
     margin:0 auto;
-    background:#FFFFFF;
+    background:#EEFFFF;
     /* border-left:#CCCCCC 1px solid; */
     /* border-right:#CCCCCC 1px solid; */
     padding:10px 10px 10px 10px;
 }
+
 
 div#map{
     width: 800px;

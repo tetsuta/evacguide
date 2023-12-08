@@ -1,6 +1,6 @@
 var Evacquide = function() {
-    var map;
     var crossIcon;
+    var map;
 
     function main() {
 	var on_shit;
@@ -10,11 +10,19 @@ var Evacquide = function() {
 
 
 	setupControlls();
-	map = L.map('map');
+	map = L.map('map', {
+	    // trackResize: true,
+	});
 
 	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
 	}).addTo(map);
+
+	var mapwidth = $('#maparea').width();
+	var mapheight = (mapwidth * 3) / 4;
+	$('#map').css('width', mapwidth);
+	$('#map').css('height', mapheight);
+
 
 	map.setView([36.948, 140.903], 15);
 	// open street map
@@ -44,6 +52,13 @@ var Evacquide = function() {
 	    }
 	});
 
+
+	$(window).resize(function(){
+	    var mapwidth = $('#maparea').width();
+	    var mapheight = (mapwidth * 3) / 4;
+	    $('#map').css('width', mapwidth);
+	    $('#map').css('height', mapheight);
+	});
 
 	map.on('move', function(e) {
 	});
