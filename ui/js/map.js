@@ -2,11 +2,12 @@ var Evacquide = function() {
     var crossIcon;
     var map;
 
+    var on_get_coordinates = false;
+    var on_auto_update = false;
+
     function main() {
-	var on_shit;
-	var on_control;
-	on_shift = false;
-	on_control = false;
+	var on_shit = false;
+	var on_control = false;
 
 
 	setupControlls();
@@ -46,9 +47,7 @@ var Evacquide = function() {
 		alert("lat: " + lat + ", lng: " + lng);
 
 	    } else {
-		// clickでバツを表示する
-		// 再度クリックしたら消す
-		L.marker([lat, lng], {icon: crossIcon}).on('click', onCrossClick).addTo(map);
+		putCross(lat, lng);
 	    }
 	});
 
@@ -63,9 +62,34 @@ var Evacquide = function() {
 	map.on('move', function(e) {
 	});
 
-	report(36.94891755154147, 140.90274810791018);
-	report(36.94812872265479, 140.90515136718753);
-	report(36.947511372610805, 140.90772628784183);
+	// 最初にすべてを読み込む
+	// updateAllInfo();
+
+    }
+
+    function putCross(lat, lng){
+	// clickでバツを表示する
+	// 再度クリックしたら消す
+	L.marker([lat, lng], {icon: crossIcon}).on('click', onCrossClick).addTo(map);
+    }
+
+    function updateAllInfo(){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getAllInfo"
+	    }),
+        }).done(function(data) {
+	    data.reports.forEach(anreport => {
+		report(anreport);
+	    });
+	    data.crosses.forEach(ancross => {
+		putCross(ancross.lat, ancross.lng);
+	    });
+	    $('#result').html(data.html);
+        });
 
     }
 
@@ -73,10 +97,11 @@ var Evacquide = function() {
 	map.removeLayer(e.target);
     }
 
-    function report(lat, lng){
-	var report_detail = "timestamp<br><img src='https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1' width='400'>";
+    function report(anreport){
+	var report_detail = anreport.time + "<br><img src='" + anreport.image_url + "' width='400'>";
 	var popup = L.popup({ maxWidth: 550 }).setContent(report_detail);
-	var marker = L.marker([lat, lng]).bindPopup(popup).bindTooltip("report on timestamp").addTo(map);
+	var tooltip_text = "report on " + anreport.time;
+	var marker = L.marker([anreport.lat, anreport.lng]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
     }
 
 
@@ -110,6 +135,33 @@ var Evacquide = function() {
 		on_shift = true;
 		$('#map').css('cursor', 'pointer');
 		// mon("shift");
+	    }
+	});
+
+
+	$('#manual_update').on('click', function() {
+	    mon("updating...");
+	    updateAllInfo();
+	    mon("update done");
+	});
+
+	$('#get_coordinates').on('click', function() {
+	    if (on_get_coordinates == false) {
+	    } else {
+	    }
+	});
+
+	$('#auto_update').on('click', function() {
+	    if (on_auto_update == true) {
+		$('#auto_update').text("Auto update (stopped)");
+		$('#auto_update').removeClass("btn-primary");
+		$('#auto_update').addClass("btn-secondary");
+		on_auto_update = false;
+	    } else {
+		$('#auto_update').text("Auto update (running)");
+		$('#auto_update').removeClass("btn-secondary");
+		$('#auto_update').addClass("btn-primary");
+		on_auto_update = true;
 	    }
 	});
 

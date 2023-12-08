@@ -20,6 +20,13 @@ div.controller {
     padding:10px 10px 10px 10px;
 }
 
+div#monitor {
+    margin:0 auto;
+    background:#FFEEFF;
+    /* border-left:#CCCCCC 1px solid; */
+    /* border-right:#CCCCCC 1px solid; */
+}
+
 
 div#map{
     width: 800px;
