@@ -26,8 +26,7 @@ var Evacquide = function() {
 	$('#map').css('width', mapwidth);
 	$('#map').css('height', mapheight);
 
-
-	map.setView([36.948, 140.903], 15);
+	map.setView([33.581, 130.340], 15);
 	// open street map
 	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -42,14 +41,14 @@ var Evacquide = function() {
 
 	map.on('click', function(e) {
 	    lat = e.latlng.lat;
-	    lng = e.latlng.lng;
+	    lon = e.latlng.lng;
 
 	    if (on_shift == true) {
 		// shift-clickで座標を表示する
-		alert("lat: " + lat + ", lng: " + lng);
+		alert("lat: " + lat + ", lon: " + lon);
 
 	    } else {
-		putCross(lat, lng);
+		putCross(lat, lon);
 	    }
 	});
 
@@ -68,10 +67,10 @@ var Evacquide = function() {
 	// updateAllInfo();
     }
 
-    function putCross(lat, lng){
+    function putCross(lat, lon){
 	// clickでバツを表示する
 	// 再度クリックしたら消す
-	L.marker([lat, lng], {icon: crossIcon}).on('click', onCrossClick).addTo(map);
+	L.marker([lat, lon], {icon: crossIcon}).on('click', onCrossClick).addTo(map);
     }
 
     function updateAllInfo(){
@@ -86,10 +85,10 @@ var Evacquide = function() {
 	    data.reports.forEach(anreport => {
 		report(anreport);
 	    });
-	    data.crosses.forEach(ancross => {
-		putCross(ancross.lat, ancross.lng);
-	    });
-	    $('#result').html(data.html);
+	    // data.crosses.forEach(ancross => {
+	    // 	putCross(ancross.lat, ancross.lon);
+	    // });
+	    // $('#result').html(data.html);
         });
 
     }
@@ -99,10 +98,10 @@ var Evacquide = function() {
     }
 
     function report(anreport){
-	var report_detail = anreport.time + "<br><img src='" + anreport.image_url + "' width='400'>";
-	var popup = L.popup({ maxWidth: 550 }).setContent(report_detail);
-	var tooltip_text = "report on " + anreport.time;
-	var marker = L.marker([anreport.lat, anreport.lng]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	var report_detail = anreport.table + "<br><img src='" + anreport.URL + "' width='300'>";
+	var popup = L.popup({ maxWidth: 350, maxHeight: 200 }).setContent(report_detail);
+	var tooltip_text = "report on " + anreport.table;
+	var marker = L.marker([anreport.lat, anreport.lon]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
     }
 
 

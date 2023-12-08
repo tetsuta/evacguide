@@ -97,13 +97,13 @@ s.mount_proc('/'){|request, response|
 
     when "putCross"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("putCross: #{userInput["lat"]}, #{userInput["lng"]}")
-      data["html"] = eg.putCross(userInput["lat"], userInput["lng"])
+      $logger.info("putCross: #{userInput["lat"]}, #{userInput["lon"]}")
+      data["html"] = eg.putCross(userInput["lat"], userInput["lon"])
       response.body = JSON.generate(data)
 
     when "removeCross"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("putCross: #{userInput["lat"]}, #{userInput["lng"]}")
+      $logger.info("putCross: #{userInput["lat"]}, #{userInput["lon"]}")
       data["html"] = eg.removeCross(userInput["id"])
       response.body = JSON.generate(data)
 

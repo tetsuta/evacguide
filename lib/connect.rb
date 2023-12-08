@@ -83,7 +83,7 @@ when "putCross"
   data = Hash::new()
   data["mode"] = mode
   data["lat"] = 36.95107821492136
-  data["lng"] = 140.91079473495486
+  data["lon"] = 140.91079473495486
 
   response = http.post(path, JSON.generate(data), header)
   data = JSON.parse(response.body)
@@ -105,7 +105,7 @@ end
 
 
 # data["lat"] = 36.957683077113025
-# data["lng"] = 140.9071254730225
+# data["lon"] = 140.9071254730225
 # response = http.post(path, JSON.generate(data), header)
 # p response
 

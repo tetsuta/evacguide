@@ -3,13 +3,21 @@
 
 require_relative 'evacguide'
 
-reportdb = AWSD.new("eg_report")
-crossdb = AWSD.new("eg_cross")
+# reportdb = AWSD.new("eg_report")
+# crossdb = AWSD.new("eg_cross")
+
+oishi3 = AWSD.new("Oishi3")
+
+items = oishi3.get_all_items()
+items.each{|item|
+  puts "---"
+  p item
+}
 
 # data = {
 #   id: "r4",
 #   lat: 36.95155835401599,
-#   lng: 140.90637445449832,
+#   lon: 140.90637445449832,
 #   image_url: "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1",
 #   time: "2023/12/07 12:57:00"
 # }
@@ -17,7 +25,7 @@ crossdb = AWSD.new("eg_cross")
 
 # p reportdb.get({id: "r3"})
 
-p reportdb.delete({id: "r3"})
+# p reportdb.delete({id: "r3"})
 # p reportdb.delete({id: "r4"})
 
 # reportdb.get_all_items.each{|item|
@@ -31,7 +39,7 @@ p reportdb.delete({id: "r3"})
 # data = {
 #   id: "c2",
 #   lat: 36.962587213312746,
-#   lng: 140.9146792984009
+#   lon: 140.9146792984009
 # }
 # crossdb.put(data)
 

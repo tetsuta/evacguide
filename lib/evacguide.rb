@@ -4,8 +4,8 @@ require_relative 'aws'
 
 class EVACGUIDE
   def initialize()
-    @reportdb = AWSD.new("eg_report")
-    @crossdb = AWSD.new("eg_cross")
+    @reportdb = AWSD.new("Oishi3")
+    # @crossdb = AWSD.new("eg_cross")
 
     @report_list = []
     @cross_list = []
@@ -17,7 +17,9 @@ class EVACGUIDE
 
   def getAllInfo()
     @report_list = @reportdb.get_all_items
-    @cross_list = @crossdb.get_all_items
+    # @cross_list = @crossdb.get_all_items
+    @cross_list = []
+
     data = {
       "reports" => @report_list,
       "crosses" => @cross_list
@@ -28,7 +30,7 @@ class EVACGUIDE
       @sent_report_id_list.push(report["id"])
     }
 
-    if @cross_list != nil
+    if @cross_list != nil && @cross_list != []
       id_list = []
       @cross_list.each{|cross|
         if cross["id"] =~ /([0-9]+)/
@@ -58,14 +60,14 @@ class EVACGUIDE
   end
 
 
-  def putCross(lat, lng)
+  def putCross(lat, lon)
     id = "c#{@cross_index}"
     @cross_index += 1
 
     data = {
       id: id,
       lat: lat,
-      lng: lng
+      lon: lon
     }
 
     @cross_list.push(data)
@@ -94,7 +96,7 @@ class EVACGUIDE
   def cross_table()
     buffer = ""
     @cross_list.each{|cross|
-      buffer << "#{cross["id"]}, #{cross["lat"]}, #{cross["lng"]} <br>\n"
+      buffer << "#{cross["id"]}, #{cross["lat"]}, #{cross["lon"]} <br>\n"
     }
     return buffer
   end
