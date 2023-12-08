@@ -26,14 +26,14 @@ oishi3 = AWSD.new("Oishi3", "ap-northeast-1")
 #   "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"
 # }
 
-data = {
-  "lat"=> "33.58091078872472",
-  "lon"=> "130.33986032009128",
-  "table"=>"2024/12/08 20:02:24",
-  "application"=>"INFO",
-  "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"
-}
-p oishi3.put(data)
+# data = {
+#   "lat"=> "33.58091078872472",
+#   "lon"=> "130.33986032009128",
+#   "table"=>"2024/12/08 20:02:24",
+#   "application"=>"INFO",
+#   "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"
+# }
+# p oishi3.put(data)
 
 
 # ==================================================

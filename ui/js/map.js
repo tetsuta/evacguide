@@ -4,11 +4,13 @@ var Evacquide = function() {
     var timer;
     var counter = 0;
 
-    var on_get_coordinates = false;
     var on_auto_update = false;
 
     var on_shift = false;
     var on_control = false;
+
+    // 描画した markerを記録する
+    var marker_set = {};
 
     function main() {
 	setupControlls();
@@ -98,13 +100,20 @@ var Evacquide = function() {
     }
 
     function report(anreport){
-	var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
-	var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
-	var tooltip_text = "report on " + anreport.table;
-	var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	mon(anreport.table);
+	if (anreport.table in marker_set) {
+	} else {
+	    var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
+	    var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
+	    var tooltip_text = "report on " + anreport.table;
+	    var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	    marker_set[anreport.table] = marker;
+	}
     }
 
     function mon(text){
+	// var tmp = $('#monitor').text;
+	// $('#monitor').text(tmp + "___" + text);
 	$('#monitor').text(text);
     }
 
@@ -135,15 +144,15 @@ var Evacquide = function() {
 
 
 	$('#manual_update').on('click', function() {
-	    mon("updating...");
 	    updateAllInfo();
-	    mon("update done");
+	    // mon("update done");
 	});
 
-	$('#get_coordinates').on('click', function() {
-	    if (on_get_coordinates == false) {
-	    } else {
+	$('#clear_marker').on('click', function() {
+	    for (let key in marker_set) {
+		map.removeLayer(marker_set[key]);
 	    }
+	    marker_set = {};
 	});
 
 	$('#auto_update').on('click', function() {
