@@ -28,13 +28,17 @@ class EVACGUIDE
       @sent_report_id_list.push(report["id"])
     }
 
-    id_list = []
-    @cross_list.each{|cross|
-      if cross["id"] =~ /([0-9]+)/
-        id_list.push($1.to_i)
+    if @cross_list != nil
+      id_list = []
+      @cross_list.each{|cross|
+        if cross["id"] =~ /([0-9]+)/
+          id_list.push($1.to_i)
+        end
+      }
+      if id_list.size > 0
+        @cross_index = id_list.max + 1
       end
-    }
-    @cross_index = id_list.max + 1
+    end
 
     return data
   end

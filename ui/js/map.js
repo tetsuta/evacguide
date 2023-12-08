@@ -1,12 +1,14 @@
 var Evacquide = function() {
     var crossIcon;
     var map;
+    var timer;
+    var counter = 0;
 
     var on_get_coordinates = false;
     var on_auto_update = false;
 
     function main() {
-	var on_shit = false;
+	var on_shift = false;
 	var on_control = false;
 
 
@@ -64,7 +66,6 @@ var Evacquide = function() {
 
 	// 最初にすべてを読み込む
 	// updateAllInfo();
-
     }
 
     function putCross(lat, lng){
@@ -153,11 +154,22 @@ var Evacquide = function() {
 
 	$('#auto_update').on('click', function() {
 	    if (on_auto_update == true) {
+		clearTimeout(timer);　
+
 		$('#auto_update').text("Auto update (stopped)");
 		$('#auto_update').removeClass("btn-primary");
 		$('#auto_update').addClass("btn-secondary");
 		on_auto_update = false;
+
 	    } else {
+
+		var countUp = function() {
+		    updateAllInfo();
+		    $('#result').text("update:" + counter++);
+		}
+		// 2秒(2000)ごとに動かす
+		timer = setInterval(countUp, 2000);
+
 		$('#auto_update').text("Auto update (running)");
 		$('#auto_update').removeClass("btn-secondary");
 		$('#auto_update').addClass("btn-primary");

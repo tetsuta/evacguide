@@ -57,12 +57,20 @@ when "getAllInfo"
   data["mode"] = mode
   response = http.post(path, JSON.generate(data), header)
   data = JSON.parse(response.body)
-  data["reports"].each{|report|
-    p report
-  }
-  data["crosses"].each{|cross|
-    p cross
-  }
+
+  reports = data["reports"]
+  if reports != nil
+    reports.each{|report|
+      p report
+    }
+  end
+
+  crosses = data["crosses"]
+  if crosses != nil
+    crosses.each{|cross|
+      p cross
+    }
+  end
 
 when "getUpdateReport"
   data = Hash::new()

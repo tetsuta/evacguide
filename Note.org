@@ -1,11 +1,17 @@
 
 * todo
-** データを読み込んでマークを付ける
 ** mobile用の画面
 ** 12/8までにデモを作る
+** DONE データを読み込んでマークを付ける
 ** DONE 画面のサイズに合わせて地図のサイズを決める
 ** DONE 画面サイズが変更されたら地図のサイズを変える
 ** DONE ×を置くアクションを設定
+
+* note
+  sudo service apache2 status
+
+    sudo service apache2 start
+
 
 * setup
 ** ruby
@@ -58,13 +64,13 @@
      aws dynamodb describe-table --table-name eg_report
 
 **** put-item
-     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r1"}, "lat": {"N": "36.94891755154147"}, "lng": {"N": "140.90274810791018"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:57:00"} }'
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r1"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
+
 
      aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r2"}, "lat": {"N": "36.94812872265479"}, "lng": {"N": "140.90515136718753"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:58:00"} }'
 
-     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r3"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
+     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r3"}, "lat": {"N": "36.94891755154147"}, "lng": {"N": "140.90274810791018"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:57:00"} }'
 
-     aws dynamodb put-item --table-name eg_report --item '{ "id": {"S": "r5"}, "lat": {"N": "36.947511372610805"}, "lng": {"N": "140.90772628784183"}, "image_url": {"S": "https://cdn.mainichi.jp/vol1/2022/11/29/20221129k0000m040094000p/9.jpg?1"}, "time": {"S": "2023/12/07 12:59:00"} }'
 
 
      同じ primary keyで put-itemすると、重複するものは上書きされる
