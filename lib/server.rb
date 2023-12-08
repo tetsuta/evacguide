@@ -101,6 +101,12 @@ s.mount_proc('/'){|request, response|
       eg.stopPolling
       response.body = JSON.generate(data)
 
+    when "selectRoute"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("selectRoute")
+      route = userInput["route"]
+      eg.selectRoute(route)
+      response.body = JSON.generate(data)
 
     ### OBSOLETE ###
     when "getUpdateReport"

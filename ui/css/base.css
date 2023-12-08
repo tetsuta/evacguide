@@ -10,6 +10,10 @@
 /*     padding:10px 10px 10px 10px; */
 /* } */
 
+div.button-container {
+    padding:2px 2px 2px 2px;
+}
+
 div.controller {
     width:95%;
     height:100%;

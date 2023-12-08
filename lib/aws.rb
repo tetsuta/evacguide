@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'aws-sdk-dynamodb'
 
 class AWSD
@@ -11,6 +12,19 @@ class AWSD
   def put(data)
     @table.put_item({item: data})
   end
+
+  # conditionに該当するレコードの、targetを valueで更新する
+  # condition: hash
+  # target: string
+  # value: any class
+  def update(condition, target, value)
+    @table.update_item(
+      key: condition,
+      update_expression: "SET #{target} = :ok",
+      expression_attribute_values: {":ok" => value}
+    )
+  end
+
 
   # call delete
   def remove(condition)

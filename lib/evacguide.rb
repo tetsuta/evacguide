@@ -6,6 +6,7 @@ require_relative './config'
 class EVACGUIDE
   def initialize()
     @reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
+    @routedb = AWSD.new(AWS_ROUTEDB, AWS_REGION)
     @report_list = []
 
     @polling_flag = false
@@ -30,6 +31,30 @@ class EVACGUIDE
       "reports" => @report_list
     }
     return data
+  end
+
+
+  def selectRoute(route)
+    case route
+    when "1"
+      @routedb.update({
+                        table: "oishi1",
+                        application: "oishi1"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi2",
+                        application: "oishi2"
+                      }, "lat", -800)
+    when "2"
+      @routedb.update({
+                        table: "oishi1",
+                        application: "oishi1"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi2",
+                        application: "oishi2"
+                      }, "lat", 0)
+    end
   end
 
 

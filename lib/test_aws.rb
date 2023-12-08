@@ -9,12 +9,12 @@ require_relative 'evacguide'
 oishi2 = AWSD.new("Oishi2", "ap-northeast-1")
 oishi3 = AWSD.new("Oishi3", "ap-northeast-1")
 
-# ### check oishi2
-# items = oishi2.get_all_items()
-# items.each{|item|
-#   puts "---"
-#   p item
-# }
+### check oishi2
+items = oishi2.get_all_items()
+items.each{|item|
+  puts "---"
+  p item
+}
 
 # ==================================================
 ### add report
@@ -45,13 +45,17 @@ oishi3 = AWSD.new("Oishi3", "ap-northeast-1")
 #                application: "INFO"
 # })
 
-items = oishi3.get_all_items()
-items.each{|item|
-  puts "---"
-  p item
-}
-puts "==="
+# oishi3.update({
+#                 table: "2024/12/08 20:02:24",
+#                 application: "INFO"
+#               }, "lat", "33.58091078872473"
+# )
 
+# items = oishi3.get_all_items()
+# items.each{|item|
+#   puts "---"
+#   p item
+# }
 
 
 
