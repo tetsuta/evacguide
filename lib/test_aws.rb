@@ -6,13 +6,35 @@ require_relative 'evacguide'
 # reportdb = AWSD.new("eg_report")
 # crossdb = AWSD.new("eg_cross")
 
+oishi2 = AWSD.new("Oishi2")
 oishi3 = AWSD.new("Oishi3")
 
-items = oishi3.get_all_items()
-items.each{|item|
-  puts "---"
-  p item
+### check oishi2
+# items = oishi2.get_all_items()
+# items.each{|item|
+#   puts "---"
+#   p item
+# }
+
+### check oishi3
+# items = oishi3.get_all_items()
+# items.each{|item|
+#   puts "---"
+#   p item
+# }
+
+### add report
+data = {
+  "lon"=>"130.339675875853",
+  "table"=>"2024/12/08 20:02:24",
+  "application"=>"INFO",
+  "lat"=>"33.5809082979102",
+  "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"
 }
+p oishi3.put(data)
+
+
+
 
 # data = {
 #   id: "r4",

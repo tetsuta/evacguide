@@ -1,10 +1,11 @@
 # coding: utf-8
 require 'json'
-require_relative 'aws'
+require_relative './aws'
+require_relative './config'
 
 class EVACGUIDE
   def initialize()
-    @reportdb = AWSD.new("Oishi3")
+    @reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
     # @crossdb = AWSD.new("eg_cross")
 
     @report_list = []
@@ -27,7 +28,7 @@ class EVACGUIDE
 
     @sent_report_id_list = []
     @report_list.each{|report|
-      @sent_report_id_list.push(report["id"])
+      @sent_report_id_list.push(report["table"])
     }
 
     if @cross_list != nil && @cross_list != []
@@ -50,9 +51,9 @@ class EVACGUIDE
     update_report_list = []
     @report_list = @reportdb.get_all_items
     @report_list.each{|report|
-      if @sent_report_id_list.index(report["id"]) == nil
+      if @sent_report_id_list.index(report["table"]) == nil
         update_report_list.push(report)
-        @sent_report_id_list.push(report["id"])
+        @sent_report_id_list.push(report["table"])
       end
     }
 

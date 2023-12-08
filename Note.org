@@ -1,7 +1,53 @@
 
 * todo
+** 地図上で座標を取る機能を追加する
+** AWSDの initializeで regionを取るようにする
+** reportには idを持たせるようにして、すでに置かれている idの reportは置かないようにする
+   updateを使えばよいか。
+   updateAllInfo()をする前は、マークを消すようにする
+
+** item
+   {"lon"=>"130.339675875853", "table"=>"2023/12/08 20:02:24", "application"=>"INFO", "lat"=>"33.5809082979102", "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"}
+
+** INFOの確認
+   重複していない？
+
+** ピンの削除機能
+
+** serverから dynamoDBのデータの取得をスレッド化する。serverへのリクエストにはキャッシュしたデータで答える
 ** mobile用の画面
-** 12/8までにデモを作る
+** ルートを画面から切り替えられるようにする
+
+{"lon"=>0.0, "table"=>"oishi1", "application"=>"oishi1", "lat"=>-0.8e3}
+{"lon"=>0.0, "table"=>"oishi2", "application"=>"oishi2", "lat"=>0.0}
+---
+
+
+
+type=$1
+if [ $type -eq 2 ]; then
+	aws dynamodb update-item --table-name Oishi2 --key \
+    	 '{ "table": { "S": "oishi1" }, "application": { "S": "oishi1" } }' \
+    	 --update-expression 'SET lat = :ok' \
+    	 --expression-attribute-values '{":ok": {"N": "0"}}'
+	aws dynamodb update-item --table-name Oishi2 --key \
+    	 '{ "table": { "S": "oishi2" }, "application": { "S": "oishi2" } }' \
+    	 --update-expression 'SET lat = :ok' \
+    	 --expression-attribute-values '{":ok": {"N": "-800"}}'
+else
+	aws dynamodb update-item --table-name Oishi2 --key \
+    	 '{ "table": { "S": "oishi2" }, "application": { "S": "oishi2" } }' \
+    	 --update-expression 'SET lat = :ok' \
+    	 --expression-attribute-values '{":ok": {"N": "0"}}'
+	aws dynamodb update-item --table-name Oishi2 --key \
+    	 '{ "table": { "S": "oishi1" }, "application": { "S": "oishi1" } }' \
+    	 --update-expression 'SET lat = :ok' \
+    	 --expression-attribute-values '{":ok": {"N": "-800"}}'
+fi
+
+** DONE evacguide.rbの DB名を configから取るようにする
+
+** DONE 12/8までにデモを作る
 ** DONE データを読み込んでマークを付ける
 ** DONE 画面のサイズに合わせて地図のサイズを決める
 ** DONE 画面サイズが変更されたら地図のサイズを変える
@@ -26,6 +72,15 @@
 ** AWS dynamoDB
 
 *** tables
+**** Oishi3
+     {
+       application (string) primary
+       table (string)
+       lat (float)
+       lon (float)
+       URL (string)
+     }
+
 **** eg_report
      {
        id (string) primary

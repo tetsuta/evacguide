@@ -1,8 +1,8 @@
 require 'aws-sdk-dynamodb'
 
 class AWSD
-  def initialize(table_name)
-    client = Aws::DynamoDB::Client.new(region: "ap-northeast-1")
+  def initialize(table_name, region)
+    client = Aws::DynamoDB::Client.new(region: region)
     dynamo_resource = Aws::DynamoDB::Resource.new(client: client)
     @table = dynamo_resource.table(table_name)
   end
