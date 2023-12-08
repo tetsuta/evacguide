@@ -13,3 +13,6 @@ AWS_REGION = "ap-northeast-1"
 AWS_REPORTDB = "Oishi3"
 AWS_ROUTEDB = "Oishi2"
 
+POLLING_INTERVAL = 2
+
+

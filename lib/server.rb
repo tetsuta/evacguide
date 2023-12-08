@@ -89,18 +89,34 @@ s.mount_proc('/'){|request, response|
       data["crosses"] = all_info["crosses"]
       response.body = JSON.generate(data)
 
+    when "startPolling"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("startPolling")
+      eg.startPolling
+      response.body = JSON.generate(data)
+
+    when "stopPolling"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("stopPolling")
+      eg.stopPolling
+      response.body = JSON.generate(data)
+
+
+    ### OBSOLETE ###
     when "getUpdateReport"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("getUpdateReport")
       data["reports"] = eg.getUpdateReport()
       response.body = JSON.generate(data)
 
+    ### OBSOLETE ###
     when "putCross"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("putCross: #{userInput["lat"]}, #{userInput["lon"]}")
       data["html"] = eg.putCross(userInput["lat"], userInput["lon"])
       response.body = JSON.generate(data)
 
+    ### OBSOLETE ###
     when "removeCross"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("putCross: #{userInput["lat"]}, #{userInput["lon"]}")

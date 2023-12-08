@@ -95,12 +95,34 @@ var Evacquide = function() {
 
     }
 
+    function startPolling(){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "startPolling"
+	    }),
+        });
+    }
+
+    function stopPolling(){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "stopPolling"
+	    }),
+        });
+    }
+
+
     function onCrossClick(e){
 	map.removeLayer(e.target);
     }
 
     function report(anreport){
-	mon(anreport.table);
 	if (anreport.table in marker_set) {
 	} else {
 	    var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
@@ -158,6 +180,7 @@ var Evacquide = function() {
 	$('#auto_update').on('click', function() {
 	    if (on_auto_update == true) {
 		clearTimeout(timer);　
+		stopPolling();
 
 		$('#auto_update').text("Auto update (stopped)");
 		$('#auto_update').removeClass("btn-primary");
@@ -165,13 +188,13 @@ var Evacquide = function() {
 		on_auto_update = false;
 
 	    } else {
-
+		startPolling();
 		var countUp = function() {
 		    updateAllInfo();
 		    $('#result').text("update:" + counter++);
 		}
-		// 2秒(2000)ごとに動かす
-		timer = setInterval(countUp, 2000);
+		// 1秒(1000)ごとに動かす
+		timer = setInterval(countUp, 1000);
 
 		$('#auto_update').text("Auto update (running)");
 		$('#auto_update').removeClass("btn-secondary");

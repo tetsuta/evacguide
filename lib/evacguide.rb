@@ -6,61 +6,55 @@ require_relative './config'
 class EVACGUIDE
   def initialize()
     @reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
-    # @crossdb = AWSD.new("eg_cross")
-
     @report_list = []
-    @cross_list = []
 
-    @sent_report_id_list = []
+    @polling_flag = false
+    @polling_thread = nil
+
+    # OBSOLETE
+    @crossdb = nil
+    @cross_list = []
     @cross_index = 0
   end
 
 
   def getAllInfo()
-    @report_list = @reportdb.get_all_items
-    # @cross_list = @crossdb.get_all_items
-    @cross_list = []
-
-    data = {
-      "reports" => @report_list,
-      "crosses" => @cross_list
-    }
-
-    @sent_report_id_list = []
-    @report_list.each{|report|
-      @sent_report_id_list.push(report["table"])
-    }
-
-    if @cross_list != nil && @cross_list != []
-      id_list = []
-      @cross_list.each{|cross|
-        if cross["id"] =~ /([0-9]+)/
-          id_list.push($1.to_i)
-        end
-      }
-      if id_list.size > 0
-        @cross_index = id_list.max + 1
-      end
+    if @polling_flag == false
+      # puts "get_all_items"
+      @report_list = @reportdb.get_all_items
+    else
+      # puts "use cache"
     end
 
+    data = {
+      "reports" => @report_list
+    }
     return data
   end
 
 
-  def getUpdateReport()
-    update_report_list = []
-    @report_list = @reportdb.get_all_items
-    @report_list.each{|report|
-      if @sent_report_id_list.index(report["table"]) == nil
-        update_report_list.push(report)
-        @sent_report_id_list.push(report["table"])
+  def startPolling
+    @polling_flag = true
+
+    @polling_thread = Thread.new{
+      while 1
+        # puts "fetching"
+        @report_list = @reportdb.get_all_items
+        sleep POLLING_INTERVAL
       end
     }
-
-    return update_report_list
   end
 
 
+  def stopPolling
+    Thread.kill(@polling_thread)
+
+    @polling_flag = false
+  end
+
+
+
+  ### OBSOLETE ###
   def putCross(lat, lon)
     id = "c#{@cross_index}"
     @cross_index += 1
@@ -77,6 +71,7 @@ class EVACGUIDE
   end
 
 
+  ### OBSOLETE ###
   def removeCross(id)
     @crossdb.delete({id: id})
 
@@ -93,7 +88,9 @@ class EVACGUIDE
   def close()
   end
 
+
   :private
+  ### OBSOLETE ###
   def cross_table()
     buffer = ""
     @cross_list.each{|cross|
