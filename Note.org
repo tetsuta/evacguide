@@ -1,9 +1,32 @@
 
 * todo
-** report
-・すでに表示されているピンは追加で表示しない
-・サーバでは 2秒おきに dynamodbから情報を取得し、地図はサーバから毎秒情報を取得 (複数ユーザの同時利用に対応)
-・ルート選択のボタンを追加。選択後に "send route"を押すと Oishi2が更新される
+** 避難者位置のリアルタイム表示
+   - 軌跡は無しで
+   - 点を表示
+   - 1分過ぎたものは消す(アクティブなものだけを表示)
+** 人が動いた様子を後で再生できるようにする
+
+** open streetmapで、もっと寄れるか確認する
+   最大の解像度は同じだった
+
+
+** 見るだけの地図サイトを用意する
+   - 最初の一回だけ読み込むようにする
+   - 座標をもらう
+     パラメータ
+     map.html?lat=xxxx&lon=yyyy
+** モバイル用地図を作る
+** https化する？
+
+** 地図画面にピンを追加
+   電話で情報が来たときに情報を集約できるように
+** 地図上にルートを描けるように
+*** マウス
+   https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
+   これを使えばできそう
+
+   https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
+*** タブレット上のペン入力
 
 ** DONE ルートを画面から切り替えられるようにする
 
@@ -58,7 +81,7 @@ fi
 * note
   sudo service apache2 status
 
-    sudo service apache2 start
+  sudo service apache2 start
 
 
 * setup
