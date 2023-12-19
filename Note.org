@@ -1,11 +1,13 @@
 
 * todo
-** GOING 見るだけの地図サイトを用意する：mobile.html
+** DONE 見るだけの地図サイトを用意する：mobile.html
 *** DONE 最初の一回だけ読み込むようにする
     指定した時間以降のものだけを使う
-*** 座標をもらう
+*** DONE 座標をもらう
     パラメータ
-    map.html?lat=xxxx&lon=yyyy
+    mobile.html?lat=33.58066555313628&lon=130.34224748611453
+    http://localhost/~tetsu/evacguide/mobile.html?lat=33.58066555313628&lon=130.34224748611453
+
 ** 避難者位置のリアルタイム表示
    - 軌跡は無しで
    - 点を表示
