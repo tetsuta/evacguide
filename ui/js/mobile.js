@@ -1,4 +1,8 @@
 var Evacquide = function() {
+    var now = new Date();
+    var now_num = now.getTime();
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 3
+
     var map;
 
     // 描画した markerを記録する
@@ -42,17 +46,21 @@ var Evacquide = function() {
 		report(anreport);
 	    });
         });
-
     }
-
 
     function report(anreport){
 	if (anreport.table in marker_set) {
 	} else {
-	    var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
-	    var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
-	    var tooltip_text = "report on " + anreport.table;
-	    var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	    var time_num = Date.parse(anreport.table);
+	    if ((now_num - time_num) < threshold_millisec) {
+		// mon("o:" + anreport.table)
+		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
+		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
+		var tooltip_text = "report on " + anreport.table;
+		var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	    } else {
+		// mon("x:" + anreport.table)
+	    }
 	    marker_set[anreport.table] = marker;
 	}
     }

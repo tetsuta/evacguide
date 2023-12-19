@@ -1,4 +1,8 @@
 var Evacquide = function() {
+    var now = new Date();
+    var now_num = now.getTime();
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 10
+
     var crossIcon;
     var map;
     var timer;
@@ -24,9 +28,15 @@ var Evacquide = function() {
 	    // trackResize: true,
 	});
 
+	// 国土地理院
 	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
             attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
 	}).addTo(map);
+
+	// open street map
+	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	// }).addTo(map);
 
 	var mapwidth = $('#maparea').width();
 	var mapheight = (mapwidth * 3) / 4;
@@ -35,10 +45,6 @@ var Evacquide = function() {
 
 	map.setView([33.5808303, 130.340], 18);
 
-	// open street map
-	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	// }).addTo(map);
 
 	crossIcon = L.icon({
 	    iconUrl: 'image/cross-sign.png',
@@ -130,18 +136,24 @@ var Evacquide = function() {
     function report(anreport){
 	if (anreport.table in marker_set) {
 	} else {
-	    var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
-	    var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
-	    var tooltip_text = "report on " + anreport.table;
-	    var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	    var time_num = Date.parse(anreport.table);
+	    if ((now_num - time_num) < threshold_millisec) {
+		// mon("o:" + anreport.table)
+		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
+		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
+		var tooltip_text = "report on " + anreport.table;
+		var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+	    } else {
+		// mon("x:" + anreport.table)
+	    }
 	    marker_set[anreport.table] = marker;
 	}
     }
 
     function mon(text){
-	// var tmp = $('#monitor').text;
-	// $('#monitor').text(tmp + "___" + text);
-	$('#monitor').text(text);
+	var tmp = $('#monitor').text();
+	$('#monitor').text(tmp + "<br>" + text);
+	// $('#monitor').text(text);
     }
 
     function showRoute(){
