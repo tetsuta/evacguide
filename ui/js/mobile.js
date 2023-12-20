@@ -35,7 +35,7 @@ var Evacquide = function() {
 	} else {
 	    // console.log(lat_str);
 	    // console.log(lon_str);
-	    map.setView([33.5808303, Number(lon_str)], 18);
+	    map.setView([Number(lat_str), Number(lon_str)], 18);
 	}
 
 	// 最初にすべてを読み込む
