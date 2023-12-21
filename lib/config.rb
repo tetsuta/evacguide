@@ -13,6 +13,11 @@ AWS_REGION = "ap-northeast-1"
 AWS_REPORTDB = "Oishi3"
 AWS_ROUTEDB = "Oishi2"
 
+AWS_TRACEDB = "Oishi4"
+
+# in second
+TraceTimeRange = 60 * 60 * 24 * 1
+
 POLLING_INTERVAL = 2
 
 

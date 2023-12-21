@@ -89,6 +89,14 @@ s.mount_proc('/'){|request, response|
       data["crosses"] = all_info["crosses"]
       response.body = JSON.generate(data)
 
+    when "getTraces"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("selectRoute")
+      time = userInput["time"]
+      eg.getTraces(time)
+      response.body = JSON.generate(data)
+
+
     when "startPolling"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("startPolling")

@@ -72,6 +72,14 @@ when "getAllInfo"
     }
   end
 
+when "getTraces"
+  data = Hash::new()
+  data["mode"] = mode
+  data["time"] = "2023/12/19 22:25"
+  response = http.post(path, JSON.generate(data), header)
+  data = JSON.parse(response.body)
+  p data
+
 when "getUpdateReport"
   data = Hash::new()
   data["mode"] = mode

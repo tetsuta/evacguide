@@ -3,10 +3,55 @@ require 'json'
 require_relative './aws'
 require_relative './config'
 
+class Trace
+  def initialize(raw_trace)
+    @id = raw_trace["application"]
+    @time_list = raw_trace["time"]
+    @lat_list = raw_trace["lat"]
+    @lon_list = raw_trace["lon"]
+    @size = @time_list.size
+  end
+
+
+  # return the latest info of point if the time is in begin_time and end_time
+  # return nil if there is no data
+  def latest_info(begin_time, end_time)
+    latest_index = nil
+    @time_list.each_index{|index|
+
+      ### DBがきれいになったら消す
+      ### この例を排除するため→ "12/14/2023 1:16:28 AM", "12/13/2023 11:33:47 PM"
+      next if @time_list[index] =~ /AM/
+      next if @time_list[index] =~ /PM/
+
+      puts @time_list[index]
+
+      time = Time.parse(@time_list[index])
+      if begin_time <= time && time < end_time
+        latest_index = index
+      end
+    }
+
+    if latest_index == nil
+      return nil
+    else
+      data = {
+        id: @id,
+        time: @time_list[latest_index],
+        lat: @lat_list[latest_index],
+        lon: @lon_list[latest_index]
+      }
+      return data
+    end
+  end
+end
+
+
 class EVACGUIDE
   def initialize()
     @reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
     @routedb = AWSD.new(AWS_ROUTEDB, AWS_REGION)
+    @tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
     @report_list = []
 
     @polling_flag = false
@@ -31,6 +76,31 @@ class EVACGUIDE
       "reports" => @report_list
     }
     return data
+  end
+
+
+  def getTraces(time)
+    end_time = Time.parse(time)
+    begin_time = end_time - TraceTimeRange
+
+    # puts begin_time
+    # puts end_time
+
+    trace_list = []
+    @tracedb.get_all_items.each{|raw_trace|
+      trace = Trace.new(raw_trace)
+
+      latest_info = trace.latest_info(begin_time, end_time)
+      if latest_info != nil
+        trace_list.push(latest_info)
+      end
+    }
+    
+    data = {
+      "traces" => trace_list
+    }
+    return data
+
   end
 
 

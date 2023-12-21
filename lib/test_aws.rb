@@ -8,13 +8,14 @@ require_relative 'evacguide'
 
 oishi2 = AWSD.new("Oishi2", "ap-northeast-1")
 oishi3 = AWSD.new("Oishi3", "ap-northeast-1")
+oishi4 = AWSD.new("Oishi4", "ap-northeast-1")
 
-### check oishi2
-items = oishi2.get_all_items()
-items.each{|item|
-  puts "---"
-  p item
-}
+# ### check oishi2
+# items = oishi2.get_all_items()
+# items.each{|item|
+#   puts "---"
+#   p item
+# }
 
 # ==================================================
 ### add report
@@ -27,9 +28,9 @@ items.each{|item|
 # }
 
 # data = {
-#   "lat"=> "33.58091078872472",
-#   "lon"=> "130.33986032009128",
-#   "table"=>"2024/12/08 20:02:24",
+#   "lat"=> "33.58089738134409",
+#   "lon"=> "130.34000515937808",
+#   "table"=>"2025/12/08 20:02:24",
 #   "application"=>"INFO",
 #   "URL"=>"https://oishibucket.s3.ap-northeast-1.amazonaws.com/ScreenShot_20231208200219390.png"
 # }
@@ -56,6 +57,13 @@ items.each{|item|
 #   puts "---"
 #   p item
 # }
+
+# ==================================================
+items = oishi4.get_all_items()
+items.each{|item|
+  puts "---"
+  p item
+}
 
 
 

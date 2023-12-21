@@ -1,21 +1,11 @@
 
 * todo
-** DONE 見るだけの地図サイトを用意する：mobile.html
-*** DONE 最初の一回だけ読み込むようにする
-    指定した時間以降のものだけを使う
-*** DONE 座標をもらう
-    パラメータ
-    mobile.html?lat=33.58066555313628&lon=130.34224748611453
-    http://localhost/~tetsu/evacguide/mobile.html?lat=33.58066555313628&lon=130.34224748611453
-
 ** 避難者位置のリアルタイム表示
    - 軌跡は無しで
    - 点を表示
    - 1分過ぎたものは消す(アクティブなものだけを表示)
-** 人が動いた様子を後で再生できるようにする
 
-** open streetmapで、もっと寄れるか確認する
-   最大の解像度は同じだった
+** 人が動いた様子を後で再生できるようにする
 
 ** https化する？
 
@@ -28,6 +18,20 @@
 
    https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
 *** タブレット上のペン入力
+
+** DONE 見るだけの地図サイトを用意する：mobile.html
+*** DONE 最初の一回だけ読み込むようにする
+    指定した時間以降のものだけを使う
+*** DONE 座標をもらう
+    パラメータ
+    mobile.html?lat=33.58066555313628&lon=130.34224748611453
+    http://localhost/~tetsu/evacguide/mobile.html?lat=33.58066555313628&lon=130.34224748611453
+
+    藤崎駅
+    mobile.html?lat=33.58128214301003&lon=130.34832000732425
+
+** DONE open streetmapで、もっと寄れるか確認する[2023-12-19 Tue]
+   最大の解像度は同じだった
 
 ** DONE ルートを画面から切り替えられるようにする
 
@@ -57,7 +61,6 @@ else
     	 --update-expression 'SET lat = :ok' \
     	 --expression-attribute-values '{":ok": {"N": "-800"}}'
 fi
-** mobile用の画面
 ** DONE serverから dynamoDBのデータの取得をスレッド化する。serverへのリクエストにはキャッシュしたデータで答える
 ** DONE ピンの削除機能
 
@@ -98,6 +101,15 @@ fi
 ** AWS dynamoDB
 
 *** tables
+**** Oishi4: 5秒ごとの歩行データ
+     {
+       table (string): "Location"
+       application (string): "SessionID20231213132947551"
+       time (list of string)
+       lat (list of string)
+       lon (list of string)
+     }
+
 **** Oishi3
      {
        application (string) primary
@@ -183,8 +195,8 @@ fi
 *** data type
 **** report
      {
-       lat (float)
-       lng (float)
+       lat (string)
+       lon (string)
        image_url (string)
        time (string)
      }
@@ -193,7 +205,14 @@ fi
      {
        id (string)
        lat (float)
-       lng (float)
+       lon (float)
+     }
+
+   * trace
+     {
+       application (string)
+       lat (string)
+       lon (string)
      }
 
 *** mode
@@ -206,8 +225,28 @@ fi
        crosses: list of cross
      }
 
+**** trace(string time)
+     timeで指定された時間から、デフォルト値として決められた時間(TraceTimeRange)以内で
+     もっとも直近の位置情報を、
+     すべてのユーザ分返す
+
+     return:
+     {
+       traces: list of trace
+     }
+
+
+**** startPolling
+     サーバ上での DBへのポーリングを開始
+
+**** stopPolling
+     サーバ上での DBへのポーリングを修了
+
+
 **** getUpdateReport
      最後に取得したデータの後に追加されたデータを返す
+     (それぞれの接続元がいつデータを取得したかが分からないため、どこまでが最後かをサーバは分からない。そのためこれは使えない。常にすべてのデータを渡してクライアント側で判断してもらう。)
+
 
      return:
      list of report
@@ -238,8 +277,9 @@ fi
 
 ** client
 
+
 * function
-  
+
 
 * reference
   
