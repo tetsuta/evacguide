@@ -19,6 +19,7 @@
    https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
 *** タブレット上のペン入力
 
+** DONE 地図でより zoomできるようにする
 ** DONE 見るだけの地図サイトを用意する：mobile.html
 *** DONE 最初の一回だけ読み込むようにする
     指定した時間以降のものだけを使う
