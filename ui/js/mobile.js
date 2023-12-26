@@ -1,12 +1,13 @@
 var Evacquide = function() {
     var now = new Date();
     var now_num = now.getTime();
-    var threshold_millisec = 1000 * 60 * 60 * 24 * 3
-
-    var map;
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 3;
+    var map = null;
+    var current_location = null;
 
     // 描画した markerを記録する
     var marker_set = {};
+
 
     function main() {
 	map = L.map('map', {
@@ -38,10 +39,42 @@ var Evacquide = function() {
 	    map.setView([Number(lat_str), Number(lon_str)], 18);
 	}
 
+	map.locate({setView: true, maxZoom: 16});
+	map.on('locationfound', onLocationFound);
+	map.on('locationerror', onLocationError);
+
 	// 最初にすべてを読み込む
 	updateAllInfo();
     }
 
+    function onLocationFound(e) {
+	// console.log(e.latlng.lat);
+	// console.log(e.latlng.lng);
+
+	var pulsingIcon = L.icon.pulse({
+	    iconSize:[20,20]
+	    ,color:'#57c6fd'
+	    ,fillColor:'#57c6fd'
+	    ,heartbeat: 2
+	});
+
+	current_location = L.marker([e.latlng.lat, e.latlng.lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
+	map.setView([e.latlng.lat, e.latlng.lng], 18);
+
+	// 自動更新
+	// var update_current_location = function() {
+	//     map.removeLayer(current_location);
+	// current_location = L.marker([e.latlng.lat, e.latlng.lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
+	// map.setView([e.latlng.lat, e.latlng.lng], 18);
+	// }
+	// 5秒(5000)ごとに動かす
+	// timer = setInterval(update_current_location, 5000);
+
+    }
+
+    function onLocationError(e) {
+	alert(e.message);
+    }
 
     function getParam(name, url) {
 	if (!url) url = window.location.href;
