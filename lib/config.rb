@@ -19,6 +19,6 @@ TraceTimeRange = 60 * 60 * 24 * 1
 
 POLLING_INTERVAL = 2
 
-UseSSL = true
-SSLCertFile = '/etc/letsencrypt/live/digital-bosai.net/fullchain.pem'
-SSLCertKeyFile = '/etc/letsencrypt/live/digital-bosai.net/privkey.pem'
+UseSSL = false
+SSLCertFile = 'path/to/certfile'
+SSLCertKeyFile = 'path/to/keyfile'
