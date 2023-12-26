@@ -147,10 +147,10 @@ var Evacquide = function() {
 		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
 		var tooltip_text = "report on " + anreport.table;
 		var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
+		marker_set[anreport.table] = marker;
 	    } else {
 		// mon("x:" + anreport.table)
 	    }
-	    marker_set[anreport.table] = marker;
 	}
     }
 
@@ -293,8 +293,8 @@ var Evacquide = function() {
 	});
 
 	$('#clear_marker').on('click', function() {
-	    for (let key in marker_set) {
-		map.removeLayer(marker_set[key]);
+	    for (let marker_key in marker_set) {
+		map.removeLayer(marker_set[marker_key]);
 	    }
 	    marker_set = {};
 	});
