@@ -3,6 +3,7 @@
 
 require 'getoptlong'
 require 'webrick'
+require 'webrick/https'
 require 'net/protocol'
 require 'logger'
 
@@ -57,6 +58,14 @@ options = {
   :BindAddress => SystemBindAddress,
   :DoNotReverseLookup => true
 }
+
+if (UseSSL)
+  options.store(:SSLEnable, true)
+  options.store(:SSLVerifyClient, OpenSSL::SSL::VERIFY_NONE)
+  options.store(:SSLCertificate, OpenSSL::X509::Certificate.new(open(SSLCertFile).read))
+  options.store(:SSLPrivateKey, OpenSSL::PKey::RSA.new(open(SSLCertKeyFile).read))
+end
+
 s = WEBrick::HTTPServer.new(options)
 
 s.mount_proc('/'){|request, response|
