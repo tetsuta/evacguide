@@ -14,13 +14,13 @@
 
 
 * todo
-** mobileで現在地に戻るボタンを入れる
 ** 避難者位置のリアルタイム表示
    - 軌跡は無しで
    - 点を表示
    - 1分過ぎたものは消す(アクティブなものだけを表示)
 ** 人が動いた様子を後で再生できるようにする
 ** ------------------------------
+** DONE mobileで現在地に戻るボタンを入れる
 ** DONE mobileで現在地を更新し続ける
 ** DONE ハザードマップの重畳
    地理院がタイルを共有できるようにしている
@@ -104,6 +104,14 @@ fi
 ** DONE 画面サイズが変更されたら地図のサイズを変える
 ** DONE ×を置くアクションを設定
 
+
+* library
+  
+** leaflet-icon-pulse
+   https://github.com/mapshakers/leaflet-icon-pulse
+
+** Leaflet.EasyButton
+   https://github.com/CliffCloud/Leaflet.EasyButton
 
 * note
   sudo service apache2 status

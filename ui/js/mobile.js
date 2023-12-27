@@ -52,6 +52,12 @@ var Evacquide = function() {
 	    map.setView([Number(lat_str), Number(lon_str)], 18);
 	}
 
+	L.easyButton('fas fa-map-marker-alt', function(btn, easyMap){
+	    if ((current_lat != null) && (current_lng != null)) {
+		map.setView([current_lat, current_lng], 18);
+	    }
+	}).addTo(map);
+
 	map.on('locationfound', onLocationFound);
 	map.on('locationerror', onLocationError);
 
@@ -70,12 +76,11 @@ var Evacquide = function() {
 
     function auto_update_current_location() {
 	var update_current_location = function() {
-	    console.log("update current location")
+	    // console.log("update current location")
 	    map.removeLayer(current_location);
 	    map.locate();
 
 	    current_location = L.marker([current_lat, current_lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
-	    // map.setView([current_lat, current_lng], 18);
 	}
 	timer = setInterval(update_current_location, 10000);
     }
