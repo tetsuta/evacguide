@@ -1,15 +1,22 @@
 var Evacquide = function() {
-    var now = new Date();
-    var now_num = now.getTime();
+    // ==================================================
+    // この時間より古い報告は表示しない
     var threshold_millisec = 1000 * 60 * 60 * 24 * 10
 
-    var crossIcon;
+    // 再生時の倍速の倍率
+    var play_speed = 5.0;
+
+    // ==================================================
+    var now = new Date();
+    var now_num = now.getTime();
+
+    var humanIcon;
     var map;
     var timer;
     var counter = 0;
 
     var on_auto_update = false;
-
+    var on_track_traces = false;
     var on_route1 = false;
     var on_route2 = false;
 
@@ -21,6 +28,10 @@ var Evacquide = function() {
 
     var route1;
     var route2;
+
+    var shown_trace_list = [];
+    var trace_time_str = moment().format('YYYY/MM/DD/ HH:mm:ss');
+    var trace_time_msec = Date.parse(trace_time_str);
 
     function main() {
 	setupControlls();
@@ -73,10 +84,10 @@ var Evacquide = function() {
 	map.setView([33.5808303, 130.340], 18);
 
 
-	crossIcon = L.icon({
-	    iconUrl: 'image/cross-sign.png',
-	    iconSize:     [30, 30], // size of the icon
-	    iconAnchor:   [15, 15], // point of the icon which will correspond to marker's location
+	humanIcon = L.icon({
+	    iconUrl: 'image/icons8-man-50.png',
+	    iconSize:     [50, 50], // size of the icon
+	    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
 	});
 
 	map.on('click', function(e) {
@@ -88,7 +99,6 @@ var Evacquide = function() {
 		alert("lat: " + lat + ", lon: " + lon);
 
 	    } else {
-		// putCross(lat, lon);
 	    }
 	});
 
@@ -107,12 +117,6 @@ var Evacquide = function() {
 	// updateAllInfo();
     }
 
-    function putCross(lat, lon){
-	// clickでバツを表示する
-	// 再度クリックしたら消す
-	L.marker([lat, lon], {icon: crossIcon}).on('click', onCrossClick).addTo(map);
-    }
-
     function updateAllInfo(){
         $.ajax({
             type: 'POST',
@@ -125,10 +129,6 @@ var Evacquide = function() {
 	    data.reports.forEach(anreport => {
 		report(anreport);
 	    });
-	    // data.crosses.forEach(ancross => {
-	    // 	putCross(ancross.lat, ancross.lon);
-	    // });
-	    // $('#result').html(data.html);
         });
 
     }
@@ -156,7 +156,37 @@ var Evacquide = function() {
     }
 
 
-    function onCrossClick(e){
+    function updateTraces(time){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getTraces",
+		time: time
+	    }),
+        }).done(function(data) {
+	    removeTraces();
+	    data.traces.forEach(antrace => {
+		put_trace(antrace);
+	    });
+        });
+
+    }
+
+    function put_trace(trace){
+	// var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).on('click', onHumanClick).addTo(map);
+	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).addTo(map);
+	shown_trace_list.push(trace_mark);
+    }
+
+    function removeTraces(){
+	shown_trace_list.forEach(antrace => {
+	    map.removeLayer(antrace);
+	});
+    }
+
+    function onHumanClick(e){
 	map.removeLayer(e.target);
     }
 
@@ -178,9 +208,7 @@ var Evacquide = function() {
     }
 
     function mon(text){
-	var tmp = $('#monitor').text();
-	$('#monitor').text(tmp + "<br>" + text);
-	// $('#monitor').text(text);
+	$('#monitor').text(text);
     }
 
     function showRoute(){
@@ -265,9 +293,9 @@ var Evacquide = function() {
 		    }),
 		});
 
-		mon("sent route #" + route)
+		// mon("sent route #" + route)
 	    } else {
-		mon("sent nothing")
+		// mon("sent nothing")
 	    }
 	});
 
@@ -288,7 +316,7 @@ var Evacquide = function() {
 		on_route1 = false;
 	    }
 	    showRoute();
-	    mon("");
+	    // mon("");
 	});
 
 	$('#route2').on('click', function() {
@@ -307,7 +335,7 @@ var Evacquide = function() {
 		on_route2 = false;
 	    }
 	    showRoute();
-	    mon("");
+	    // mon("");
 	});
 
 	$('#manual_update').on('click', function() {
@@ -348,6 +376,44 @@ var Evacquide = function() {
 	    }
 	});
 
+
+	$('#track_traces').on('click', function() {
+	    // console.log("start");
+
+	    if (on_track_traces == true) {
+		clearTimeout(timer);　
+		$('#track_traces').text("Track traces (stopped)");
+		$('#track_traces').removeClass("btn-primary");
+		$('#track_traces').addClass("btn-secondary");
+		on_track_traces = false;
+
+	    } else {
+		trace_time_str = $('#starttime').val();
+		// trace_time_str = "2023/12/13 13:23";
+		trace_time_msec = Date.parse(trace_time_str);
+		$('#starttime').val(trace_time_str);
+		updateTraces(trace_time_str);
+
+		var countUp = function() {
+		    // 5秒ごとに更新
+		    trace_time_msec += 5000 * play_speed;
+		    trace_time_str = moment(trace_time_msec).format('YYYY/MM/DD/ HH:mm:ss');
+		    // console.log(trace_time_str);
+		    $('#starttime').val(trace_time_str);
+		    updateTraces(trace_time_str);
+		}
+		// 5秒(5000)ごとに動かす
+		timer = setInterval(countUp, 5000);
+
+		$('#track_traces').text("Track traces (running)");
+		$('#track_traces').removeClass("btn-secondary");
+		$('#track_traces').addClass("btn-primary");
+		on_track_traces = true;
+	    }
+	});
+
+	// 軌跡表示の初期値として今の時刻を設定
+	$('#starttime').val(trace_time_str);
     }
 
     return {

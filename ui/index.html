@@ -14,6 +14,7 @@
   <link rel="stylesheet" href="leaflet/leaflet.css" />
   <script src="leaflet/leaflet.js"></script>
 
+  <script type="text/javascript" src="js/moment.js"></script>
   <script type="text/javascript" src="js/config.js"></script>
   <script type="text/javascript" src="js/map.js"></script>
 </head>
@@ -43,6 +44,11 @@
 	<button id="manual_update" type="button" class="btn btn-primary">Manual update</button>
 	<button id="clear_marker" type="button" class="btn btn-primary">Clear Marker</button>
 	<button id="auto_update" type="button" class="btn btn-secondary">Auto update (stopped)</button>
+      </div>
+
+      <div class="input-group mb-3">
+	<button id="track_traces" type="button" class="btn btn-secondary">Track traces (stopped)</button>
+	<input id="starttime" type="text" class="form-control" placeholder="YYYY/MM/DD hh:mm:ss">
       </div>
 
       <div id="monitor">Monitor</div>
