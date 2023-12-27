@@ -14,16 +14,14 @@
 
 
 * todo
-** mobileで現在地を更新し続ける
 ** mobileで現在地に戻るボタンを入れる
-
 ** 避難者位置のリアルタイム表示
    - 軌跡は無しで
    - 点を表示
    - 1分過ぎたものは消す(アクティブなものだけを表示)
 ** 人が動いた様子を後で再生できるようにする
-
 ** ------------------------------
+** DONE mobileで現在地を更新し続ける
 ** DONE ハザードマップの重畳
    地理院がタイルを共有できるようにしている
    https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/opendata.html#tsunami

@@ -8,12 +8,22 @@ var Evacquide = function() {
     // 描画した markerを記録する
     var marker_set = {};
 
+    var current_lat = null;
+    var current_lng = null;
+
+    var pulsingIcon = L.icon.pulse({
+	iconSize:[20,20],
+	color:'#57c6fd',
+	fillColor:'#57c6fd',
+	heartbeat: 2
+    });
+
+    var first_location_found = true;
 
     function main() {
 	map = L.map('map', {
 	    // trackResize: true,
 	});
-
 
 	// 国土地理院
 	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
@@ -32,44 +42,55 @@ var Evacquide = function() {
 	var lat_str = getParam('lat');
 	var lon_str = getParam('lon');
 	if (lat_str == null || lon_str == null) {
+	    console.log("default location");
+
 	    map.setView([33.5808303, 130.340], 18);
 	} else {
+	    console.log("gived location");
 	    // console.log(lat_str);
 	    // console.log(lon_str);
 	    map.setView([Number(lat_str), Number(lon_str)], 18);
 	}
 
-	map.locate({setView: true, maxZoom: 16});
 	map.on('locationfound', onLocationFound);
 	map.on('locationerror', onLocationError);
 
 	// 最初にすべてを読み込む
 	updateAllInfo();
+
+	console.log("go3")
+	map.locate({setView: true, maxZoom: 16});
+
+	console.log("go4")
+	console.log("go5")
+	console.log("go6")
+
+	auto_update_current_location();
+    }
+
+    function auto_update_current_location() {
+	var update_current_location = function() {
+	    console.log("update current location")
+	    map.removeLayer(current_location);
+	    map.locate();
+
+	    current_location = L.marker([current_lat, current_lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
+	    // map.setView([current_lat, current_lng], 18);
+	}
+	timer = setInterval(update_current_location, 10000);
     }
 
     function onLocationFound(e) {
-	// console.log(e.latlng.lat);
-	// console.log(e.latlng.lng);
-
-	var pulsingIcon = L.icon.pulse({
-	    iconSize:[20,20]
-	    ,color:'#57c6fd'
-	    ,fillColor:'#57c6fd'
-	    ,heartbeat: 2
-	});
-
-	current_location = L.marker([e.latlng.lat, e.latlng.lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
-	map.setView([e.latlng.lat, e.latlng.lng], 18);
-
-	// 自動更新
-	// var update_current_location = function() {
-	//     map.removeLayer(current_location);
-	// current_location = L.marker([e.latlng.lat, e.latlng.lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
-	// map.setView([e.latlng.lat, e.latlng.lng], 18);
-	// }
-	// 5秒(5000)ごとに動かす
-	// timer = setInterval(update_current_location, 5000);
-
+	current_lat = e.latlng.lat;
+	current_lng = e.latlng.lng;
+	// console.log("get current location");
+	// console.log(current_lat);
+	// console.log(current_lng);
+	if (first_location_found == true) {
+	    current_location = L.marker([current_lat, current_lng], {icon:pulsingIcon}).addTo(map).bindPopup("heartbeat:2sec");
+	    map.setView([current_lat, current_lng], 18);
+	    first_location_found = false;
+	}
     }
 
     function onLocationError(e) {
