@@ -24,7 +24,7 @@ class Trace
       next if @time_list[index] =~ /AM/
       next if @time_list[index] =~ /PM/
 
-      puts @time_list[index]
+      # puts @time_list[index]
 
       time = Time.parse(@time_list[index])
       if begin_time <= time && time < end_time

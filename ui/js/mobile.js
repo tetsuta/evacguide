@@ -64,12 +64,11 @@ var Evacquide = function() {
 	// 最初にすべてを読み込む
 	updateAllInfo();
 
-	console.log("go3")
 	map.locate({setView: true, maxZoom: 16});
-
-	console.log("go4")
-	console.log("go5")
-	console.log("go6")
+	// console.log("go3")
+	// console.log("go4")
+	// console.log("go5")
+	// console.log("go6")
 
 	auto_update_current_location();
     }

@@ -75,7 +75,7 @@ when "getAllInfo"
 when "getTraces"
   data = Hash::new()
   data["mode"] = mode
-  data["time"] = "2023/12/19 22:25"
+  data["time"] = "2023/12/13 13:23"
   response = http.post(path, JSON.generate(data), header)
   data = JSON.parse(response.body)
   p data
