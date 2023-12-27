@@ -1,27 +1,35 @@
 
 * URL
+  domain
+  https://digital-bosai.net/evacguide/index.html
+  https://digital-bosai.net/evacguide/mobile.html
+
+  elastic ip
+  http://35.74.99.112/evacguide/index.html
+  http://35.74.99.112/evacguide/mobile.html
+
+  initial
   http://35.77.198.0/index.html
   http://35.77.198.0/mobile.html
 
 
 * todo
-** https化する
-
-** GOING スマホから位置情報をもらって、現在位置を表示しつつセンタリング
-   取れなかったらどうする？
-
-** ハザードマップの重畳
-   地理院がタイルを共有できるようにしている
-   https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/opendata.html#tsunami
+** mobileで現在地を更新し続ける
+** mobileで現在地に戻るボタンを入れる
 
 ** 避難者位置のリアルタイム表示
    - 軌跡は無しで
    - 点を表示
    - 1分過ぎたものは消す(アクティブなものだけを表示)
-
 ** 人が動いた様子を後で再生できるようにする
 
 ** ------------------------------
+** DONE ハザードマップの重畳
+   地理院がタイルを共有できるようにしている
+   https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/opendata.html#tsunami
+
+** DONE スマホから位置情報をもらって、現在位置を表示しつつセンタリング
+   取れなかったらデフォルトの場所にする。今は福岡
 
 ** 地図画面にピンを追加
    電話で情報が来たときに情報を集約できるように
@@ -32,6 +40,7 @@
 
    https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
 *** タブレット上のペン入力
+** DONE https化する
 
 ** DONE 地図でより zoomできるようにする
 ** DONE 見るだけの地図サイトを用意する：mobile.html

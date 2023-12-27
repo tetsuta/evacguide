@@ -24,23 +24,46 @@ var Evacquide = function() {
 
     function main() {
 	setupControlls();
+
+	var maplist = [];
+	var overlaylist = [];
+
+	maplist[0] = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+	    maxZoom: 24,
+	    maxNativeZoom: 18,
+	    attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
+	});
+	maplist[1] = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		maxZoom: 24,
+		maxNativeZoom: 18,
+		attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	});
+
+	overlaylist[0] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '国土地理院：津波浸水想定'
+	});
+	overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '国土地理院：洪水浸水想定区域'
+	});
+
+	var baseMaps = {
+	    '国土地理院': maplist[0],
+	    'OpenStreetMap': maplist[1]
+	};
+
+	var overlayMaps = {
+	    'ハザードマップ 津波浸水想定': overlaylist[0],
+	    'ハザードマップ 洪水浸水想定区域': overlaylist[1]
+	};
+
 	map = L.map('map', {
+	    layers: [maplist[0], overlaylist[0]]
 	    // trackResize: true,
 	});
 
-	// 国土地理院
-	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-	    maxZoom: 24,
-	    maxNativeZoom: 18,
-            attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
-	}).addTo(map);
-
-	// open street map
-	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	    // maxZoom: 24,
-	    // maxNativeZoom: 18,
-	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	// }).addTo(map);
+	L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 	var mapwidth = $('#maparea').width();
 	var mapheight = (mapwidth * 3) / 4;
