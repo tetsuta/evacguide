@@ -12,9 +12,16 @@
   http://35.77.198.0/index.html
   http://35.77.198.0/mobile.html
 
+  軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** mobileの方で拡大できるように
+** 土砂の情報を載せる
+** 凡例を載せる
+   →mobile
+** mobileにもハンバーガーをのる
+   - default: on
+   - 凡例も載せる：ハンバーガーの中に
+** ハザードマップボタンを作る？
 ** 軌跡を残すように
 ** SessionIDによって出力をし分ける
 ** reportは、古い順に出す
@@ -22,13 +29,20 @@
 ** mobile: ボタンを右下に
 ** mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** 倍速設定も画面におく
+** 地図上にルートを描けるように
+*** マウス
+   https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
+   これを使えばできそう
+
+   https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
+*** タブレット上のペン入力
+** DONE mobileの方で拡大できるように
+** ------------------------------
+** DONE 人が動いた様子を後で再生できるようにする
 ** DONE 避難者位置のリアルタイム表示
-   - テスト用の日付：2023/12/13 13:23
    - 軌跡は無しで
    - 点を表示
    - 1分過ぎたものは消す(アクティブなものだけを表示)
-** DONE 人が動いた様子を後で再生できるようにする
-** ------------------------------
 ** DONE mobileで現在地に戻るボタンを入れる
 ** DONE mobileで現在地を更新し続ける
 ** DONE ハザードマップの重畳
@@ -40,13 +54,6 @@
 
 ** 地図画面にピンを追加
    電話で情報が来たときに情報を集約できるように
-** 地図上にルートを描けるように
-*** マウス
-   https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
-   これを使えばできそう
-
-   https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
-*** タブレット上のペン入力
 ** DONE https化する
 
 ** DONE 地図でより zoomできるようにする
