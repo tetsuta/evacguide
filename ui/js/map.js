@@ -85,9 +85,9 @@ var Evacquide = function() {
 
 
 	humanIcon = L.icon({
-	    iconUrl: 'image/icons8-man-50.png',
-	    iconSize:     [50, 50], // size of the icon
-	    iconAnchor:   [25, 25], // point of the icon which will correspond to marker's location
+	    iconUrl: 'image/MapNoHito.png',
+	    iconSize:     [24, 50], // size of the icon
+	    iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
 	});
 
 	map.on('click', function(e) {
