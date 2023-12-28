@@ -30,7 +30,7 @@ var Evacquide = function() {
     var route2;
 
     var shown_trace_list = [];
-    var trace_time_str = moment().format('YYYY/MM/DD/ HH:mm:ss');
+    var trace_time_str = moment().format('YYYY/MM/DD HH:mm:ss');
     var trace_time_msec = Date.parse(trace_time_str);
 
     function main() {
@@ -397,7 +397,7 @@ var Evacquide = function() {
 		var countUp = function() {
 		    // 5秒ごとに更新
 		    trace_time_msec += 5000 * play_speed;
-		    trace_time_str = moment(trace_time_msec).format('YYYY/MM/DD/ HH:mm:ss');
+		    trace_time_str = moment(trace_time_msec).format('YYYY/MM/DD HH:mm:ss');
 		    // console.log(trace_time_str);
 		    $('#starttime').val(trace_time_str);
 		    updateTraces(trace_time_str);
