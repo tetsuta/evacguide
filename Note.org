@@ -21,14 +21,13 @@
 ** mobileにもハンバーガーをのる
    - default: on
    - 凡例も載せる：ハンバーガーの中に
-** ハザードマップボタンを作る？
 ** 軌跡を残すように
 ** SessionIDによって出力をし分ける
 ** reportは、古い順に出す
-** mobile上で reportは全部出す: 設定でよい
-** mobile: ボタンを右下に
 ** mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** 倍速設定も画面におく
+** ハザードマップボタンを作る？
+** DONE mobile: ボタンを右下に
 ** 地図上にルートを描けるように
 *** マウス
    https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
@@ -36,6 +35,7 @@
 
    https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
 *** タブレット上のペン入力
+** DONE mobile上で reportは全部出す: 設定でよい
 ** DONE mobileの方で拡大できるように
 ** ------------------------------
 ** DONE 人が動いた様子を後で再生できるようにする

@@ -1,7 +1,7 @@
 var Evacquide = function() {
     // ==================================================
     // この時間より古い報告は表示しない
-    var threshold_millisec = 1000 * 60 * 60 * 24 * 10
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 365
 
     // 再生時の倍速の倍率
     var play_speed = 5.0;
@@ -73,9 +73,10 @@ var Evacquide = function() {
 	    layers: [maplist[0], overlaylist[0]]
 	    // trackResize: true,
 	});
+	map.zoomControl.setPosition('bottomright');
 
-	L.control.layers(baseMaps, overlayMaps).addTo(map);
-
+	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
+	
 	var mapwidth = $('#maparea').width();
 	var mapheight = (mapwidth * 3) / 4;
 	$('#map').css('width', mapwidth);

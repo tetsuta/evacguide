@@ -24,6 +24,7 @@ var Evacquide = function() {
 	map = L.map('map', {
 	    // trackResize: true,
 	});
+	map.zoomControl.setPosition('bottomright');
 
 	// 国土地理院
 	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
@@ -57,7 +58,7 @@ var Evacquide = function() {
 	    if ((current_lat != null) && (current_lng != null)) {
 		map.setView([current_lat, current_lng], 18);
 	    }
-	}).addTo(map);
+	}).setPosition('bottomright').addTo(map);
 
 	map.on('locationfound', onLocationFound);
 	map.on('locationerror', onLocationError);
