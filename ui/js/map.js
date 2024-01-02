@@ -54,7 +54,31 @@ var Evacquide = function() {
 	    opacity: 0.5,
 	    attribution: '国土地理院：津波浸水想定'
 	});
-	overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
+	overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '土砂災害警戒区域（土石流）'
+	});
+
+	overlaylist[2] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '土砂災害警戒区域（急傾斜地の崩壊）'
+	});
+
+	overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukikenkeiryu/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '土石流危険渓流'
+	});
+
+	overlaylist[4] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeisyachihoukai/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '急傾斜地崩壊危険箇所'
+	});
+
+	overlaylist[5] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikikenkasyo/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '地すべり危険箇所'
+	});
+	overlaylist[6] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
 	    opacity: 0.5,
 	    attribution: '国土地理院：洪水浸水想定区域'
 	});
@@ -66,11 +90,16 @@ var Evacquide = function() {
 
 	var overlayMaps = {
 	    'ハザードマップ 津波浸水想定': overlaylist[0],
-	    'ハザードマップ 洪水浸水想定区域': overlaylist[1]
+	    'ハザードマップ 土砂災害警戒区域（土石流）': overlaylist[1],
+	    'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）': overlaylist[2],
+	    'ハザードマップ 土石流危険渓流': overlaylist[3],
+	    'ハザードマップ 急傾斜地崩壊危険箇所': overlaylist[4],
+	    'ハザードマップ 地すべり危険箇所': overlaylist[5],
+	    'ハザードマップ 洪水浸水想定区域': overlaylist[6]
 	};
 
 	map = L.map('map', {
-	    layers: [maplist[0], overlaylist[0]]
+	    layers: [maplist[0], overlaylist[0]]  // default layer
 	    // trackResize: true,
 	});
 	map.zoomControl.setPosition('bottomright');
