@@ -21,23 +21,108 @@ var Evacquide = function() {
     var first_location_found = true;
 
     function main() {
+	// ------------------------------
+	var maplist = [];
+	var overlaylist = [];
+
+	maplist[0] = L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
+	    maxZoom: 24,
+	    maxNativeZoom: 18,
+	    attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
+	});
+	maplist[1] = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	    maxZoom: 24,
+	    maxNativeZoom: 18,
+	    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+	});
+
+	overlaylist[0] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/04_tsunami_newlegend_data/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '国土地理院：津波浸水想定'
+	});
+	overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '土砂災害警戒区域（土石流）'
+	});
+
+	overlaylist[2] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '土砂災害警戒区域（急傾斜地の崩壊）'
+	});
+
+	overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
+	    opacity: 0.5,
+	    attribution: '国土地理院：洪水浸水想定区域'
+	});
+
+	var baseMaps = {
+	    '国土地理院': maplist[0],
+	    'OpenStreetMap': maplist[1]
+	};
+
+	var overlayLabel_wo_legend = {
+	    'hz0': 'ハザードマップ 津波浸水想定',
+	    'hz1': 'ハザードマップ 土砂災害警戒区域（土石流）',
+	    'hz2': 'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）',
+	    'hz3': 'ハザードマップ 洪水浸水想定区域'
+	}
+	var overlayLabel_with_legend = {
+	    'hz0': '<span id=hz0>ハザードマップ 津波浸水想定<br><img src=image/legend_tsunami.png /></span>',
+	    'hz1': '<span id=hz1>ハザードマップ 土砂災害警戒区域（土石流）<br><img src=image/dosha_keikai_tiny.png /></span>',
+	    'hz2': '<span id=hz2>ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）<br><img src=image/dosha_keikai_tiny.png /></span>',
+	    'hz3': '<span id=hz3>ハザードマップ 洪水浸水想定区域<br><img src=image/shinsui_legend2-1.png /></span>'
+	}
+
+	var overlayMaps = {
+	    '<span id=hz0></span>': overlaylist[0],
+	    '<span id=hz1></span>': overlaylist[1],
+	    '<span id=hz2></span>': overlaylist[2],
+	    '<span id=hz3></span>': overlaylist[3]
+	};
+
+
+	// ------------------------------
 	map = L.map('map', {
+	    layers: [maplist[0], overlaylist[0]]  // default layer
 	    // trackResize: true,
 	});
 	map.zoomControl.setPosition('bottomright');
 
-	// 国土地理院
-	L.tileLayer('https://cyberjapandata.gsi.go.jp/xyz/std/{z}/{x}/{y}.png', {
-	    maxZoom: 24,
-	    maxNativeZoom: 18,
-            attribution: "<a href='https://maps.gsi.go.jp/development/ichiran.html' target='_blank'>国土地理院</a>"
-	}).addTo(map);
+	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
 
-	// open street map
-	// L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-	//     maxZoom: 19,
-	//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-	// }).addTo(map);
+	map.on('overlayadd', function(e) {
+	    console.log(e.name);
+	    var target_name = e.name;
+	    if (target_name.includes('hz0')) {
+		$('#hz0').html(overlayLabel_with_legend['hz0']);
+	    }
+	    if (target_name.includes('hz1')) {
+		$('#hz1').html(overlayLabel_with_legend['hz1']);
+	    }
+	    if (target_name.includes('hz2')) {
+		$('#hz2').html(overlayLabel_with_legend['hz2']);
+	    }
+	    if (target_name.includes('hz3')) {
+		$('#hz3').html(overlayLabel_with_legend['hz3']);
+	    }
+	});
+
+	map.on('overlayremove', function(e) {
+	    console.log(e.name);
+	    var target_name = e.name;
+	    if (target_name.includes('hz0')) {
+		$('#hz0').html(overlayLabel_wo_legend['hz0']);
+	    }
+	    if (target_name.includes('hz1')) {
+		$('#hz1').html(overlayLabel_wo_legend['hz1']);
+	    }
+	    if (target_name.includes('hz2')) {
+		$('#hz2').html(overlayLabel_wo_legend['hz2']);
+	    }
+	    if (target_name.includes('hz3')) {
+		$('#hz3').html(overlayLabel_wo_legend['hz3']);
+	    }
+	});
 
 
 	var param = location.search;
@@ -71,6 +156,13 @@ var Evacquide = function() {
 	// console.log("go4");
 	// console.log("go5");
 	// console.log("go6");
+
+
+	// initial legend
+	$('#hz0').html(overlayLabel_with_legend['hz0']);
+	$('#hz1').html(overlayLabel_wo_legend['hz1']);
+	$('#hz2').html(overlayLabel_wo_legend['hz2']);
+	$('#hz3').html(overlayLabel_wo_legend['hz3']);
 
 	auto_update_current_location();
     }
