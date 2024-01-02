@@ -15,16 +15,10 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 軌跡を残すように
-** SessionIDによって出力をし分ける
 ** reportは、古い順に出す
-** DONE mouseoverで 人の最新の位置情報とタイムスタンプを出す
-** DONE 倍速設定も画面におく
-** DONE ハザードマップボタンを作る？
-** DONE mobileにもハンバーガーをのせる
-** DONE 凡例を載せる
-** DONE 土砂の情報を載せる
-** DONE mobile: ボタンを右下に
+** ------------------------------
+** SessionIDによって出力をし分ける
+** DONE 軌跡を残すように
 ** 地図上にルートを描けるように
 *** マウス
    https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
@@ -32,6 +26,15 @@
 
    https://github.com/Leaflet/Leaflet.draw?tab=readme-ov-file
 *** タブレット上のペン入力
+** 地図画面にピンを追加
+   電話で情報が来たときに情報を集約できるように
+** DONE mouseoverで 人の最新の位置情報とタイムスタンプを出す
+** DONE 倍速設定も画面におく
+** DONE ハザードマップボタンを作る？
+** DONE mobileにもハンバーガーをのせる
+** DONE 凡例を載せる
+** DONE 土砂の情報を載せる
+** DONE mobile: ボタンを右下に
 ** DONE mobile上で reportは全部出す: 設定でよい
 ** DONE mobileの方で拡大できるように
 ** DONE 人が動いた様子を後で再生できるようにする
@@ -47,9 +50,6 @@
 
 ** DONE スマホから位置情報をもらって、現在位置を表示しつつセンタリング
    取れなかったらデフォルトの場所にする。今は福岡
-
-** 地図画面にピンを追加
-   電話で情報が来たときに情報を集約できるように
 ** DONE https化する
 
 ** DONE 地図でより zoomできるようにする

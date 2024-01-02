@@ -116,10 +116,18 @@ var Evacquide = function() {
 
 	// ------------------------------
 	humanIcon = L.icon({
-	    iconUrl: 'image/MapNoHito.png',
+	    iconUrl: 'image/MapNoHito2.png',
 	    iconSize:     [24, 50], // size of the icon
 	    iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
 	});
+
+	traceIcon = L.icon({
+	    iconUrl: 'image/trace.png',
+	    iconSize:     [10, 10], // size of the icon
+	    iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
+	});
+
+
 
 	map.on('click', function(e) {
 	    console.log(e);
@@ -241,7 +249,8 @@ var Evacquide = function() {
 		time: time
 	    }),
         }).done(function(data) {
-	    removeTraces();
+	    // removeTraces();
+	    changeTraceIcons();
 	    data.traces.forEach(antrace => {
 		put_trace(antrace);
 	    });
@@ -254,6 +263,12 @@ var Evacquide = function() {
 	var tooltip_text = "updated on " + trace.time;
 	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
 	shown_trace_list.push(trace_mark);
+    }
+
+    function changeTraceIcons(){
+	shown_trace_list.forEach(antrace => {
+	    antrace.setIcon(traceIcon);
+	});
     }
 
     function removeTraces(){
