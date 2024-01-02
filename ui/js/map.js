@@ -34,8 +34,7 @@ var Evacquide = function() {
     var trace_time_msec = Date.parse(trace_time_str);
 
     function main() {
-	setupControlls();
-
+	// ------------------------------
 	var maplist = [];
 	var overlaylist = [];
 
@@ -64,21 +63,7 @@ var Evacquide = function() {
 	    attribution: '土砂災害警戒区域（急傾斜地の崩壊）'
 	});
 
-	overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukikenkeiryu/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '土石流危険渓流'
-	});
-
-	overlaylist[4] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_kyukeisyachihoukai/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '急傾斜地崩壊危険箇所'
-	});
-
-	overlaylist[5] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_jisuberikikenkasyo/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '地すべり危険箇所'
-	});
-	overlaylist[6] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
+	overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
 	    opacity: 0.5,
 	    attribution: '国土地理院：洪水浸水想定区域'
 	});
@@ -88,32 +73,48 @@ var Evacquide = function() {
 	    'OpenStreetMap': maplist[1]
 	};
 
+	var overlayLabel_wo_legend = {
+	    'hz0': 'ハザードマップ 津波浸水想定',
+	    'hz1': 'ハザードマップ 土砂災害警戒区域（土石流）',
+	    'hz2': 'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）',
+	    'hz3': 'ハザードマップ 洪水浸水想定区域'
+	}
+	var overlayLabel_with_legend = {
+	    'hz0': '<span id=hz0>ハザードマップ 津波浸水想定<br><img src=image/legend_tsunami.png /></span>',
+	    'hz1': '<span id=hz1>ハザードマップ 土砂災害警戒区域（土石流）<br><img src=image/dosha_keikai_mini.png /></span>',
+	    'hz2': '<span id=hz2>ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）<br><img src=image/dosha_keikai_mini.png /></span>',
+	    'hz3': '<span id=hz3>ハザードマップ 洪水浸水想定区域<br><img src=image/shinsui_legend2-1.png /></span>'
+	}
+
 	var overlayMaps = {
-	    'ハザードマップ 津波浸水想定': overlaylist[0],
-	    'ハザードマップ 土砂災害警戒区域（土石流）': overlaylist[1],
-	    'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）': overlaylist[2],
-	    'ハザードマップ 土石流危険渓流': overlaylist[3],
-	    'ハザードマップ 急傾斜地崩壊危険箇所': overlaylist[4],
-	    'ハザードマップ 地すべり危険箇所': overlaylist[5],
-	    'ハザードマップ 洪水浸水想定区域': overlaylist[6]
+	    '<span id=hz0></span>': overlaylist[0],
+	    '<span id=hz1></span>': overlaylist[1],
+	    '<span id=hz2></span>': overlaylist[2],
+	    '<span id=hz3></span>': overlaylist[3]
 	};
 
+
+	// ------------------------------
 	map = L.map('map', {
 	    layers: [maplist[0], overlaylist[0]]  // default layer
 	    // trackResize: true,
 	});
 	map.zoomControl.setPosition('bottomright');
 
+	map.setView([33.5808303, 130.340], 18);
+
 	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
-	
+
 	var mapwidth = $('#maparea').width();
 	var mapheight = (mapwidth * 3) / 4;
 	$('#map').css('width', mapwidth);
 	$('#map').css('height', mapheight);
 
-	map.setView([33.5808303, 130.340], 18);
+	// ------------------------------
+	setupControlls();
 
 
+	// ------------------------------
 	humanIcon = L.icon({
 	    iconUrl: 'image/MapNoHito.png',
 	    iconSize:     [24, 50], // size of the icon
@@ -121,6 +122,7 @@ var Evacquide = function() {
 	});
 
 	map.on('click', function(e) {
+	    console.log(e);
 	    lat = e.latlng.lat;
 	    lon = e.latlng.lng;
 
@@ -142,6 +144,49 @@ var Evacquide = function() {
 
 	map.on('move', function(e) {
 	});
+
+
+	map.on('overlayadd', function(e) {
+	    console.log(e.name);
+	    var target_name = e.name;
+	    if (target_name.includes('hz0')) {
+		$('#hz0').html(overlayLabel_with_legend['hz0']);
+	    }
+	    if (target_name.includes('hz1')) {
+		$('#hz1').html(overlayLabel_with_legend['hz1']);
+	    }
+	    if (target_name.includes('hz2')) {
+		$('#hz2').html(overlayLabel_with_legend['hz2']);
+	    }
+	    if (target_name.includes('hz3')) {
+		$('#hz3').html(overlayLabel_with_legend['hz3']);
+	    }
+	});
+
+	map.on('overlayremove', function(e) {
+	    console.log(e.name);
+	    var target_name = e.name;
+	    if (target_name.includes('hz0')) {
+		$('#hz0').html(overlayLabel_wo_legend['hz0']);
+	    }
+	    if (target_name.includes('hz1')) {
+		$('#hz1').html(overlayLabel_wo_legend['hz1']);
+	    }
+	    if (target_name.includes('hz2')) {
+		$('#hz2').html(overlayLabel_wo_legend['hz2']);
+	    }
+	    if (target_name.includes('hz3')) {
+		$('#hz3').html(overlayLabel_wo_legend['hz3']);
+	    }
+	});
+
+
+	// initial legend
+	$('#hz0').html(overlayLabel_with_legend['hz0']);
+	$('#hz1').html(overlayLabel_wo_legend['hz1']);
+	$('#hz2').html(overlayLabel_wo_legend['hz2']);
+	$('#hz3').html(overlayLabel_wo_legend['hz3']);
+
 
 	// 最初にすべてを読み込む
 	// updateAllInfo();

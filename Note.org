@@ -15,7 +15,6 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 凡例を載せる
 ** mobileにもハンバーガーをのせる
 ** 軌跡を残すように
 ** SessionIDによって出力をし分ける
@@ -23,6 +22,7 @@
 ** mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** 倍速設定も画面におく
 ** ハザードマップボタンを作る？
+** DONE 凡例を載せる
 ** DONE 土砂の情報を載せる
 ** DONE mobile: ボタンを右下に
 ** 地図上にルートを描けるように
@@ -124,6 +124,12 @@ fi
 
 ** Leaflet.EasyButton
    https://github.com/CliffCloud/Leaflet.EasyButton
+
+** Leaflet.toolbar
+   https://github.com/Leaflet/Leaflet.toolbar
+
+
+
 
 * note
   sudo service apache2 status
