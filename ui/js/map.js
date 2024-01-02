@@ -251,7 +251,8 @@ var Evacquide = function() {
 
     function put_trace(trace){
 	// var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).on('click', onHumanClick).addTo(map);
-	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).addTo(map);
+	var tooltip_text = "updated on " + trace.time;
+	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
 	shown_trace_list.push(trace_mark);
     }
 

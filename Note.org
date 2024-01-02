@@ -16,9 +16,9 @@
 
 * todo
 ** 軌跡を残すように
-** mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** SessionIDによって出力をし分ける
 ** reportは、古い順に出す
+** DONE mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** DONE 倍速設定も画面におく
 ** DONE ハザードマップボタンを作る？
 ** DONE mobileにもハンバーガーをのせる
@@ -263,6 +263,7 @@ fi
        application (string)
        lat (string)
        lon (string)
+       time (string)
      }
 
 *** mode
