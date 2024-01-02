@@ -4,7 +4,7 @@ var Evacquide = function() {
     var threshold_millisec = 1000 * 60 * 60 * 24 * 365
 
     // 再生時の倍速の倍率
-    var play_speed = 5.0;
+    var play_speed = "1.0";
 
     // ==================================================
     var now = new Date();
@@ -465,13 +465,15 @@ var Evacquide = function() {
 	    } else {
 		trace_time_str = $('#starttime').val();
 		// trace_time_str = "2023/12/13 13:23";
+		play_speed = $('#playback_speed').val();
 		trace_time_msec = Date.parse(trace_time_str);
+
 		$('#starttime').val(trace_time_str);
 		updateTraces(trace_time_str);
 
 		var countUp = function() {
 		    // 5秒ごとに更新
-		    trace_time_msec += 5000 * play_speed;
+		    trace_time_msec += 5000 * Number(play_speed);
 		    trace_time_str = moment(trace_time_msec).format('YYYY/MM/DD HH:mm:ss');
 		    // console.log(trace_time_str);
 		    $('#starttime').val(trace_time_str);
@@ -489,6 +491,8 @@ var Evacquide = function() {
 
 	// 軌跡表示の初期値として今の時刻を設定
 	$('#starttime').val(trace_time_str);
+	// 初期の倍率を設定
+	$('#playback_speed').val(play_speed);
     }
 
     return {
