@@ -67,7 +67,7 @@ class EVACGUIDE
   def getAllInfo()
     if @polling_flag == false
       # puts "get_all_items"
-      @report_list = @reportdb.get_all_items
+      @report_list = @reportdb.get_sorted_all_items
     else
       # puts "use cache"
     end
@@ -134,7 +134,7 @@ class EVACGUIDE
     @polling_thread = Thread.new{
       while 1
         # puts "fetching"
-        @report_list = @reportdb.get_all_items
+        @report_list = @reportdb.get_sorted_all_items
         sleep POLLING_INTERVAL
       end
     }

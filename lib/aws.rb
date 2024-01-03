@@ -46,5 +46,16 @@ class AWSD
     ret_val = @table.scan()
     return ret_val["items"]
   end
+
+  def get_sorted_all_items()
+    ret_val = @table.scan()
+
+    ### DBがきれいになったら filterを消す
+    sorted_list = ret_val["items"].filter{|r| r["table"] !~ /[AP]M/}.sort{|a,b|
+      Time.parse(a["table"]) <=> Time.parse(b["table"])
+    }
+    return sorted_list
+  end
+
 end
 

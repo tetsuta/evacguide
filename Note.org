@@ -15,10 +15,8 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** reportは、古い順に出す
 ** ------------------------------
 ** SessionIDによって出力をし分ける
-** DONE 軌跡を残すように
 ** 地図上にルートを描けるように
 *** マウス
    https://leaflet.github.io/Leaflet.draw/docs/leaflet-draw-latest.html
@@ -28,6 +26,8 @@
 *** タブレット上のペン入力
 ** 地図画面にピンを追加
    電話で情報が来たときに情報を集約できるように
+** DONE reportは、古い順に出す
+** DONE 軌跡を残すように
 ** DONE mouseoverで 人の最新の位置情報とタイムスタンプを出す
 ** DONE 倍速設定も画面におく
 ** DONE ハザードマップボタンを作る？
@@ -47,7 +47,6 @@
 ** DONE ハザードマップの重畳
    地理院がタイルを共有できるようにしている
    https://disaportal.gsi.go.jp/hazardmapportal/hazardmap/copyright/opendata.html#tsunami
-
 ** DONE スマホから位置情報をもらって、現在位置を表示しつつセンタリング
    取れなかったらデフォルトの場所にする。今は福岡
 ** DONE https化する
