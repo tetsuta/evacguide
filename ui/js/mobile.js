@@ -1,7 +1,7 @@
 var Evacquide = function() {
     var now = new Date();
     var now_num = now.getTime();
-    var threshold_millisec = 1000 * 60 * 60 * 24 * 3;
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 365;
     var map = null;
     var current_location = null;
 
