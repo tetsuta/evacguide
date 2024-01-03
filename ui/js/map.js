@@ -260,7 +260,7 @@ var Evacquide = function() {
 
     function put_trace(trace){
 	// var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).on('click', onHumanClick).addTo(map);
-	var tooltip_text = "updated on " + trace.time;
+	var tooltip_text = "updated at " + trace.time;
 	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
 	shown_trace_list.push(trace_mark);
     }
@@ -289,7 +289,7 @@ var Evacquide = function() {
 		// mon("o:" + anreport.table)
 		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
 		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
-		var tooltip_text = "report on " + anreport.table;
+		var tooltip_text = "report at " + anreport.table;
 		var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
 		marker_set[anreport.table] = marker;
 	    } else {
