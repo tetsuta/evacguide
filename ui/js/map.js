@@ -53,20 +53,20 @@ var Evacquide = function() {
 	    opacity: 0.5,
 	    attribution: '国土地理院：津波浸水想定'
 	});
-	overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '土砂災害警戒区域（土石流）'
-	});
+	// overlaylist[1] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	//     opacity: 0.5,
+	//     attribution: '土砂災害警戒区域（土石流）'
+	// });
 
-	overlaylist[2] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '土砂災害警戒区域（急傾斜地の崩壊）'
-	});
+	// overlaylist[2] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/05_dosekiryukeikaikuiki/{z}/{x}/{y}.png', {
+	//     opacity: 0.5,
+	//     attribution: '土砂災害警戒区域（急傾斜地の崩壊）'
+	// });
 
-	overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
-	    opacity: 0.5,
-	    attribution: '国土地理院：洪水浸水想定区域'
-	});
+	// overlaylist[3] = L.tileLayer('https://disaportaldata.gsi.go.jp/raster/01_flood_l2_shinsuishin_data/{z}/{x}/{y}.png', {
+	//     opacity: 0.5,
+	//     attribution: '国土地理院：洪水浸水想定区域'
+	// });
 
 	var baseMaps = {
 	    '国土地理院': maplist[0],
@@ -74,23 +74,23 @@ var Evacquide = function() {
 	};
 
 	var overlayLabel_wo_legend = {
-	    'hz0': 'ハザードマップ 津波浸水想定',
-	    'hz1': 'ハザードマップ 土砂災害警戒区域（土石流）',
-	    'hz2': 'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）',
-	    'hz3': 'ハザードマップ 洪水浸水想定区域'
+	    'hz0': 'ハザードマップ 津波浸水想定'
+	    // 'hz1': 'ハザードマップ 土砂災害警戒区域（土石流）',
+	    // 'hz2': 'ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）',
+	    // 'hz3': 'ハザードマップ 洪水浸水想定区域'
 	}
 	var overlayLabel_with_legend = {
-	    'hz0': '<span id=hz0>ハザードマップ 津波浸水想定<br><img src=image/legend_tsunami.png /></span>',
-	    'hz1': '<span id=hz1>ハザードマップ 土砂災害警戒区域（土石流）<br><img src=image/dosha_keikai_mini.png /></span>',
-	    'hz2': '<span id=hz2>ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）<br><img src=image/dosha_keikai_mini.png /></span>',
-	    'hz3': '<span id=hz3>ハザードマップ 洪水浸水想定区域<br><img src=image/shinsui_legend2-1.png /></span>'
+	    'hz0': '<span id=hz0>ハザードマップ 津波浸水想定<br><img src=image/legend_tsunami.png /></span>'
+	    // 'hz1': '<span id=hz1>ハザードマップ 土砂災害警戒区域（土石流）<br><img src=image/dosha_keikai_mini.png /></span>',
+	    // 'hz2': '<span id=hz2>ハザードマップ 土砂災害警戒区域（急傾斜地の崩壊）<br><img src=image/dosha_keikai_mini.png /></span>',
+	    // 'hz3': '<span id=hz3>ハザードマップ 洪水浸水想定区域<br><img src=image/shinsui_legend2-1.png /></span>'
 	}
 
 	var overlayMaps = {
 	    '<span id=hz0></span>': overlaylist[0],
-	    '<span id=hz1></span>': overlaylist[1],
-	    '<span id=hz2></span>': overlaylist[2],
-	    '<span id=hz3></span>': overlaylist[3]
+	    // '<span id=hz1></span>': overlaylist[1],
+	    // '<span id=hz2></span>': overlaylist[2],
+	    // '<span id=hz3></span>': overlaylist[3]
 	};
 
 
