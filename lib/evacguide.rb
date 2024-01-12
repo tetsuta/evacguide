@@ -79,6 +79,8 @@ class EVACGUIDE
   end
 
 
+  ### tracedb内のすべての項目のうち
+  ### timeから過去 TraceTimeRangeの間の最新の trace情報を返す
   def getTraces(time)
     end_time = Time.parse(time)
     begin_time = end_time - TraceTimeRange

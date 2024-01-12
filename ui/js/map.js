@@ -33,6 +33,8 @@ var Evacquide = function() {
     var trace_time_str = moment().format('YYYY/MM/DD HH:mm:ss');
     var trace_time_msec = Date.parse(trace_time_str);
 
+    var trace_timestamp = {}; // trace_key -> msec
+
     function main() {
 	// ------------------------------
 	var maplist = [];
@@ -121,8 +123,20 @@ var Evacquide = function() {
 	    iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
 	});
 
+	humanGrayIcon = L.icon({
+	    iconUrl: 'image/MapNoHito2_gray.png',
+	    iconSize:     [24, 50], // size of the icon
+	    iconAnchor:   [12, 25], // point of the icon which will correspond to marker's location
+	});
+
 	traceIcon = L.icon({
 	    iconUrl: 'image/trace.png',
+	    iconSize:     [10, 10], // size of the icon
+	    iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
+	});
+
+	traceGrayIcon = L.icon({
+	    iconUrl: 'image/trace_gray.png',
 	    iconSize:     [10, 10], // size of the icon
 	    iconAnchor:   [5, 5], // point of the icon which will correspond to marker's location
 	});
@@ -260,13 +274,32 @@ var Evacquide = function() {
 
     function put_trace(trace){
 	// var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).on('click', onHumanClick).addTo(map);
+
+	var key = trace.lat + "," + trace.lon + ",";
+	// if (key in trace_timestamp) {
+	//     console.log("already exist:" + key);
+	// } else {
+	trace_timestamp[key] = Date.parse(trace.time)
 	var tooltip_text = "updated at " + trace.time;
-	var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+
+	if (trace_time_msec > (trace_timestamp[key] + 60 * 1000)) {
+	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanGrayIcon}).bindTooltip(tooltip_text).addTo(map);
+	} else {
+	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+	}
 	shown_trace_list.push(trace_mark);
+	// }
     }
 
     function changeTraceIcons(){
 	shown_trace_list.forEach(antrace => {
+
+	    // 古いアイコンを grayにしたいが、アイコンの情報を取り出すことができない
+	    // アイコンに情報を埋込めると良いがその方法が見付かっていない
+	    // var latlng = antrace.getLatLng()
+	    // var key = latlng.lat.toString() + latlng.lng.toString()
+	    // console.log(trace_timestamp[key]);
+
 	    antrace.setIcon(traceIcon);
 	});
     }
