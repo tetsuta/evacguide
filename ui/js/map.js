@@ -3,20 +3,24 @@ var Evacquide = function() {
     // この時間より古い報告は表示しない
     var threshold_millisec = 1000 * 60 * 60 * 24 * 365
 
-    // 再生時の倍速の倍率
-    var play_speed = "1.0";
-
     // ==================================================
     var now = new Date();
     var now_num = now.getTime();
 
     var humanIcon;
+    var humanGrayIcon;
+    var traceIcon;
+    var traceGrayIcon;
+
     var map;
-    var timer;
+    var auto_update_timer;
+    var trace_playback_timer;
+    var track_traces_timer;
     var counter = 0;
 
     var on_auto_update = false;
     var on_track_traces = false;
+    var on_trace_playback = false;
     var on_route1 = false;
     var on_route2 = false;
 
@@ -29,11 +33,11 @@ var Evacquide = function() {
     var route1;
     var route2;
 
-    var shown_trace_list = [];
-    var trace_time_str = moment().format('YYYY/MM/DD HH:mm:ss');
-    var trace_time_msec = Date.parse(trace_time_str);
 
-    var trace_timestamp = {}; // trace_key -> msec
+    var shown_trace_set = {};  // shown_trace_set[sid][time] = icon_marker
+    var shown_history_set = {}; // shown_history_set[sid][time] = icon_marker
+    var trace_history;
+    var playback_time_str;
 
     function main() {
 	// ------------------------------
@@ -253,62 +257,135 @@ var Evacquide = function() {
     }
 
 
-    function updateTraces(time){
+    function getAllTraces(time){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getAllTraces",
+		time: time
+	    }),
+        }).done(function(data) {
+	    trace_history = data.trace_history;
+        });
+    }
+
+
+    function updateTraces(trace_time_str, trace_time_msec){
         $.ajax({
             type: 'POST',
             url: new Config().getUrl() + '/',
             async: false,
             data: JSON.stringify({
                 mode: "getTraces",
-		time: time
+		time: trace_time_str
 	    }),
         }).done(function(data) {
-	    // removeTraces();
-	    changeTraceIcons();
 	    data.traces.forEach(antrace => {
 		put_trace(antrace);
 	    });
+	    update_trace_icon(trace_time_msec);
         });
 
     }
 
     function put_trace(trace){
-	// var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).on('click', onHumanClick).addTo(map);
-
-	var key = trace.lat + "," + trace.lon + ",";
-	// if (key in trace_timestamp) {
-	//     console.log("already exist:" + key);
-	// } else {
-	trace_timestamp[key] = Date.parse(trace.time)
-	var tooltip_text = "updated at " + trace.time;
-
-	if (trace_time_msec > (trace_timestamp[key] + 60 * 1000)) {
-	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanGrayIcon}).bindTooltip(tooltip_text).addTo(map);
-	} else {
-	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+	var tooltip_text = trace.sid + "<br>updated at " + trace.time;
+	if (!(trace.sid in shown_trace_set)) {
+	    shown_trace_set[trace.sid] = {}
 	}
-	shown_trace_list.push(trace_mark);
-	// }
+	if (!(trace.stime in shown_trace_set[trace.sid])) {
+	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+	    shown_trace_set[trace.sid][trace.stime] = trace_mark;
+	}
     }
 
-    function changeTraceIcons(){
-	shown_trace_list.forEach(antrace => {
-
-	    // 古いアイコンを grayにしたいが、アイコンの情報を取り出すことができない
-	    // アイコンに情報を埋込めると良いがその方法が見付かっていない
-	    // var latlng = antrace.getLatLng()
-	    // var key = latlng.lat.toString() + latlng.lng.toString()
-	    // console.log(trace_timestamp[key]);
-
-	    antrace.setIcon(traceIcon);
-	});
+    function update_trace_icon(trace_time_msec){
+	for (let sid in shown_trace_set) {
+	    var max_time = 0;
+	    var recent_time_list = [];
+	    var old_time_list = [];
+	    for (let time in shown_trace_set[sid]) {
+		if (max_time < time) {
+		    max_time = time;
+		}
+		if (trace_time_msec > (time * 1000 + 60 * 1000)) {
+		    old_time_list.push(time);
+		} else {
+		    recent_time_list.push(time);
+		}
+	    }
+	    // console.log(sid + ":" + max_time);
+	    if (trace_time_msec > (max_time * 1000 + 60 * 1000)) {
+		shown_trace_set[sid][max_time].setIcon(humanGrayIcon)
+	    }
+	    old_time_list.forEach(a_time => {
+		if (a_time != max_time) {
+		    shown_trace_set[sid][a_time].setIcon(traceGrayIcon)
+		}
+	    })
+	    recent_time_list.forEach(a_time => {
+		if (a_time != max_time) {
+		    shown_trace_set[sid][a_time].setIcon(traceIcon)
+		}
+	    })
+	}
     }
+
 
     function removeTraces(){
-	shown_trace_list.forEach(antrace => {
-	    map.removeLayer(antrace);
-	});
+	for (let sid in shown_trace_set) {
+	    for (let time in shown_trace_set[sid]) {
+		map.removeLayer(shown_trace_set[sid][time]);
+	    }
+	}
     }
+
+
+    function put_history(sid, history){
+	var tooltip_text = sid + "<br>updated at " + history.time;
+	var history_mark = L.marker([Number(history.lat), Number(history.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+
+	if (!(sid in shown_history_set)) {
+	    shown_history_set[sid] = {}
+	}
+	shown_history_set[sid][history.stime] = history_mark;
+    }
+
+
+    function update_history_icon(playback_time_msec){
+	for (let sid in shown_history_set) {
+	    var max_time = 0;
+	    var recent_time_list = [];
+	    var old_time_list = [];
+	    for (let time in shown_history_set[sid]) {
+		if (max_time < time) {
+		    max_time = time;
+		}
+		if (playback_time_msec > (time * 1000 + 60 * 1000)) {
+		    old_time_list.push(time);
+		} else {
+		    recent_time_list.push(time);
+		}
+	    }
+	    // console.log(sid + ":" + max_time);
+	    if (playback_time_msec > (max_time * 1000 + 60 * 1000)) {
+		shown_history_set[sid][max_time].setIcon(humanGrayIcon)
+	    }
+	    old_time_list.forEach(a_time => {
+		if (a_time != max_time) {
+		    shown_history_set[sid][a_time].setIcon(traceGrayIcon)
+		}
+	    })
+	    recent_time_list.forEach(a_time => {
+		if (a_time != max_time) {
+		    shown_history_set[sid][a_time].setIcon(traceIcon)
+		}
+	    })
+	}
+    }
+
 
     function onHumanClick(e){
 	map.removeLayer(e.target);
@@ -476,7 +553,7 @@ var Evacquide = function() {
 
 	$('#auto_update').on('click', function() {
 	    if (on_auto_update == true) {
-		clearTimeout(timer);　
+		clearTimeout(auto_update_timer);　
 		stopPolling();
 
 		$('#auto_update').text("Auto update (stopped)");
@@ -486,12 +563,12 @@ var Evacquide = function() {
 
 	    } else {
 		startPolling();
-		var countUp = function() {
+		var au_countUp = function() {
 		    updateAllInfo();
 		    $('#result').text("update:" + counter++);
 		}
 		// 1秒(1000)ごとに動かす
-		timer = setInterval(countUp, 1000);
+		auto_update_timer = setInterval(au_countUp, 1000);
 
 		$('#auto_update').text("Auto update (running)");
 		$('#auto_update').removeClass("btn-secondary");
@@ -501,11 +578,71 @@ var Evacquide = function() {
 	});
 
 
+	$('#trace_playback').on('click', function() {
+	    var playback_time_str;
+	    var playback_time_msec;
+	    var interval_time;
+	    var play_speed;
+
+	    if (on_trace_playback == true) {
+		clearTimeout(trace_playback_timer);　
+		$('#trace_playback').text("Playback Trace (stopped)");
+		$('#trace_playback').removeClass("btn-primary");
+		$('#trace_playback').addClass("btn-secondary");
+		on_trace_playback = false;
+
+	    } else {
+		playback_time_str = $('#pb_starttime').val();
+		getAllTraces(playback_time_str);
+
+		playback_time_str = $('#pb_starttime').val();
+		playback_time_msec = Date.parse(playback_time_str);
+		play_speed = Number($('#pb_playback_speed').val());
+
+		var pb_countUp = function() {
+
+		    for (let sid in trace_history) {
+			// console.log(sid);
+			// console.log(sid + ":" + trace_history[sid].length);
+
+			if (trace_history[sid].length > 0) {
+			    var stime = trace_history[sid][0].stime;
+			    while (stime * 1000 < playback_time_msec) {
+				ahistory = trace_history[sid].shift();
+				put_history(sid, ahistory);
+				if (trace_history[sid].length == 0) {
+				    break;
+				} else {
+				    stime = trace_history[sid][0].stime;
+				}
+			    }
+			}
+		    }
+		    update_history_icon(playback_time_msec);
+
+		    playback_time_msec += 1000;
+		    playback_time_str = moment(playback_time_msec).format('YYYY/MM/DD HH:mm:ss');
+
+		    $('#pb_starttime').val(playback_time_str);
+		}
+		interval_time = Math.floor(1000.0 / play_speed);
+		trace_playback_timer = setInterval(pb_countUp, interval_time);
+
+		$('#trace_playback').text("Playback Trace (running)");
+		$('#trace_playback').removeClass("btn-secondary");
+		$('#trace_playback').addClass("btn-primary");
+		on_trace_playback = true;
+	    }
+	});
+
+
 	$('#track_traces').on('click', function() {
-	    // console.log("start");
+	    var trace_time_str;
+	    var trace_time_msec;
+	    var play_speed;
 
 	    if (on_track_traces == true) {
-		clearTimeout(timer);　
+		clearTimeout(track_traces_timer);　
 		$('#track_traces').text("Track traces (stopped)");
 		$('#track_traces').removeClass("btn-primary");
 		$('#track_traces').addClass("btn-secondary");
@@ -513,23 +650,20 @@ var Evacquide = function() {
 
 	    } else {
 		trace_time_str = $('#starttime').val();
-		// trace_time_str = "2023/12/13 13:23";
-		play_speed = $('#playback_speed').val();
+		play_speed = Number($('#playback_speed').val());
 		trace_time_msec = Date.parse(trace_time_str);
 
-		$('#starttime').val(trace_time_str);
-		updateTraces(trace_time_str);
+		updateTraces(trace_time_str, trace_time_msec);
 
-		var countUp = function() {
+		var tt_countUp = function() {
 		    // 5秒ごとに更新
-		    trace_time_msec += 5000 * Number(play_speed);
+		    trace_time_msec += 5000 * play_speed;
 		    trace_time_str = moment(trace_time_msec).format('YYYY/MM/DD HH:mm:ss');
-		    // console.log(trace_time_str);
 		    $('#starttime').val(trace_time_str);
-		    updateTraces(trace_time_str);
+		    updateTraces(trace_time_str, trace_time_msec);
 		}
 		// 5秒(5000)ごとに動かす
-		timer = setInterval(countUp, 5000);
+		track_traces_timer = setInterval(tt_countUp, 5000);
 
 		$('#track_traces').text("Track traces (running)");
 		$('#track_traces').removeClass("btn-secondary");
@@ -539,9 +673,15 @@ var Evacquide = function() {
 	});
 
 	// 軌跡表示の初期値として今の時刻を設定
-	$('#starttime').val(trace_time_str);
+	$('#starttime').val(moment().format('YYYY/MM/DD HH:mm:ss'));
+	// $('#starttime').val("2023/12/13 13:23");
+
 	// 初期の倍率を設定
-	$('#playback_speed').val(play_speed);
+	$('#playback_speed').val("1.0");
+
+	$('#pb_starttime').val("2023/12/13 13:23");
+	$('#pb_playback_speed').val(10);
+
     }
 
     return {

@@ -4,12 +4,59 @@ require_relative './aws'
 require_relative './config'
 
 class Trace
+  attr_reader :id
+
   def initialize(raw_trace)
     @id = raw_trace["application"]
     @time_list = raw_trace["time"]
     @lat_list = raw_trace["lat"]
     @lon_list = raw_trace["lon"]
     @size = @time_list.size
+
+    @parsed_time_list = []
+    @time_list.each{|time_str|
+      if time_str =~ /[AP]M/
+        @parsed_time_list.push(nil)
+      else
+        @parsed_time_list.push(Time.parse(time_str))
+      end
+    }
+
+  end
+
+
+  # return all trace info between begin_time and end_time
+  def history(begin_time, end_time)
+
+    available_index_list = []
+    @time_list.each_index{|index|
+
+      ### DBがきれいになったら消す
+      ### この例を排除するため→ "12/14/2023 1:16:28 AM", "12/13/2023 11:33:47 PM"
+      next if @time_list[index] =~ /AM/
+      next if @time_list[index] =~ /PM/
+
+      if begin_time <= @parsed_time_list[index] && @parsed_time_list[index] < end_time
+        available_index_list.push(index)
+      end
+    }
+
+    ret_list = []
+    available_index_list.each{|index|
+      data = {
+        time: @time_list[index],
+        stime: @parsed_time_list[index].to_i,
+        lat: @lat_list[index],
+        lon: @lon_list[index]
+      }
+      ret_list.push(data)
+    }
+
+    ret_list.sort!{|a,b|
+      a[:stime] <=> b[:stime]
+    }
+
+    return ret_list
   end
 
 
@@ -36,8 +83,9 @@ class Trace
       return nil
     else
       data = {
-        id: @id,
+        sid: @id,
         time: @time_list[latest_index],
+        stime: @parsed_time_list[latest_index].to_i,
         lat: @lat_list[latest_index],
         lon: @lon_list[latest_index]
       }
@@ -76,6 +124,29 @@ class EVACGUIDE
       "reports" => @report_list
     }
     return data
+  end
+
+
+  # time以降のすべての traceを返す
+  def getAllTraces(time)
+    end_time = Time.now()
+    begin_time = Time.parse(time)
+
+    trace_set = {}
+    @tracedb.get_all_items.each{|raw_trace|
+      trace = Trace.new(raw_trace)
+
+      trace_history = trace.history(begin_time, end_time)
+      if trace_history.size > 0
+        trace_set[trace.id] = trace_history
+      end
+    }
+    
+    data = {
+      "trace_history" => trace_set
+    }
+    return data
+
   end
 
 
