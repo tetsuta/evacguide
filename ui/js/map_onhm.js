@@ -144,9 +144,6 @@ var Evacquide = function() {
 	$('#map').css('width', mapwidth);
 	$('#map').css('height', mapheight);
 
-	// ------------------------------
-	setupControlls();
-
 
 	// ------------------------------
 	humanIcon = L.icon({
@@ -246,6 +243,9 @@ var Evacquide = function() {
 
 	// 最初にすべてを読み込む
 	// updateAllInfo();
+
+	// ------------------------------
+	setupControlls();
     }
 
 
@@ -314,6 +314,55 @@ var Evacquide = function() {
 	route4 = drawRedArrow(route4v_cood);
 	route5 = drawRedArrow(route5v_cood);
 	route6 = drawRedArrow(route6v_cood);
+
+	var routeIntersection1 = L.divIcon({
+	    html: '1',
+	    className: 'divroute route1icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.94848086088772,140.90297877788547], {icon: routeIntersection1}).addTo(map);
+
+	var routeIntersection2 = L.divIcon({
+	    html: '2',
+	    className: 'divroute route2icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.9481574165731,140.90364664793017], {icon: routeIntersection2}).addTo(map);
+
+	var routeIntersection3 = L.divIcon({
+	    html: '3',
+	    className: 'divroute route3icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.94915256676398,140.90445667505264], {icon: routeIntersection3}).addTo(map);
+
+	var routeIntersection4 = L.divIcon({
+	    html: '4',
+	    className: 'divroute route4icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.94806330436424,140.90501189231875], {icon: routeIntersection4}).addTo(map);
+
+	var routeIntersection5 = L.divIcon({
+	    html: '5',
+	    className: 'divroute route5icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.94848079868966,140.90557783842087], {icon: routeIntersection5}).addTo(map);
+
+	var routeIntersection6 = L.divIcon({
+	    html: '6',
+	    className: 'divroute route6icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.94908337729707,140.90655416250232], {icon: routeIntersection6}).addTo(map);
+
     }
 
 
@@ -529,6 +578,109 @@ var Evacquide = function() {
 	});
     }
 
+
+    function toggle_route1() {
+	map.removeLayer(route1);
+	if (route1_direction == "v") {
+	    route1_direction = "h";
+	    route1 = drawBlueArrow(route1h_cood);
+	    $('#route1').removeClass("btn-danger");
+	    $('#route1').addClass("btn-primary");
+	    send_route("1h");
+	} else {
+	    route1_direction = "v";
+	    route1 = drawRedArrow(route1v_cood);
+	    $('#route1').removeClass("btn-primary");
+	    $('#route1').addClass("btn-danger");
+	    send_route("1v");
+	}
+    }
+
+    function toggle_route2() {
+	map.removeLayer(route2);
+	if (route2_direction == "v") {
+	    route2_direction = "h";
+	    route2 = drawBlueArrow(route2h_cood);
+	    $('#route2').removeClass("btn-danger");
+	    $('#route2').addClass("btn-primary");
+	    send_route("2h");
+	} else {
+	    route2_direction = "v";
+	    route2 = drawRedArrow(route2v_cood);
+	    $('#route2').removeClass("btn-primary");
+	    $('#route2').addClass("btn-danger");
+	    send_route("2v");
+	}
+    }
+
+    function toggle_route3() {
+	map.removeLayer(route3);
+	if (route3_direction == "v") {
+	    route3_direction = "h";
+	    route3 = drawBlueArrow(route3h_cood);
+	    $('#route3').removeClass("btn-danger");
+	    $('#route3').addClass("btn-primary");
+	    send_route("3h");
+	} else {
+	    route3_direction = "v";
+	    route3 = drawRedArrow(route3v_cood);
+	    $('#route3').removeClass("btn-primary");
+	    $('#route3').addClass("btn-danger");
+	    send_route("3v");
+	}
+    }
+
+    function toggle_route4() {
+	map.removeLayer(route4);
+	if (route4_direction == "v") {
+	    route4_direction = "h";
+	    route4 = drawBlueArrow(route4h_cood);
+	    $('#route4').removeClass("btn-danger");
+	    $('#route4').addClass("btn-primary");
+	    send_route("4h");
+	} else {
+	    route4_direction = "v";
+	    route4 = drawRedArrow(route4v_cood);
+	    $('#route4').removeClass("btn-primary");
+	    $('#route4').addClass("btn-danger");
+	    send_route("4v");
+	}
+    }
+
+    function toggle_route5() {
+	map.removeLayer(route5);
+	if (route5_direction == "v") {
+	    route5_direction = "h";
+	    route5 = drawBlueArrow(route5h_cood);
+	    $('#route5').removeClass("btn-danger");
+	    $('#route5').addClass("btn-primary");
+	    send_route("5h");
+	} else {
+	    route5_direction = "v";
+	    route5 = drawRedArrow(route5v_cood);
+	    $('#route5').removeClass("btn-primary");
+	    $('#route5').addClass("btn-danger");
+	    send_route("5v");
+	}
+    }
+
+    function toggle_route6() {
+	map.removeLayer(route6);
+	if (route6_direction == "v") {
+	    route6_direction = "h";
+	    route6 = drawBlueArrow(route6h_cood);
+	    $('#route6').removeClass("btn-danger");
+	    $('#route6').addClass("btn-primary");
+	    send_route("6h");
+	} else {
+	    route6_direction = "v";
+	    route6 = drawRedArrow(route6v_cood);
+	    $('#route6').removeClass("btn-primary");
+	    $('#route6').addClass("btn-danger");
+	    send_route("6v");
+	}
+    }
+
     function setupControlls() {
 	$(window).keyup(function(e) {
 	    // mon(e.key);
@@ -555,116 +707,58 @@ var Evacquide = function() {
 	});
 
 
+	$('.route1icon').on('click', function() {
+	    toggle_route1()
+	});
+
 	$('#route1').on('click', function() {
-	    map.removeLayer(route1);
-	    if (route1_direction == "v") {
-		route1_direction = "h";
-		route1 = drawBlueArrow(route1h_cood);
-		$('#route1').removeClass("btn-danger");
-		$('#route1').addClass("btn-primary");
-		send_route("1h");
-	    } else {
-		route1_direction = "v";
-		route1 = drawRedArrow(route1v_cood);
-		$('#route1').removeClass("btn-primary");
-		$('#route1').addClass("btn-danger");
-		send_route("1v");
-	    }
+	    toggle_route1()
 	});
 
 
-// =====
+	$('.route2icon').on('click', function() {
+	    toggle_route2()
+	});
+
 	$('#route2').on('click', function() {
-	    map.removeLayer(route2);
-	    if (route2_direction == "v") {
-		route2_direction = "h";
-		route2 = drawBlueArrow(route2h_cood);
-		$('#route2').removeClass("btn-danger");
-		$('#route2').addClass("btn-primary");
-		send_route("2h");
-	    } else {
-		route2_direction = "v";
-		route2 = drawRedArrow(route2v_cood);
-		$('#route2').removeClass("btn-primary");
-		$('#route2').addClass("btn-danger");
-		send_route("2v");
-	    }
+	    toggle_route2()
 	});
 
+
+	$('.route3icon').on('click', function() {
+	    toggle_route3()
+	});
 
 	$('#route3').on('click', function() {
-	    map.removeLayer(route3);
-	    if (route3_direction == "v") {
-		route3_direction = "h";
-		route3 = drawBlueArrow(route3h_cood);
-		$('#route3').removeClass("btn-danger");
-		$('#route3').addClass("btn-primary");
-		send_route("3h");
-	    } else {
-		route3_direction = "v";
-		route3 = drawRedArrow(route3v_cood);
-		$('#route3').removeClass("btn-primary");
-		$('#route3').addClass("btn-danger");
-		send_route("3v");
-	    }
+	    toggle_route3()
 	});
 
+
+	$('.route4icon').on('click', function() {
+	    toggle_route4()
+	});
 
 	$('#route4').on('click', function() {
-	    map.removeLayer(route4);
-	    if (route4_direction == "v") {
-		route4_direction = "h";
-		route4 = drawBlueArrow(route4h_cood);
-		$('#route4').removeClass("btn-danger");
-		$('#route4').addClass("btn-primary");
-		send_route("4h");
-	    } else {
-		route4_direction = "v";
-		route4 = drawRedArrow(route4v_cood);
-		$('#route4').removeClass("btn-primary");
-		$('#route4').addClass("btn-danger");
-		send_route("4v");
-	    }
+	    toggle_route4()
 	});
 
+
+	$('.route5icon').on('click', function() {
+	    toggle_route5()
+	});
 
 	$('#route5').on('click', function() {
-	    map.removeLayer(route5);
-	    if (route5_direction == "v") {
-		route5_direction = "h";
-		route5 = drawBlueArrow(route5h_cood);
-		$('#route5').removeClass("btn-danger");
-		$('#route5').addClass("btn-primary");
-		send_route("5h");
-	    } else {
-		route5_direction = "v";
-		route5 = drawRedArrow(route5v_cood);
-		$('#route5').removeClass("btn-primary");
-		$('#route5').addClass("btn-danger");
-		send_route("5v");
-	    }
+	    toggle_route5()
 	});
 
+
+	$('.route6icon').on('click', function() {
+	    toggle_route6()
+	});
 
 	$('#route6').on('click', function() {
-	    map.removeLayer(route6);
-	    if (route6_direction == "v") {
-		route6_direction = "h";
-		route6 = drawBlueArrow(route6h_cood);
-		$('#route6').removeClass("btn-danger");
-		$('#route6').addClass("btn-primary");
-		send_route("6h");
-	    } else {
-		route6_direction = "v";
-		route6 = drawRedArrow(route6v_cood);
-		$('#route6').removeClass("btn-primary");
-		$('#route6').addClass("btn-danger");
-		send_route("6v");
-	    }
+	    toggle_route6()
 	});
-
-
-
 
 
 	$('#manual_update').on('click', function() {
