@@ -15,7 +15,7 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 交差点に迂回ボタンを置き、ルート変更できるようにする。
+** GOING 交差点に迂回ボタンを置き、ルート変更できるようにする。
    障害物は、左から 1〜6
 
 ** 変数で sessionIDをもらい、自分の軌跡を出力する
@@ -138,7 +138,12 @@ fi
 ** Leaflet.toolbar
    https://github.com/Leaflet/Leaflet.toolbar
 
-
+** Leaflet.GeometryUtil
+   https://github.com/makinacorpus/Leaflet.GeometryUtil
+   arrowheadのために必要
+   
+** leaflet-arrowheads
+   https://github.com/slutske22/leaflet-arrowheads
 
 
 * note

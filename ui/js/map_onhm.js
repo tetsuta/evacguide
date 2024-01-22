@@ -21,18 +21,44 @@ var Evacquide = function() {
     var on_auto_update = false;
     var on_track_traces = false;
     var on_trace_playback = false;
-    var on_route1 = false;
-    var on_route2 = false;
+
+    var route1v_cood = [[36.94847705163496,140.9029841423035],[36.94744384964621,140.90281248092654]];
+    var route2v_cood = [[36.94814265584457,140.9036493301392],[36.94745028040733,140.90359032154086]];
+    var route3v_cood = [[36.9491372646546,140.90445399284366],[36.94853278412399,140.90436279773715]];
+    var route4v_cood = [[36.94803333382547,140.9050038456917],[36.947403121479915,140.90495824813846]];
+    var route5v_cood = [[36.94847276451874,140.90558588504794],[36.94805262595792,140.90546786785129]];
+    var route6v_cood = [[36.949062240736026,140.9065514802933],[36.94838487858288,140.90639591217044]];
+
+    var route1h_cood = [[36.94847705163496,140.9029841423035],[36.94846204672712,140.9036493301392]];
+    var route2h_cood = [[36.94815980438237,140.90365469455722],[36.94810835875745,140.9042823314667]];
+    var route3h_cood = [[36.94914583881203,140.90445399284366],[36.949090106771536,140.90507090091708]];
+    var route4h_cood = [[36.948061200237404,140.90500652790072],[36.94809978448323,140.90437889099124]];
+    var route5h_cood = [[36.94847705163496,140.9055805206299],[36.948507061441816,140.9050762653351]];
+    var route6h_cood = [[36.94908581968982,140.9065380692482],[36.949220862648325,140.90580582618716]];
+
+    // 現在選択されている道路の向き
+    // "v"または "h"の値を持つ。
+    var route1_direction;
+    var route2_direction;
+    var route3_direction;
+    var route4_direction;
+    var route5_direction;
+    var route6_direction;
+
+    // 道路のオブジェクト
+    var route1;
+    var route2;
+    var route3;
+    var route4;
+    var route5;
+    var route6;
+
 
     var on_shift = false;
     var on_control = false;
 
     // 描画した markerを記録する
     var marker_set = {};
-
-    var route1;
-    var route2;
-
 
     var shown_trace_set = {};  // shown_trace_set[sid][time] = icon_marker
     var shown_history_set = {}; // shown_history_set[sid][time] = icon_marker
@@ -102,12 +128,14 @@ var Evacquide = function() {
 
 	// ------------------------------
 	map = L.map('map', {
-	    layers: [maplist[0], overlaylist[0]]  // default layer
+	    // layers: [maplist[0], overlaylist[0]]  // default layer; 国土地理院 & ハザードマップ
+	    layers: [maplist[0]]  // default layer; 国土地理院
+
 	    // trackResize: true,
 	});
 	map.zoomControl.setPosition('bottomright');
 
-	map.setView([33.5808303, 130.340], 18);
+	map.setView([36.9485564412181, 140.904335975647], 17);
 
 	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
 
@@ -148,13 +176,13 @@ var Evacquide = function() {
 
 
 	map.on('click', function(e) {
-	    console.log(e);
 	    lat = e.latlng.lat;
 	    lon = e.latlng.lng;
 
 	    if (on_shift == true) {
 		// shift-clickで座標を表示する
-		alert("lat: " + lat + ", lon: " + lon);
+		console.log("[" + lat + "," + lon + "]")
+		// alert("lat: " + lat + ", lon: " + lon);
 
 	    } else {
 	    }
@@ -213,10 +241,81 @@ var Evacquide = function() {
 	$('#hz2').html(overlayLabel_wo_legend['hz2']);
 	$('#hz3').html(overlayLabel_wo_legend['hz3']);
 
+	showBaseGuide();
+	showInitialGuide();
 
 	// 最初にすべてを読み込む
 	// updateAllInfo();
     }
+
+
+    function drawRedArrow(cood){
+	var route = L.polyline(cood, { color: 'red', weight: 5 }).arrowheads().addTo(map);
+	return route;
+    }
+
+    function drawBlueArrow(cood){
+	var route = L.polyline(cood, { color: 'blue', weight: 5 }).arrowheads().addTo(map);
+	return route;
+    }
+
+    function showBaseGuide(){
+	// 右
+	drawRedArrow([[36.94945879489742,140.90186566114426],[36.94933018296315,140.9030619263649]]);
+	drawRedArrow([[36.949090106771536,140.90185761451724],[36.94902151343497,140.9030082821846]]);
+	drawRedArrow([[36.94854135834946,140.90179324150088],[36.94847276451874,140.90293586254123]]);
+	drawRedArrow([[36.94823054205992,140.90176910161972],[36.94816623508303,140.90287953615191]]);
+	drawRedArrow([[36.947422413771925,140.9017610549927],[36.9473924035378,140.90277493000033]]);
+	drawRedArrow([[36.94737954200525,140.90284466743472],[36.94735381893368,140.9035259485245]]);
+	drawRedArrow([[36.947349531754234,140.90362250804904],[36.94733667021446,140.90421259403232]]);
+
+	// 左
+	drawRedArrow([[36.94893577167738,140.90735077857974],[36.94907724552562,140.90656220912936]]);
+	drawRedArrow([[36.948202675709915,140.90716838836673],[36.948335576672044,140.90643882751468]]);
+	drawRedArrow([[36.94776967419281,140.90706110000613],[36.947885427314645,140.90633153915408]]);
+	drawRedArrow([[36.9472766496668,140.90694040060046],[36.947295941990845,140.90618133544925]]);
+	drawRedArrow([[36.947289511216695,140.90610623359683],[36.947310947128386,140.905414223671]]);
+	drawRedArrow([[36.947310947128386,140.90528547763827],[36.947310947128386,140.9049850702286]]);
+	drawRedArrow([[36.947310947128386,140.90490460395816],[36.94732380867251,140.90432524681094]]);
+
+
+	// 下
+	drawRedArrow([[36.950046119970466,140.9032362699509],[36.94941163721342,140.90311825275424]]);
+	drawRedArrow([[36.949951805300465,140.90454518795016],[36.94921228849934,140.9044674038887]]);
+	drawRedArrow([[36.94928516873485,140.90309947729114],[36.9490879632307,140.90306729078296]]);
+	drawRedArrow([[36.949006508634334,140.90305387973788],[36.948528497010905,140.90298682451248]]);
+
+	drawRedArrow([[36.94988964329501,140.9059023857117],[36.94928302519951,140.905779004097]]);
+	drawRedArrow([[36.94981676363782,140.9067311882973],[36.94913083403593,140.90655952692032]]);
+	drawRedArrow([[36.94919728373629,140.90576291084292],[36.94854350190568,140.90560734272006]]);
+	drawRedArrow([[36.94904294885927,140.9050923585892],[36.94855636324169,140.90506017208102]]);
+	drawRedArrow([[36.94846633384395,140.90505212545398],[36.948093353776976,140.9050226211548]]);
+	drawRedArrow([[36.94831842817381,140.90637445449832],[36.94793901666334,140.9062832593918]]);
+	drawRedArrow([[36.947844699384426,140.90625643730166],[36.94735167534397,140.90614378452304]]);
+	drawRedArrow([[36.94843632402106,140.90365737676623],[36.94818981431419,140.90365201234818]]);
+	drawRedArrow([[36.94844275469839,140.90434938669205],[36.94814694297939,140.90432792901996]]);
+	drawRedArrow([[36.948071918085425,140.90431183576584],[36.94743098812237,140.90426087379458]]);
+	drawRedArrow([[36.94798617525901,140.90548396110538],[36.94738168559415,140.90534985065463]]);
+
+    }
+
+
+    function showInitialGuide(){
+	route1_direction = "v";
+	route2_direction = "v";
+	route3_direction = "v";
+	route4_direction = "v";
+	route5_direction = "v";
+	route6_direction = "v";
+
+	route1 = drawRedArrow(route1v_cood);
+	route2 = drawRedArrow(route2v_cood);
+	route3 = drawRedArrow(route3v_cood);
+	route4 = drawRedArrow(route4v_cood);
+	route5 = drawRedArrow(route5v_cood);
+	route6 = drawRedArrow(route6v_cood);
+    }
+
 
     function updateAllInfo(){
         $.ajax({
@@ -418,41 +517,16 @@ var Evacquide = function() {
 	$('#monitor').text(text);
     }
 
-    function showRoute(){
-	if (on_route1 == true) {
-	    var roadlatlons1 = [
-		[33.581035924176796, 130.33912271261215],
-		[33.580843751800764, 130.3397771716118],
-		[33.58077224569113, 130.34064620733264],
-		[33.580615825869785, 130.3406247496605],
-		[33.58067392469367, 130.34054964780807],
-		[33.580615825869785, 130.3406247496605],
-		[33.58064710985673, 130.34069985151294]
-	    ]
-	    route1 = L.polyline(roadlatlons1, { color: 'red', weight: 5 }).addTo(map);
-	} else {
-	    if (route1 != null) {
-		map.removeLayer(route1);
-	    }
-	}
-
-	if (on_route2 == true) {
-	    var roadlatlons2 = [
-		[33.581035924176796, 130.33912271261215],
-		[33.58087950483335, 130.33971279859546],
-		[33.58072755434254, 130.33961087465286],
-		[33.58064710985673, 130.34006148576736],
-		[33.580615825869785, 130.3406247496605],
-		[33.58066498641563, 130.3405925631523],
-		[33.580615825869785, 130.3406247496605],
-		[33.58057113444018, 130.34057646989825]
-	    ]
-	    route2 = L.polyline(roadlatlons2, { color: 'green', weight: 5 }).addTo(map);
-	} else {
-	    if (route2 != null) {
-		map.removeLayer(route2);
-	    }
-	}
+    function send_route(route){
+	$.ajax({
+	    type: 'POST',
+	    url: new Config().getUrl() + '/',
+	    async: false,
+	    data: JSON.stringify({
+		mode: "setOnahamaRoute",
+		route: route
+	    }),
+	});
     }
 
     function setupControlls() {
@@ -481,69 +555,117 @@ var Evacquide = function() {
 	});
 
 
-	$('#send_route').on('click', function() {
-	    if ((on_route1 == true) || (on_route2 == true)){
-		var route;
-		if (on_route1 == true) {
-		    route = "1";
-		}
-		if (on_route2 == true) {
-		    route = "2";
-		}
-		$.ajax({
-		    type: 'POST',
-		    url: new Config().getUrl() + '/',
-		    async: false,
-		    data: JSON.stringify({
-			mode: "selectRoute",
-			route: route
-		    }),
-		});
-
-		// mon("sent route #" + route)
-	    } else {
-		// mon("sent nothing")
-	    }
-	});
-
-
 	$('#route1').on('click', function() {
-	    if (on_route1 == false) {
-		$('#route1').removeClass("btn-secondary");
+	    map.removeLayer(route1);
+	    if (route1_direction == "v") {
+		route1_direction = "h";
+		route1 = drawBlueArrow(route1h_cood);
+		$('#route1').removeClass("btn-danger");
 		$('#route1').addClass("btn-primary");
-		on_route1 = true;
-		if (on_route2 == true) {
-		    $('#route2').removeClass("btn-primary");
-		    $('#route2').addClass("btn-secondary");
-		    on_route2 = false;
-		}
+		send_route("1h");
 	    } else {
+		route1_direction = "v";
+		route1 = drawRedArrow(route1v_cood);
 		$('#route1').removeClass("btn-primary");
-		$('#route1').addClass("btn-secondary");
-		on_route1 = false;
+		$('#route1').addClass("btn-danger");
+		send_route("1v");
 	    }
-	    showRoute();
-	    // mon("");
 	});
 
+
+// =====
 	$('#route2').on('click', function() {
-	    if (on_route2 == false) {
-		$('#route2').removeClass("btn-secondary");
+	    map.removeLayer(route2);
+	    if (route2_direction == "v") {
+		route2_direction = "h";
+		route2 = drawBlueArrow(route2h_cood);
+		$('#route2').removeClass("btn-danger");
 		$('#route2').addClass("btn-primary");
-		on_route2 = true;
-		if (on_route1 == true) {
-		    $('#route1').removeClass("btn-primary");
-		    $('#route1').addClass("btn-secondary");
-		    on_route1 = false;
-		}
+		send_route("2h");
 	    } else {
+		route2_direction = "v";
+		route2 = drawRedArrow(route2v_cood);
 		$('#route2').removeClass("btn-primary");
-		$('#route2').addClass("btn-secondary");
-		on_route2 = false;
+		$('#route2').addClass("btn-danger");
+		send_route("2v");
 	    }
-	    showRoute();
-	    // mon("");
 	});
+
+
+	$('#route3').on('click', function() {
+	    map.removeLayer(route3);
+	    if (route3_direction == "v") {
+		route3_direction = "h";
+		route3 = drawBlueArrow(route3h_cood);
+		$('#route3').removeClass("btn-danger");
+		$('#route3').addClass("btn-primary");
+		send_route("3h");
+	    } else {
+		route3_direction = "v";
+		route3 = drawRedArrow(route3v_cood);
+		$('#route3').removeClass("btn-primary");
+		$('#route3').addClass("btn-danger");
+		send_route("3v");
+	    }
+	});
+
+
+	$('#route4').on('click', function() {
+	    map.removeLayer(route4);
+	    if (route4_direction == "v") {
+		route4_direction = "h";
+		route4 = drawBlueArrow(route4h_cood);
+		$('#route4').removeClass("btn-danger");
+		$('#route4').addClass("btn-primary");
+		send_route("4h");
+	    } else {
+		route4_direction = "v";
+		route4 = drawRedArrow(route4v_cood);
+		$('#route4').removeClass("btn-primary");
+		$('#route4').addClass("btn-danger");
+		send_route("4v");
+	    }
+	});
+
+
+	$('#route5').on('click', function() {
+	    map.removeLayer(route5);
+	    if (route5_direction == "v") {
+		route5_direction = "h";
+		route5 = drawBlueArrow(route5h_cood);
+		$('#route5').removeClass("btn-danger");
+		$('#route5').addClass("btn-primary");
+		send_route("5h");
+	    } else {
+		route5_direction = "v";
+		route5 = drawRedArrow(route5v_cood);
+		$('#route5').removeClass("btn-primary");
+		$('#route5').addClass("btn-danger");
+		send_route("5v");
+	    }
+	});
+
+
+	$('#route6').on('click', function() {
+	    map.removeLayer(route6);
+	    if (route6_direction == "v") {
+		route6_direction = "h";
+		route6 = drawBlueArrow(route6h_cood);
+		$('#route6').removeClass("btn-danger");
+		$('#route6').addClass("btn-primary");
+		send_route("6h");
+	    } else {
+		route6_direction = "v";
+		route6 = drawRedArrow(route6v_cood);
+		$('#route6').removeClass("btn-primary");
+		$('#route6').addClass("btn-danger");
+		send_route("6v");
+	    }
+	});
+
+
+
+
 
 	$('#manual_update').on('click', function() {
 	    updateAllInfo();

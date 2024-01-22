@@ -177,6 +177,127 @@ class EVACGUIDE
   end
 
 
+  # Onahama
+  def setOnahamaRoute(route)
+    case route
+    when "1h"
+      @routedb.update({
+                        table: "oishi1h",
+                        application: "oishi1h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi1v",
+                        application: "oishi1v"
+                      }, "lat", -800)
+    when "1v"
+      @routedb.update({
+                        table: "oishi1h",
+                        application: "oishi1h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi1v",
+                        application: "oishi1v"
+                      }, "lat", 0)
+
+    when "2h"
+      @routedb.update({
+                        table: "oishi2h",
+                        application: "oishi2h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi2v",
+                        application: "oishi2v"
+                      }, "lat", -800)
+    when "2v"
+      @routedb.update({
+                        table: "oishi2h",
+                        application: "oishi2h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi2v",
+                        application: "oishi2v"
+                      }, "lat", 0)
+
+    when "3h"
+      @routedb.update({
+                        table: "oishi3h",
+                        application: "oishi3h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi3v",
+                        application: "oishi3v"
+                      }, "lat", -800)
+    when "3v"
+      @routedb.update({
+                        table: "oishi3h",
+                        application: "oishi3h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi3v",
+                        application: "oishi3v"
+                      }, "lat", 0)
+
+    when "4h"
+      @routedb.update({
+                        table: "oishi4h",
+                        application: "oishi4h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi4v",
+                        application: "oishi4v"
+                      }, "lat", -800)
+    when "4v"
+      @routedb.update({
+                        table: "oishi4h",
+                        application: "oishi4h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi4v",
+                        application: "oishi4v"
+                      }, "lat", 0)
+
+    when "5h"
+      @routedb.update({
+                        table: "oishi5h",
+                        application: "oishi5h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi5v",
+                        application: "oishi5v"
+                      }, "lat", -800)
+    when "5v"
+      @routedb.update({
+                        table: "oishi5h",
+                        application: "oishi5h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi5v",
+                        application: "oishi5v"
+                      }, "lat", 0)
+
+    when "6h"
+      @routedb.update({
+                        table: "oishi6h",
+                        application: "oishi6h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi6v",
+                        application: "oishi6v"
+                      }, "lat", -800)
+    when "6v"
+      @routedb.update({
+                        table: "oishi6h",
+                        application: "oishi6h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi6v",
+                        application: "oishi6v"
+                      }, "lat", 0)
+    end
+  end
+
+
+  # Fukuoka
   def selectRoute(route)
     case route
     when "1"

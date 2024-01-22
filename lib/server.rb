@@ -100,7 +100,7 @@ s.mount_proc('/'){|request, response|
 
     when "getAllTraces"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("selectRoute")
+      $logger.info("getAllTraces")
       time = userInput["time"]
       ret_data = eg.getAllTraces(time)
       data["trace_history"] = ret_data["trace_history"]
@@ -108,7 +108,7 @@ s.mount_proc('/'){|request, response|
 
     when "getTraces"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("selectRoute")
+      $logger.info("getTraces")
       time = userInput["time"]
       ret_data = eg.getTraces(time)
       data["traces"] = ret_data["traces"]
@@ -124,6 +124,16 @@ s.mount_proc('/'){|request, response|
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("stopPolling")
       eg.stopPolling
+      response.body = JSON.generate(data)
+
+    when "setOnahamaRoute"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("selectRoute")
+      route = userInput["route"]
+      # puts "----"
+      # puts "setOnahamaRoute"
+      # puts route
+      eg.setOnahamaRoute(route)
       response.body = JSON.generate(data)
 
     when "selectRoute"
