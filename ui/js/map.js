@@ -345,7 +345,10 @@ var Evacquide = function() {
 
     function put_history(sid, history){
 	var tooltip_text = sid + "<br>updated at " + history.time;
-	var history_mark = L.marker([Number(history.lat), Number(history.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+	var history_mark = L.marker([Number(history.lat), Number(history.lon)], {
+	    icon: humanIcon,
+	    zIndexOffset: 1000
+	}).bindTooltip(tooltip_text).addTo(map);
 
 	if (!(sid in shown_history_set)) {
 	    shown_history_set[sid] = {}
@@ -371,15 +374,18 @@ var Evacquide = function() {
 	    }
 	    // console.log(sid + ":" + max_time);
 	    if (playback_time_msec > (max_time * 1000 + 60 * 1000)) {
+		shown_history_set[sid][max_time].setZIndexOffset(20);
 		shown_history_set[sid][max_time].setIcon(humanGrayIcon)
 	    }
 	    old_time_list.forEach(a_time => {
 		if (a_time != max_time) {
+		    shown_history_set[sid][a_time].setZIndexOffset(10);
 		    shown_history_set[sid][a_time].setIcon(traceGrayIcon)
 		}
 	    })
 	    recent_time_list.forEach(a_time => {
 		if (a_time != max_time) {
+		    shown_history_set[sid][a_time].setZIndexOffset(500);
 		    shown_history_set[sid][a_time].setIcon(traceIcon)
 		}
 	    })
