@@ -130,10 +130,12 @@ s.mount_proc('/'){|request, response|
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("selectRoute")
       route = userInput["route"]
-      # puts "----"
-      # puts "setOnahamaRoute"
-      # puts route
+
+      puts "----"
+      puts "setOnahamaRoute"
+      puts route
       eg.setOnahamaRoute(route)
+
       response.body = JSON.generate(data)
 
     when "selectRoute"
