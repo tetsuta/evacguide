@@ -15,7 +15,6 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 再生するときに矢印の変化も見せたい
 ** 交差点にダミーの数字を置く
 ** 矢印の色を薄く(透明化)、細く？
 ** 全部の道に矢印を？
@@ -24,6 +23,7 @@
 
    http://localhost/~tetsu/evacguide/mobile.html?lat=33.5808303&lon=130.340
 ** PENDING モバイルで他の人の情報も出す
+** DONE 再生するときに矢印の変化も見せたい
 ** DONE 再生したときは、投稿を一度消して、reportも投稿された時間で出す
 ** DONE map.js, map_onhm.jsで、put traceにも zindexを設定する
 ** DONE 2vの開始を 1ブロック前から
@@ -193,7 +193,7 @@ fi
 
 **** maplog
      {
-       application (string) primary # key: onahama_1_yyyymmddHHMMSSSSS
+       application (string) primary # key: onahama_1_h_yyyymmddHHMMSSSSS
        time (string) # yyyy/mm/dd HH:MM:SS
        msec (Number) # milli sec
        area (string) # onahama

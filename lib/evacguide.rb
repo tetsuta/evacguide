@@ -100,6 +100,7 @@ class EVACGUIDE
     @reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
     @routedb = AWSD.new(AWS_ROUTEDB, AWS_REGION)
     @tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
+    @maplogdb = AWSD.new(AWS_MAPLOG, AWS_REGION)
     @report_list = []
 
     @polling_flag = false
@@ -112,6 +113,30 @@ class EVACGUIDE
   end
 
 
+  # time(s)以降のルートの変更情報のリストを時刻でソートして返す
+  def getRouteHistory(time)
+    begin_time = Time.parse(time)
+    time_msec = begin_time.to_i * 1000
+
+    maplog_list = @maplogdb.get_all_items
+    ret_list = maplog_list.filter{|h| h["msec"] > time_msec}.sort{|a,b|
+      a["msec"] <=> b["msec"]
+    }
+
+    # ret_list.each{|maplog|
+    #   puts "---"
+    #   p maplog
+    # }
+    
+    data = {
+      "route_history" => ret_list
+    }
+
+    return data
+  end
+
+
+  # すべての reportを返す
   def getAllInfo()
     if @polling_flag == false
       # puts "get_all_items"
@@ -177,10 +202,34 @@ class EVACGUIDE
   end
 
 
+  # put Onahama route log
+  def putOnahamaRouteLog(point, action)
+    time = Time.now()
+
+    key = "onahama_#{point}_#{action}_#{time.strftime("%Y%m%d%H%M%S%L")}"
+    time_str = time.strftime("%Y/%m/%d %H:%M:%S")
+    time_msec = time.to_i * 1000
+
+    data = {
+      application: key,
+      time: time_str,
+      msec: time_msec,
+      area: "onahama",
+      point: point,
+      action: action
+    }
+    
+    # puts "put"
+    # p data
+
+    @maplogdb.put(data)
+  end
+
   # Onahama
   def setOnahamaRoute(route)
     case route
     when "1h"
+      putOnahamaRouteLog("1", "h")
       @routedb.update({
                         table: "oishi1h",
                         application: "oishi1h"
@@ -190,6 +239,7 @@ class EVACGUIDE
                         application: "oishi1v"
                       }, "lat", -800)
     when "1v"
+      putOnahamaRouteLog("1", "v")
       @routedb.update({
                         table: "oishi1h",
                         application: "oishi1h"
@@ -200,6 +250,7 @@ class EVACGUIDE
                       }, "lat", 0)
 
     when "2h"
+      putOnahamaRouteLog("2", "h")
       @routedb.update({
                         table: "oishi2h",
                         application: "oishi2h"
@@ -209,6 +260,7 @@ class EVACGUIDE
                         application: "oishi2v"
                       }, "lat", -800)
     when "2v"
+      putOnahamaRouteLog("2", "v")
       @routedb.update({
                         table: "oishi2h",
                         application: "oishi2h"
@@ -219,6 +271,7 @@ class EVACGUIDE
                       }, "lat", 0)
 
     when "3h"
+      putOnahamaRouteLog("3", "h")
       @routedb.update({
                         table: "oishi3h",
                         application: "oishi3h"
@@ -228,6 +281,7 @@ class EVACGUIDE
                         application: "oishi3v"
                       }, "lat", -800)
     when "3v"
+      putOnahamaRouteLog("3", "v")
       @routedb.update({
                         table: "oishi3h",
                         application: "oishi3h"
@@ -238,6 +292,7 @@ class EVACGUIDE
                       }, "lat", 0)
 
     when "4h"
+      putOnahamaRouteLog("4", "h")
       @routedb.update({
                         table: "oishi4h",
                         application: "oishi4h"
@@ -247,6 +302,7 @@ class EVACGUIDE
                         application: "oishi4v"
                       }, "lat", -800)
     when "4v"
+      putOnahamaRouteLog("4", "v")
       @routedb.update({
                         table: "oishi4h",
                         application: "oishi4h"
@@ -257,6 +313,7 @@ class EVACGUIDE
                       }, "lat", 0)
 
     when "5h"
+      putOnahamaRouteLog("5", "h")
       @routedb.update({
                         table: "oishi5h",
                         application: "oishi5h"
@@ -266,6 +323,7 @@ class EVACGUIDE
                         application: "oishi5v"
                       }, "lat", -800)
     when "5v"
+      putOnahamaRouteLog("5", "v")
       @routedb.update({
                         table: "oishi5h",
                         application: "oishi5h"
@@ -276,6 +334,7 @@ class EVACGUIDE
                       }, "lat", 0)
 
     when "6h"
+      putOnahamaRouteLog("6", "h")
       @routedb.update({
                         table: "oishi6h",
                         application: "oishi6h"
@@ -285,6 +344,7 @@ class EVACGUIDE
                         application: "oishi6v"
                       }, "lat", -800)
     when "6v"
+      putOnahamaRouteLog("6", "v")
       @routedb.update({
                         table: "oishi6h",
                         application: "oishi6h"

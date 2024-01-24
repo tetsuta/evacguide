@@ -98,6 +98,14 @@ s.mount_proc('/'){|request, response|
       data["crosses"] = all_info["crosses"]
       response.body = JSON.generate(data)
 
+    when "getRouteHisoty"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("getRouteHistory")
+      time = userInput["time"]
+      ret_data = eg.getRouteHistory(time)
+      data["route_history"] = ret_data["route_history"]
+      response.body = JSON.generate(data)
+
     when "getAllTraces"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("getAllTraces")

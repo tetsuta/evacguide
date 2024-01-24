@@ -137,8 +137,8 @@ var Evacquide = function() {
 
 	map.setView([36.9485564412181, 140.904335975647], 17);
 
-	// for test
-	map.setView([35.53063491789644,139.7006678581238], 17);
+	// for Kawasaki test
+	// map.setView([35.53063491789644,139.7006678581238], 17);
 
 
 	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
@@ -426,6 +426,23 @@ var Evacquide = function() {
                 mode: "stopPolling"
 	    }),
         });
+    }
+
+
+    function getRouteHistory(time){
+	var ret_data;
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getRouteHisoty",
+		time: time
+	    }),
+        }).done(function(data) {
+	    ret_data = data.route_history;
+        });
+	return ret_data;
     }
 
 
@@ -718,6 +735,72 @@ var Evacquide = function() {
 	marker_set = {};
     }
 
+    function change_arrow(route_history) {
+	// route_history.point // 1,2,3,4,5,6
+	// route_history.action // h,v
+
+	// console.log("change arrow");
+	// console.log(route_history.point);
+	// console.log(route_history.action);
+
+	switch (route_history.point) {
+	case "1":
+	    map.removeLayer(route1);
+	    if (route_history.action == "h") {
+		route1 = drawBlueArrow(route1h_cood);
+	    } else {
+		route1 = drawRedArrow(route1v_cood);
+	    }
+	    route1_direction = route_history.action;
+	    break;
+	case "2":
+	    map.removeLayer(route2);
+	    if (route_history.action == "h") {
+		route2 = drawBlueArrow(route2h_cood);
+	    } else {
+		route2 = drawRedArrow(route2v_cood);
+	    }
+	    route2_direction = route_history.action;
+	    break;
+	case "3":
+	    map.removeLayer(route3);
+	    if (route_history.action == "h") {
+		route3 = drawBlueArrow(route3h_cood);
+	    } else {
+		route3 = drawRedArrow(route3v_cood);
+	    }
+	    route3_direction = route_history.action;
+	    break;
+	case "4":
+	    map.removeLayer(route4);
+	    if (route_history.action == "h") {
+		route4 = drawBlueArrow(route4h_cood);
+	    } else {
+		route4 = drawRedArrow(route4v_cood);
+	    }
+	    route4_direction = route_history.action;
+	    break;
+	case "5":
+	    map.removeLayer(route5);
+	    if (route_history.action == "h") {
+		route5 = drawBlueArrow(route5h_cood);
+	    } else {
+		route5 = drawRedArrow(route5v_cood);
+	    }
+	    route5_direction = route_history.action;
+	    break;
+	case "6":
+	    map.removeLayer(route6);
+	    if (route_history.action == "h") {
+		route6 = drawBlueArrow(route6h_cood);
+	    } else {
+		route6 = drawRedArrow(route6v_cood);
+	    }
+	    route6_direction = route_history.action;
+	    break;
+	}
+    }
+
     function setupControlls() {
 	$(window).keyup(function(e) {
 	    // mon(e.key);
@@ -840,11 +923,6 @@ var Evacquide = function() {
 	    var interval_time;
 	    var play_speed;
 
-	    // 最初にすべてのReportを消す
-	    clearAllReport();
-
-	    var all_reports = getAllReport();
-
 	    if (on_trace_playback == true) {
 		clearTimeout(trace_playback_timer);　
 		$('#trace_playback').text("Playback Trace (stopped)");
@@ -853,6 +931,9 @@ var Evacquide = function() {
 		on_trace_playback = false;
 
 	    } else {
+		// 最初にすべてのReportを消す
+		clearAllReport();
+
 		playback_time_str = $('#pb_starttime').val();
 		getAllTraces(playback_time_str);
 
@@ -860,12 +941,43 @@ var Evacquide = function() {
 		playback_time_msec = Date.parse(playback_time_str);
 		play_speed = Number($('#pb_playback_speed').val());
 
-		while (Date.parse(all_reports[0].table) < playback_time_msec) {
-		    report(all_reports[0]);
-		    all_reports.shift();
+		var all_reports = getAllReport();
+		// 過去の reportsは表示する
+		if (all_reports.length > 0) {
+		    while (Date.parse(all_reports[0].table) < playback_time_msec) {
+			report(all_reports[0]);
+			all_reports.shift();
+			if (all_reports.length == 0) {
+			    break;
+			}
+		    }
 		}
 
+		var route_history_list = getRouteHistory(playback_time_str);
+
 		var pb_countUp = function() {
+
+		    // reportの表示
+		    if (all_reports.length > 0) {
+			while (Date.parse(all_reports[0].table) < playback_time_msec) {
+			    report(all_reports[0]);
+			    all_reports.shift();
+			    if (all_reports.length == 0) {
+				break;
+			    }
+			}
+		    }
+
+		    // 矢印の表示
+		    if (route_history_list.length > 0) {
+			while (route_history_list[0].msec < playback_time_msec) {
+			    change_arrow(route_history_list[0]);
+			    route_history_list.shift();
+			    if (route_history_list.length == 0) {
+				break;
+			    }
+			}
+		    }
 
 		    for (let sid in trace_history) {
 			// console.log(sid);
@@ -874,13 +986,7 @@ var Evacquide = function() {
 			if (trace_history[sid].length > 0) {
 			    var stime = trace_history[sid][0].stime;
 
-			    if (all_reports.length > 0) {
-				while (Date.parse(all_reports[0].table) < (stime * 1000)) {
-				    report(all_reports[0]);
-				    all_reports.shift();
-				}
-			    }
-
+			    // traceの表示
 			    while (stime * 1000 < playback_time_msec) {
 				ahistory = trace_history[sid].shift();
 				put_history(sid, ahistory);
@@ -953,7 +1059,14 @@ var Evacquide = function() {
 	// 初期の倍率を設定
 	$('#playback_speed').val("1.0");
 
-	$('#pb_starttime').val("2024/1/24 13:09");
+	// for kawasaki
+	// $('#pb_starttime').val("2024/1/24 13:09");
+
+	// for Onahama 矢印の変化を見る
+	// $('#pb_starttime').val("2024/1/24 21:56:00");
+	// $('#pb_starttime').val("2024/1/24 22:43:00");
+	$('#pb_starttime').val("2024/1/24 23:00:40");
+
 	$('#pb_playback_speed').val(10);
 
     }
