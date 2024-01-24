@@ -137,6 +137,10 @@ var Evacquide = function() {
 
 	map.setView([36.9485564412181, 140.904335975647], 17);
 
+	// for test
+	map.setView([35.53063491789644,139.7006678581238], 17);
+
+
 	L.control.layers(baseMaps, overlayMaps, {position: 'topright'}).addTo(map);
 
 	var mapwidth = $('#maparea').width();
@@ -367,6 +371,22 @@ var Evacquide = function() {
 	});
 	L.marker([36.94908337729707,140.90655416250232], {icon: routeIntersection6}).addTo(map);
 
+    }
+
+
+    function getAllReport(){
+	var ret_data;
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getAllInfo"
+	    }),
+        }).done(function(data) {
+	    ret_data = data.reports;
+        });
+	return ret_data;
     }
 
 
@@ -691,6 +711,13 @@ var Evacquide = function() {
 	}
     }
 
+    function clearAllReport() {
+	for (let marker_key in marker_set) {
+	    map.removeLayer(marker_set[marker_key]);
+	}
+	marker_set = {};
+    }
+
     function setupControlls() {
 	$(window).keyup(function(e) {
 	    // mon(e.key);
@@ -777,10 +804,7 @@ var Evacquide = function() {
 	});
 
 	$('#clear_marker').on('click', function() {
-	    for (let marker_key in marker_set) {
-		map.removeLayer(marker_set[marker_key]);
-	    }
-	    marker_set = {};
+	    clearAllReport();
 	});
 
 	$('#auto_update').on('click', function() {
@@ -816,6 +840,11 @@ var Evacquide = function() {
 	    var interval_time;
 	    var play_speed;
 
+	    // 最初にすべてのReportを消す
+	    clearAllReport();
+
+	    var all_reports = getAllReport();
+
 	    if (on_trace_playback == true) {
 		clearTimeout(trace_playback_timer);　
 		$('#trace_playback').text("Playback Trace (stopped)");
@@ -831,6 +860,11 @@ var Evacquide = function() {
 		playback_time_msec = Date.parse(playback_time_str);
 		play_speed = Number($('#pb_playback_speed').val());
 
+		while (Date.parse(all_reports[0].table) < playback_time_msec) {
+		    report(all_reports[0]);
+		    all_reports.shift();
+		}
+
 		var pb_countUp = function() {
 
 		    for (let sid in trace_history) {
@@ -839,6 +873,12 @@ var Evacquide = function() {
 
 			if (trace_history[sid].length > 0) {
 			    var stime = trace_history[sid][0].stime;
+
+			    while (Date.parse(all_reports[0].table) < (stime * 1000)) {
+				report(all_reports[0]);
+				all_reports.shift();
+			    }
+
 			    while (stime * 1000 < playback_time_msec) {
 				ahistory = trace_history[sid].shift();
 				put_history(sid, ahistory);
@@ -911,7 +951,7 @@ var Evacquide = function() {
 	// 初期の倍率を設定
 	$('#playback_speed').val("1.0");
 
-	$('#pb_starttime').val("2023/12/13 13:23");
+	$('#pb_starttime').val("2024/1/24 13:09");
 	$('#pb_playback_speed').val(10);
 
     }
