@@ -15,9 +15,19 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
+** GOING 変数で sessionIDをもらい、自分の軌跡を出力する
+   http://localhost/~tetsu/evacguide/mobile.html?lat=33.58083928267066&lon=130.33965915441516&sid=SessionID20231213132218730
+
+   http://localhost/~tetsu/evacguide/mobile.html?lat=33.5808303&lon=130.340
+
+** 再生したときは、投稿を一度消して、reportも投稿された時間で出す
+
+** map.js, map_onhm.jsで、put traceにも zindexを設定する
+
+** 再生するときに矢印の変化も見せたい
+** 交差点にダミーの数字を置く
+** 矢印の色を薄く(透明化)、細く？
 ** 全部の道に矢印を？
-** 変数で sessionIDをもらい、自分の軌跡を出力する
-** SessionIDによって出力をし分ける
 ** PENDING モバイルで他の人の情報も出す
 ** ------------------------------
 ** DONE 2vの開始を 1ブロック前から
@@ -185,7 +195,18 @@ fi
        URL (string)
      }
 
-**** eg_report
+**** maplog
+     {
+       application (string) primary # key: onahama_1_yyyymmddHHMMSSSSS
+       time (string) # yyyy/mm/dd HH:MM:SS
+       msec (Number) # milli sec
+       area (string) # onahama
+       point (stirng) # 1, 2, 3, ..., 6
+       action (string) # 'h' or 'v'
+     }
+
+
+**** candidate eg_report
      {
        id (string) primary
        lat (float)
@@ -194,7 +215,7 @@ fi
        time (string) or (int)
      }
 
-**** eg_cross
+**** candidate eg_cross
      {
        id (string) primary
        lat (float)
