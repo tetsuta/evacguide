@@ -874,9 +874,11 @@ var Evacquide = function() {
 			if (trace_history[sid].length > 0) {
 			    var stime = trace_history[sid][0].stime;
 
-			    while (Date.parse(all_reports[0].table) < (stime * 1000)) {
-				report(all_reports[0]);
-				all_reports.shift();
+			    if (all_reports.length > 0) {
+				while (Date.parse(all_reports[0].table) < (stime * 1000)) {
+				    report(all_reports[0]);
+				    all_reports.shift();
+				}
 			    }
 
 			    while (stime * 1000 < playback_time_msec) {
