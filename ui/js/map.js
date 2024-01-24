@@ -296,7 +296,10 @@ var Evacquide = function() {
 	    shown_trace_set[trace.sid] = {}
 	}
 	if (!(trace.stime in shown_trace_set[trace.sid])) {
-	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {icon: humanIcon}).bindTooltip(tooltip_text).addTo(map);
+	    var trace_mark = L.marker([Number(trace.lat), Number(trace.lon)], {
+		icon: humanIcon,
+		zIndexOffset: 1000
+	    }).bindTooltip(tooltip_text).addTo(map);
 	    shown_trace_set[trace.sid][trace.stime] = trace_mark;
 	}
     }
@@ -318,16 +321,19 @@ var Evacquide = function() {
 	    }
 	    // console.log(sid + ":" + max_time);
 	    if (trace_time_msec > (max_time * 1000 + 60 * 1000)) {
-		shown_trace_set[sid][max_time].setIcon(humanGrayIcon)
+		shown_trace_set[sid][max_time].setZIndexOffset(20);
+		shown_trace_set[sid][max_time].setIcon(humanGrayIcon);
 	    }
 	    old_time_list.forEach(a_time => {
 		if (a_time != max_time) {
-		    shown_trace_set[sid][a_time].setIcon(traceGrayIcon)
+		    shown_trace_set[sid][a_time].setZIndexOffset(10);
+		    shown_trace_set[sid][a_time].setIcon(traceGrayIcon);
 		}
 	    })
 	    recent_time_list.forEach(a_time => {
 		if (a_time != max_time) {
-		    shown_trace_set[sid][a_time].setIcon(traceIcon)
+		    shown_trace_set[sid][a_time].setZIndexOffset(500);
+		    shown_trace_set[sid][a_time].setIcon(traceIcon);
 		}
 	    })
 	}
@@ -386,7 +392,7 @@ var Evacquide = function() {
 	    recent_time_list.forEach(a_time => {
 		if (a_time != max_time) {
 		    shown_history_set[sid][a_time].setZIndexOffset(500);
-		    shown_history_set[sid][a_time].setIcon(traceIcon)
+		    shown_history_set[sid][a_time].setIcon(traceIcon);
 		}
 	    })
 	}
