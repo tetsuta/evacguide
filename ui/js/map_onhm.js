@@ -309,19 +309,50 @@ var Evacquide = function() {
 
 
     function showInitialGuide(){
-	route1_direction = "v";
-	route2_direction = "v";
-	route3_direction = "v";
-	route4_direction = "v";
-	route5_direction = "v";
-	route6_direction = "v";
+	route_status = getRouteStatus();
 
-	route1 = drawRedArrow(route1v_cood);
-	route2 = drawRedArrow(route2v_cood);
-	route3 = drawRedArrow(route3v_cood);
-	route4 = drawRedArrow(route4v_cood);
-	route5 = drawRedArrow(route5v_cood);
-	route6 = drawRedArrow(route6v_cood);
+	if (route_status["1"] == "v") {
+	    route1_direction = "v";
+	    route1 = drawRedArrow(route1v_cood);
+	} else {
+	    route1_direction = "h";
+	    route1 = drawBlueArrow(route1h_cood);
+	}
+	if (route_status["2"] == "v") {
+	    route2_direction = "v";
+	    route2 = drawRedArrow(route2v_cood);
+	} else {
+	    route2_direction = "h";
+	    route2 = drawBlueArrow(route2h_cood);
+	}
+	if (route_status["3"] == "v") {
+	    route3_direction = "v";
+	    route3 = drawRedArrow(route3v_cood);
+	} else {
+	    route3_direction = "h";
+	    route3 = drawBlueArrow(route3h_cood);
+	}
+	if (route_status["4"] == "v") {
+	    route4_direction = "v";
+	    route4 = drawRedArrow(route4v_cood);
+	} else {
+	    route4_direction = "h";
+	    route4 = drawBlueArrow(route4h_cood);
+	}
+	if (route_status["5"] == "v") {
+	    route5_direction = "v";
+	    route5 = drawRedArrow(route5v_cood);
+	} else {
+	    route5_direction = "h";
+	    route5 = drawBlueArrow(route5h_cood);
+	}
+	if (route_status["6"] == "v") {
+	    route6_direction = "v";
+	    route6 = drawRedArrow(route6v_cood);
+	} else {
+	    route6_direction = "h";
+	    route6 = drawBlueArrow(route6h_cood);
+	}
 
 	var routeIntersection1 = L.divIcon({
 	    html: '1',
@@ -426,6 +457,22 @@ var Evacquide = function() {
                 mode: "stopPolling"
 	    }),
         });
+    }
+
+
+    function getRouteStatus(){
+	var ret_data;
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getRouteStatus"
+	    }),
+        }).done(function(data) {
+	    ret_data = data.route_status;
+        });
+	return ret_data;
     }
 
 

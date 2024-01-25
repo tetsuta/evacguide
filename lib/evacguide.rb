@@ -254,6 +254,34 @@ class EVACGUIDE
     @maplogdb.put(data)
   end
 
+
+  def getRouteStatus()
+    route_info_list = @routedb.get_all_items
+
+    # default
+    route_status = {}
+    1.upto(6){|i|
+      route_status[i.to_s] = "v"
+    }
+
+    route_info_list.each{|route_info|
+      if route_info["table"] =~ /oishi([123456])([vh])/
+        id = $1
+        value = $2
+        if route_info["lat"] == 0
+          route_status[id] = value
+        end
+      end
+
+    }
+    data = {
+      "route_status" => route_status
+    }
+
+    return data
+  end
+
+
   # Onahama
   def setOnahamaRoute(route)
     case route
