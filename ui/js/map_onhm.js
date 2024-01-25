@@ -1065,9 +1065,10 @@ var Evacquide = function() {
 	// for Onahama 矢印の変化を見る
 	// $('#pb_starttime').val("2024/1/24 21:56:00");
 	// $('#pb_starttime').val("2024/1/24 22:43:00");
-	$('#pb_starttime').val("2024/1/24 23:00:40");
+	// $('#pb_starttime').val("2024/1/24 23:00:40");
+	$('#pb_starttime').val("2024/1/25 21:15:40");
 
-	$('#pb_playback_speed').val(10);
+	$('#pb_playback_speed').val(20);
 
     }
 

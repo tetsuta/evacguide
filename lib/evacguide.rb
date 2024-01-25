@@ -13,6 +13,25 @@ class Trace
     @lon_list = raw_trace["lon"]
     @size = @time_list.size
 
+    # ------------------------------
+    # 緊急デバッグ(2024-1-25(Thu))
+    # 部分的にデータが記録されないところがあったので、マージしたデータを
+    # "lat"に記録することにした。
+    
+    merged_list = @lat_list.dup
+    @time_list = []
+    @lat_list = []
+    @lon_list = []
+
+    merged_list.each{|merged_data|
+      elems = merged_data.split(",")
+      @lat_list.push(elems[0])
+      @lon_list.push(elems[1])
+      @time_list.push(elems[2])
+    }
+    @size = @time_list.size
+    # ------------------------------
+
     @parsed_time_list = []
     @time_list.each{|time_str|
       if time_str =~ /[AP]M/
@@ -144,6 +163,16 @@ class EVACGUIDE
     else
       # puts "use cache"
     end
+
+    # ------------------------------
+    # 緊急デバッグ(2024-1-25(Thu))
+    # 部分的にデータが記録されないところがあったので、マージしたデータを
+    # "lat"に記録することにした。
+    @report_list.each{|report|
+      elems = report["lat"].split(",")
+      report["lat"] = elems[0]
+    }
+    # ------------------------------
 
     data = {
       "reports" => @report_list

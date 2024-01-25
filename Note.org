@@ -4,6 +4,11 @@
   https://digital-bosai.net/evacguide/index.html
   https://digital-bosai.net/evacguide/mobile.html
 
+  https://digital-bosai.net/evacguide/onhm.html
+  https://digital-bosai.net/evacguide/kwsk.html
+
+
+
   elastic ip
   http://35.74.99.112/evacguide/index.html
   http://35.74.99.112/evacguide/mobile.html
@@ -23,6 +28,7 @@
 
    http://localhost/~tetsu/evacguide/mobile.html?lat=33.5808303&lon=130.340
 ** PENDING モバイルで他の人の情報も出す
+** DONE 緯度に、緯度軽度時間がカンマ区切りで入る。
 ** DONE 再生するときに矢印の変化も見せたい
 ** DONE 再生したときは、投稿を一度消して、reportも投稿された時間で出す
 ** DONE map.js, map_onhm.jsで、put traceにも zindexを設定する
