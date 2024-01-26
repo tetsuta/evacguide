@@ -361,7 +361,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94848086088772,140.90297877788547], {icon: routeIntersection1}).addTo(map);
+	L.marker([36.94848086088772,140.90297877788547], {icon: routeIntersection1,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection2 = L.divIcon({
 	    html: '2',
@@ -369,7 +369,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.9481574165731,140.90364664793017], {icon: routeIntersection2}).addTo(map);
+	L.marker([36.9481574165731,140.90364664793017], {icon: routeIntersection2,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection3 = L.divIcon({
 	    html: '3',
@@ -377,7 +377,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94915256676398,140.90445667505264], {icon: routeIntersection3}).addTo(map);
+	L.marker([36.94915256676398,140.90445667505264], {icon: routeIntersection3,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection4 = L.divIcon({
 	    html: '4',
@@ -385,7 +385,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94806330436424,140.90501189231875], {icon: routeIntersection4}).addTo(map);
+	L.marker([36.94806330436424,140.90501189231875], {icon: routeIntersection4,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection5 = L.divIcon({
 	    html: '5',
@@ -393,7 +393,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94848079868966,140.90557783842087], {icon: routeIntersection5}).addTo(map);
+	L.marker([36.94848079868966,140.90557783842087], {icon: routeIntersection5,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection6 = L.divIcon({
 	    html: '6',
@@ -401,7 +401,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94908337729707,140.90655416250232], {icon: routeIntersection6}).addTo(map);
+	L.marker([36.94908337729707,140.90655416250232], {icon: routeIntersection6,zIndexOffset: 1800}).addTo(map);
 
     }
 
