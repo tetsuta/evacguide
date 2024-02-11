@@ -20,7 +20,6 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 小名浜の新しい矢印に対応
 ** GOING APKファイルを起き QRコードを作る
    https://digital-bosai.net/package/latest.apk
 
@@ -33,10 +32,11 @@
    sudo mv ~/iwaki_new_0210.apk ./
    sudo ln -s iwaki_new_0210.apk latest.apk
    
-** 各交差点にダミーの数字を置く
-** 矢印の色を薄く(透明化)、細く？
+** PENDING 各交差点にダミーの数字を置く
 ** PENDING 全部の道に矢印を？
 ** PENDING モバイルで他の人の情報も出す
+** DONE 小名浜の新しい矢印に対応
+** DONE 矢印の色を薄く(透明化)、細く？
 ** DONE ポップアップする写真のサイズを調整
    SEで写真を消せるように．
 ** DONE メールアドレスのQRコードも作る

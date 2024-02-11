@@ -265,7 +265,7 @@ class EVACGUIDE
     }
 
     route_info_list.each{|route_info|
-      if route_info["table"] =~ /oishi([123456])([vh])/
+      if route_info["table"] =~ /oishi([0-9]+)([vh])/
         id = $1
         value = $2
         if route_info["lat"] == 0
@@ -409,6 +409,27 @@ class EVACGUIDE
       @routedb.update({
                         table: "oishi6v",
                         application: "oishi6v"
+                      }, "lat", 0)
+
+    when "7h"
+      putOnahamaRouteLog("7", "h")
+      @routedb.update({
+                        table: "oishi7h",
+                        application: "oishi7h"
+                      }, "lat", 0)
+      @routedb.update({
+                        table: "oishi7v",
+                        application: "oishi7v"
+                      }, "lat", -800)
+    when "7v"
+      putOnahamaRouteLog("7", "v")
+      @routedb.update({
+                        table: "oishi7h",
+                        application: "oishi7h"
+                      }, "lat", -800)
+      @routedb.update({
+                        table: "oishi7v",
+                        application: "oishi7v"
                       }, "lat", 0)
     end
   end

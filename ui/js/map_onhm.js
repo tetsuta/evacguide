@@ -22,19 +22,22 @@ var Evacquide = function() {
     var on_track_traces = false;
     var on_trace_playback = false;
 
-    var route1v_cood = [[36.94847705163496,140.9029841423035],[36.94798278080618,140.902892947197],[36.94744384964621,140.90281248092654]];
-    var route2v_cood = [[36.948175698326686,140.9036493301392],[36.94745028040733,140.90359032154086]];
-    var route3v_cood = [[36.9491372646546,140.90445399284366],[36.94853278412399,140.90436279773715]];
-    var route4v_cood = [[36.94803333382547,140.9050038456917],[36.947403121479915,140.90495824813846]];
-    var route5v_cood = [[36.94847276451874,140.90558588504794],[36.94805262595792,140.90546786785129]];
-    var route6v_cood = [[36.949062240736026,140.9065514802933],[36.94838487858288,140.90639591217044]];
+    var route1v_cood = [[36.948068857805964,140.9049588464416],[36.948120333513614,140.9043203408177],[36.94796590628629,140.90429351285033],[36.94738680139588,140.90422912572856]];
+    var route2v_cood = [[36.94816945043316,140.90366274118423],[36.94812336373498,140.90427562594417]];
+    var route3v_cood = [[36.94912857277826,140.90445155630331],[36.94878111567551,140.90440058316526],[36.94854518710968,140.9043630240109]];
+    var route4v_cood = [[36.94901293926355,140.90568244457248],[36.94851349211317,140.9055805206299]];
+    var route5v_cood = [[36.948352284345724,140.90635892134526],[36.947906161748946,140.90624087828877]];
+    var route6v_cood = [[36.94924765685764,140.90380892157557],[36.94917156127851,140.9044271707535]];
+    var route7v_cood = [[36.94847448979887,140.90557024728],[36.94801120933171,140.90545220422348],[36.94806911954419,140.90502563954198]];
 
-    var route1h_cood = [[36.947420487326845,140.90281784534457],[36.947888192618755,140.90288221836093],[36.94847705163496,140.9029841423035],[36.94846204672712,140.9036493301392]];
-    var route2h_cood = [[36.94742500092451,140.90355813503268],[36.94815980438237,140.90365469455722],[36.94810835875745,140.9042823314667]];
-    var route3h_cood = [[36.948587822468724,140.9043735265732],[36.94914583881203,140.90445399284366],[36.949090106771536,140.90507090091708]];
-    var route4h_cood = [[36.947399255597226,140.9049314260483],[36.948061200237404,140.90500652790072],[36.94809978448323,140.90437889099124]];
-    var route5h_cood = [[36.94806434042784,140.90546786785129],[36.94847705163496,140.9055805206299],[36.948507061441816,140.9050762653351]];
-    var route6h_cood = [[36.94841189857763,140.90637445449832],[36.94908581968982,140.9065380692482],[36.949220862648325,140.90580582618716]];
+    var route1h_cood = [[36.947363709079426,140.9042288212875],[36.94812083444769,140.9043119879864],[36.948069358740376,140.9049934183581],[36.94763610349215,140.90495585920377],[36.947350840027944,140.9049236656429]];
+    var route2h_cood = [[36.94815551724826,140.90363860130313],[36.94737739841628,140.90355545282367]];
+    var route3h_cood = [[36.94855408693906,140.90436296112443],[36.949163210036595,140.9044568590103],[36.94909028710552,140.9050685366668]];
+    var route4h_cood = [[36.949019369892206,140.9056743979454],[36.94907938906676,140.90511113405228]];
+    var route5h_cood = [[36.9479126889011,140.9062488238273],[36.94835666664592,140.906364184087],[36.94847892093287,140.9056103182034]];
+    var route6h_cood = [[36.94922943679634,140.9037753939629],[36.94847705163496,140.90366542339328],[36.94818767074801,140.90364664793017]];
+    var route7h_cood = [[36.94807355070178,140.90501205453057],[36.94800920602227,140.90544935039907],[36.94847892093287,140.90557275904902],[36.948502513842854,140.90508449004253]];
+
 
     // 現在選択されている道路の向き
     // "v"または "h"の値を持つ。
@@ -44,6 +47,7 @@ var Evacquide = function() {
     var route4_direction;
     var route5_direction;
     var route6_direction;
+    var route7_direction;
 
     // 道路のオブジェクト
     var route1;
@@ -52,6 +56,7 @@ var Evacquide = function() {
     var route4;
     var route5;
     var route6;
+    var route7;
 
 
     var on_shift = false;
@@ -254,60 +259,37 @@ var Evacquide = function() {
 
 
     function drawRedArrow(cood){
-	var route = L.polyline(cood, { color: 'red', weight: 5 }).arrowheads().addTo(map);
+	var route = L.polyline(cood, {color:'red', weight:5, opacity:0.5}).arrowheads({fill:true, yawn:60, size:'10px', frequency:'30px'}).addTo(map);
 	return route;
     }
 
     function drawBlueArrow(cood){
-	var route = L.polyline(cood, { color: 'blue', weight: 5 }).arrowheads().addTo(map);
+	var route = L.polyline(cood, {color:'blue', weight:5, opacity:0.5}).arrowheads({fill:true, yawn:60, size:'10px', frequency:'30px'}).addTo(map);
 	return route;
     }
 
     function showBaseGuide(){
-	// 右
-	drawRedArrow([[36.94945879489742,140.90186566114426],[36.94933018296315,140.9030619263649]]);
-	drawRedArrow([[36.949090106771536,140.90185761451724],[36.94902151343497,140.9030082821846]]);
-	drawRedArrow([[36.94854135834946,140.90179324150088],[36.94847276451874,140.90293586254123]]);
-	drawRedArrow([[36.94823054205992,140.90176910161972],[36.94816623508303,140.90287953615191]]);
-	drawRedArrow([[36.947422413771925,140.9017610549927],[36.9473924035378,140.90277493000033]]);
-	drawRedArrow([[36.94737954200525,140.90284466743472],[36.94735381893368,140.9035259485245]]);
-	drawRedArrow([[36.947349531754234,140.90362250804904],[36.94733667021446,140.90421259403232]]);
+	// 1,2,3,4,5
+	drawRedArrow([[36.95012540114057,140.90247988877186],[36.949482095715055,140.90235136019706]]);
+	drawRedArrow([[36.95006504091139,140.90322317392597],[36.94938558046006,140.90308644650355]]);
+	drawRedArrow([[36.94996852639505,140.90455384110845],[36.94920498502175,140.90446262601932]]);
+	drawRedArrow([[36.94989989377566,140.90589523947796],[36.949247880807434,140.90575036845408],[36.94902794406289,140.90568512678146]]);
+	drawRedArrow([[36.94979302461486,140.90672924544518],[36.94908953571396,140.90653608408],[36.94839461956742,140.9063697506822]]);
 
-	// 左
-	drawRedArrow([[36.94893577167738,140.90735077857974],[36.94907724552562,140.90656220912936]]);
-	drawRedArrow([[36.948202675709915,140.90716838836673],[36.948335576672044,140.90643882751468]]);
-	drawRedArrow([[36.94776967419281,140.90706110000613],[36.947885427314645,140.90633153915408]]);
-	drawRedArrow([[36.9472766496668,140.90694040060046],[36.947295941990845,140.90618133544925]]);
-	drawRedArrow([[36.947289511216695,140.90610623359683],[36.947310947128386,140.905414223671]]);
-	drawRedArrow([[36.947310947128386,140.90528547763827],[36.947310947128386,140.9049850702286]]);
-	drawRedArrow([[36.947310947128386,140.90490460395816],[36.94732380867251,140.90432524681094]]);
+	// 6,7,8,9,10
+	drawRedArrow([[36.94947153084759,140.90184426988498],[36.94933640943765,140.90307299079143],[36.94925087216212,140.90378612279895]]);
+	drawRedArrow([[36.94909619300591,140.90182280751108],[36.94905115234061,140.9026008185654],[36.94903177405099,140.90298444556907]]);
+	drawRedArrow([[36.949027580890004,140.90303008367533],[36.9487144401935,140.9030059385047],[36.94853213166088,140.90298447613077]]);
+	drawRedArrow([[36.94905115234061,140.90508508834566],[36.94850637266095,140.90503679800437],[36.94811387150067,140.9050019216468]]);
+	drawRedArrow([[36.94854939908216,140.9017718896191],[36.948512937331536,140.90257672864078],[36.94848505480458,140.90295232018423]]);
 
-
-
-
-	// 下
-	drawRedArrow([[36.950046119970466,140.9032362699509],[36.94941163721342,140.90311825275424]]);
-	drawRedArrow([[36.949951805300465,140.90454518795016],[36.94921228849934,140.9044674038887]]);
-	drawRedArrow([[36.94928516873485,140.90309947729114],[36.9490879632307,140.90306729078296]]);
-	drawRedArrow([[36.949006508634334,140.90305387973788],[36.948528497010905,140.90298682451248]]);
-	drawRedArrow([[36.949213719380104,140.9037780761719],[36.94880180277178,140.90371370315555],[36.94846711888739,140.90366542339328],[36.94823112295673,140.9036493301392]]);
-
-	drawRedArrow([[36.94988964329501,140.9059023857117],[36.94928302519951,140.905779004097]]);
-	drawRedArrow([[36.94981676363782,140.9067311882973],[36.94913083403593,140.90655952692032]]);
-	drawRedArrow([[36.94919728373629,140.90576291084292],[36.94854350190568,140.90560734272006]]);
-	drawRedArrow([[36.94904294885927,140.9050923585892],[36.94855636324169,140.90506017208102]]);
-	drawRedArrow([[36.94846633384395,140.90505212545398],[36.948093353776976,140.9050226211548]]);
-	drawRedArrow([[36.94831842817381,140.90637445449832],[36.94793901666334,140.9062832593918]]);
-	drawRedArrow([[36.947844699384426,140.90625643730166],[36.94735167534397,140.90614378452304]]);
-	drawRedArrow([[36.94844275469839,140.90434938669205],[36.94814694297939,140.90432792901996]]);
-	drawRedArrow([[36.948071918085425,140.90431183576584],[36.94743098812237,140.90426087379458]]);
-	drawRedArrow([[36.94798617525901,140.90548396110538],[36.94738168559415,140.90534985065463]]);
-	drawRedArrow([[36.947246639375244,140.90393096208575],[36.947032279805974,140.90391218662265]]);
-
-	// drawRedArrow([[36.94843632402106,140.90365737676623],[36.94818981431419,140.90365201234818]]);
-
+	// 11,12,13,14,15
+	drawRedArrow([[36.94849613702071,140.90434959886048],[36.94816369076916,140.90431203970613]]);
+	drawRedArrow([[36.948234450985076,140.90175277445144],[36.94816367198414,140.90292247382968],[36.94821943726311,140.90293588781336],[36.94817439607944,140.9035985386079]]);
+	drawRedArrow([[36.947863491881165,140.90623809499124],[36.94756964992523,140.9061951702434],[36.94731870370787,140.90615761108904]]);
+	drawRedArrow([[36.947386733769115,140.90167532304187],[36.94736957503853,140.90280746326573],[36.947326678195175,140.90416495841566]]);
+	drawRedArrow([[36.94727091226266,140.90612876562858],[36.94730094007754,140.90491614150255],[36.94731380913744,140.9042776358787]]);
     }
-
 
     function showInitialGuide(){
 	route_status = getRouteStatus();
@@ -315,44 +297,79 @@ var Evacquide = function() {
 	if (route_status["1"] == "v") {
 	    route1_direction = "v";
 	    route1 = drawRedArrow(route1v_cood);
+	    $('#route1').removeClass("btn-primary");
+	    $('#route1').addClass("btn-danger");
 	} else {
 	    route1_direction = "h";
 	    route1 = drawBlueArrow(route1h_cood);
+	    $('#route1').removeClass("btn-danger");
+	    $('#route1').addClass("btn-primary");
 	}
 	if (route_status["2"] == "v") {
 	    route2_direction = "v";
 	    route2 = drawRedArrow(route2v_cood);
+	    $('#route2').removeClass("btn-primary");
+	    $('#route2').addClass("btn-danger");
 	} else {
 	    route2_direction = "h";
 	    route2 = drawBlueArrow(route2h_cood);
+	    $('#route2').removeClass("btn-danger");
+	    $('#route2').addClass("btn-primary");
 	}
 	if (route_status["3"] == "v") {
 	    route3_direction = "v";
 	    route3 = drawRedArrow(route3v_cood);
+	    $('#route3').removeClass("btn-primary");
+	    $('#route3').addClass("btn-danger");
 	} else {
 	    route3_direction = "h";
 	    route3 = drawBlueArrow(route3h_cood);
+	    $('#route3').removeClass("btn-danger");
+	    $('#route3').addClass("btn-primary");
 	}
 	if (route_status["4"] == "v") {
 	    route4_direction = "v";
 	    route4 = drawRedArrow(route4v_cood);
+	    $('#route4').removeClass("btn-primary");
+	    $('#route4').addClass("btn-danger");
 	} else {
 	    route4_direction = "h";
 	    route4 = drawBlueArrow(route4h_cood);
+	    $('#route4').removeClass("btn-danger");
+	    $('#route4').addClass("btn-primary");
 	}
 	if (route_status["5"] == "v") {
 	    route5_direction = "v";
 	    route5 = drawRedArrow(route5v_cood);
+	    $('#route5').removeClass("btn-primary");
+	    $('#route5').addClass("btn-danger");
 	} else {
 	    route5_direction = "h";
 	    route5 = drawBlueArrow(route5h_cood);
+	    $('#route5').removeClass("btn-danger");
+	    $('#route5').addClass("btn-primary");
 	}
 	if (route_status["6"] == "v") {
 	    route6_direction = "v";
 	    route6 = drawRedArrow(route6v_cood);
+	    $('#route6').removeClass("btn-primary");
+	    $('#route6').addClass("btn-danger");
 	} else {
 	    route6_direction = "h";
 	    route6 = drawBlueArrow(route6h_cood);
+	    $('#route6').removeClass("btn-danger");
+	    $('#route6').addClass("btn-primary");
+	}
+	if (route_status["7"] == "v") {
+	    route7_direction = "v";
+	    route7 = drawRedArrow(route7v_cood);
+	    $('#route7').removeClass("btn-primary");
+	    $('#route7').addClass("btn-danger");
+	} else {
+	    route7_direction = "h";
+	    route7 = drawBlueArrow(route7h_cood);
+	    $('#route7').removeClass("btn-danger");
+	    $('#route7').addClass("btn-primary");
 	}
 
 	var routeIntersection1 = L.divIcon({
@@ -361,7 +378,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94848086088772,140.90297877788547], {icon: routeIntersection1,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.94773537693773,140.90427160263064], {icon: routeIntersection1,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection2 = L.divIcon({
 	    html: '2',
@@ -369,7 +386,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.9481574165731,140.90364664793017], {icon: routeIntersection2,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.94815123011396,140.90394973754886], {icon: routeIntersection2,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection3 = L.divIcon({
 	    html: '3',
@@ -377,7 +394,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94915256676398,140.90445667505264], {icon: routeIntersection3,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.948871465295866,140.90441107749942], {icon: routeIntersection3,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection4 = L.divIcon({
 	    html: '4',
@@ -385,7 +402,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94806330436424,140.90501189231875], {icon: routeIntersection4,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.94871712975873,140.90562343597415], {icon: routeIntersection4,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection5 = L.divIcon({
 	    html: '5',
@@ -393,7 +410,7 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94848079868966,140.90557783842087], {icon: routeIntersection5,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.94814694297939,140.9063154459], {icon: routeIntersection5,zIndexOffset: 1800}).addTo(map);
 
 	var routeIntersection6 = L.divIcon({
 	    html: '6',
@@ -401,7 +418,15 @@ var Evacquide = function() {
 	    iconSize: [20,20],
 	    iconAnchor: [10,10]
 	});
-	L.marker([36.94908337729707,140.90655416250232], {icon: routeIntersection6,zIndexOffset: 1800}).addTo(map);
+	L.marker([36.949205857886945,140.90410798788074], {icon: routeIntersection6,zIndexOffset: 1800}).addTo(map);
+
+	var routeIntersection7 = L.divIcon({
+	    html: '7',
+	    className: 'divroute route7icon',
+	    iconSize: [20,20],
+	    iconAnchor: [10,10]
+	});
+	L.marker([36.948037620966446,140.9052237868309], {icon: routeIntersection7,zIndexOffset: 1800}).addTo(map);
 
     }
 
@@ -778,6 +803,23 @@ var Evacquide = function() {
 	}
     }
 
+    function toggle_route7() {
+	map.removeLayer(route7);
+	if (route7_direction == "v") {
+	    route7_direction = "h";
+	    route7 = drawBlueArrow(route7h_cood);
+	    $('#route7').removeClass("btn-danger");
+	    $('#route7').addClass("btn-primary");
+	    send_route("7h");
+	} else {
+	    route7_direction = "v";
+	    route7 = drawRedArrow(route7v_cood);
+	    $('#route7').removeClass("btn-primary");
+	    $('#route7').addClass("btn-danger");
+	    send_route("7v");
+	}
+    }
+
     function clearAllReport() {
 	for (let marker_key in marker_set) {
 	    map.removeLayer(marker_set[marker_key]);
@@ -786,7 +828,7 @@ var Evacquide = function() {
     }
 
     function change_arrow(route_history) {
-	// route_history.point // 1,2,3,4,5,6
+	// route_history.point // 1,2,3,4,5,6,7
 	// route_history.action // h,v
 
 	// console.log("change arrow");
@@ -847,6 +889,15 @@ var Evacquide = function() {
 		route6 = drawRedArrow(route6v_cood);
 	    }
 	    route6_direction = route_history.action;
+	    break;
+	case "7":
+	    map.removeLayer(route7);
+	    if (route_history.action == "h") {
+		route7 = drawBlueArrow(route7h_cood);
+	    } else {
+		route7 = drawRedArrow(route7v_cood);
+	    }
+	    route7_direction = route_history.action;
 	    break;
 	}
     }
@@ -928,6 +979,14 @@ var Evacquide = function() {
 
 	$('#route6').on('click', function() {
 	    toggle_route6()
+	});
+
+	$('.route7icon').on('click', function() {
+	    toggle_route7()
+	});
+
+	$('#route7').on('click', function() {
+	    toggle_route7()
 	});
 
 
