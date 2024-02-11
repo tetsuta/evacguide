@@ -20,14 +20,30 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
-** 交差点にダミーの数字を置く
+** 小名浜の新しい矢印に対応
+** GOING APKファイルを起き QRコードを作る
+   https://digital-bosai.net/package/latest.apk
+
+   <local>
+   cd /home/tetsu/localwork/evacguide
+   scp -i takahashi.pem ~/Desktop/iwaki_new_0210.apk ubuntu@35.74.99.112:~/
+
+   <EC2>
+   cd /var/www/html/package/
+   sudo mv ~/iwaki_new_0210.apk ./
+   sudo ln -s iwaki_new_0210.apk latest.apk
+   
+** 各交差点にダミーの数字を置く
 ** 矢印の色を薄く(透明化)、細く？
-** 全部の道に矢印を？
-** GOING 変数で sessionIDをもらい、自分の軌跡を出力する
+** PENDING 全部の道に矢印を？
+** PENDING モバイルで他の人の情報も出す
+** DONE ポップアップする写真のサイズを調整
+   SEで写真を消せるように．
+** DONE メールアドレスのQRコードも作る
+** DONE 変数で sessionIDをもらい、自分の軌跡を出力する
    http://localhost/~tetsu/evacguide/mobile.html?lat=33.58083928267066&lon=130.33965915441516&sid=SessionID20231213132218730
 
    http://localhost/~tetsu/evacguide/mobile.html?lat=33.5808303&lon=130.340
-** PENDING モバイルで他の人の情報も出す
 ** DONE 迂回の矢印を入れる
 ** DONE 矢印はDBから取る
 ** DONE 人よりもレポートを上に置く
@@ -143,8 +159,24 @@ fi
 ** DONE ×を置くアクションを設定
 
 
+* account
+** iwaki.hinan.host
+iwaki.hinan.host@gmail.com
+aeon.iwaki.host
+
+iwaki.hinan.01@gmail.com
+aeon.iwaki.01
+
+iwaki.hinan.02@gmail.com
+aeon.iwaki.02
+
+
+   - google driveでファイルを開くテストをする
+   - リンクでいろいろなファイルを指せるようにする。
+   - QRコードで開けるようにしておく
+
 * library
-  
+ 
 ** leaflet-icon-pulse
    https://github.com/mapshakers/leaflet-icon-pulse
 

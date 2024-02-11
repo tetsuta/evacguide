@@ -353,8 +353,8 @@ var Evacquide = function() {
 	} else {
 	    var time_num = Date.parse(anreport.table);
 	    if ((now_num - time_num) < threshold_millisec) {
-		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
-		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
+		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='200' height='400'></a>";
+		var popup = L.popup({ maxWidth: 200, maxHeight: 400 }).setContent(report_detail);
 		var tooltip_text = "report on " + anreport.table;
 		var marker = L.marker([Number(anreport.lat), Number(anreport.lon)]).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
 	    } else {
