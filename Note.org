@@ -20,6 +20,9 @@
   軌跡のテスト用の日付：2023/12/13 13:23
 
 * todo
+** 青色のユニークな人数を表示する
+** 青からグレーになるまでの時間をパラメータ化する
+
 ** GOING APKファイルを起き QRコードを作る
    https://digital-bosai.net/package/latest.apk
 
