@@ -618,12 +618,45 @@ var Evacquide = function() {
     }
 
 
+    function highlight_user(e, target_sid){
+	playback_time_str = $('#pb_starttime').val();
+	playback_time_msec = Date.parse(playback_time_str);
+
+	for (let sid in shown_history_set) {
+	    if (sid == target_sid) {
+		for (let time in shown_history_set[sid]) {
+		    shown_history_set[sid][time].setZIndexOffset(100);
+		    var current_icon = shown_history_set[sid][time].getIcon();
+		    if (current_icon == humanGrayIcon) {
+			shown_history_set[sid][time].setIcon(humanIcon);
+		    }
+		    if (current_icon == traceGrayIcon) {
+			shown_history_set[sid][time].setIcon(traceIcon);
+		    }
+		}
+	    } else {
+		for (let time in shown_history_set[sid]) {
+		    shown_history_set[sid][time].setZIndexOffset(10);
+		    var current_icon = shown_history_set[sid][time].getIcon();
+		    if (current_icon == humanIcon) {
+			shown_history_set[sid][time].setIcon(humanGrayIcon);
+		    }
+		    if (current_icon == traceIcon) {
+			shown_history_set[sid][time].setIcon(traceGrayIcon);
+		    }
+		}
+	    }
+	}
+    }
+
     function put_history(sid, history){
 	var tooltip_text = sid + "<br>updated at " + history.time;
 	var history_mark = L.marker([Number(history.lat), Number(history.lon)], {
 	    icon: humanIcon,
 	    zIndexOffset: 1000
-	}).bindTooltip(tooltip_text).addTo(map);
+	}).bindTooltip(tooltip_text).addTo(map).on('click', (e) => {
+            highlight_user(e, sid);
+	});
 
 	if (!(sid in shown_history_set)) {
 	    shown_history_set[sid] = {}
