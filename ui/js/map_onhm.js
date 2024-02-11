@@ -1,7 +1,10 @@
 var Evacquide = function() {
     // ==================================================
     // この時間より古い報告は表示しない
-    var threshold_millisec = 1000 * 60 * 60 * 24 * 365
+    var threshold_millisec = 1000 * 60 * 60 * 24 * 365;
+
+    // この時間が経過すると、人や軌跡のアイコンをグレーにする
+    var gray_time_threshold_millisec = 2 * 60 * 1000;
 
     // ==================================================
     var now = new Date();
@@ -575,14 +578,14 @@ var Evacquide = function() {
 		if (max_time < time) {
 		    max_time = time;
 		}
-		if (trace_time_msec > (time * 1000 + 60 * 1000)) {
+		if (trace_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
 		    old_time_list.push(time);
 		} else {
 		    recent_time_list.push(time);
 		}
 	    }
 	    // console.log(sid + ":" + max_time);
-	    if (trace_time_msec > (max_time * 1000 + 60 * 1000)) {
+	    if (trace_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_trace_set[sid][max_time].setZIndexOffset(20);
 		shown_trace_set[sid][max_time].setIcon(humanGrayIcon);
 	    }
@@ -634,14 +637,14 @@ var Evacquide = function() {
 		if (max_time < time) {
 		    max_time = time;
 		}
-		if (playback_time_msec > (time * 1000 + 60 * 1000)) {
+		if (playback_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
 		    old_time_list.push(time);
 		} else {
 		    recent_time_list.push(time);
 		}
 	    }
 	    // console.log(sid + ":" + max_time);
-	    if (playback_time_msec > (max_time * 1000 + 60 * 1000)) {
+	    if (playback_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_history_set[sid][max_time].setZIndexOffset(20);
 		shown_history_set[sid][max_time].setIcon(humanGrayIcon)
 	    }
@@ -1162,10 +1165,7 @@ var Evacquide = function() {
 	// $('#pb_starttime').val("2024/1/24 13:09");
 
 	// for Onahama 矢印の変化を見る
-	// $('#pb_starttime').val("2024/1/24 21:56:00");
-	// $('#pb_starttime').val("2024/1/24 22:43:00");
-	// $('#pb_starttime').val("2024/1/24 23:00:40");
-	$('#pb_starttime').val("2024/1/25 21:15:40");
+	$('#pb_starttime').val("2024/1/26 14:20:00");
 
 	$('#pb_playback_speed').val(20);
 

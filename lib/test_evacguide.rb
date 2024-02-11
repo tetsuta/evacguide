@@ -16,7 +16,8 @@ eg = EVACGUIDE.new()
 # p eg.getRouteHistory("2024/1/24 21:56:00")
 
 
-eg.getRouteStatus()
+# eg.getRouteStatus()
+p eg.getAllTraces("2024/01/26 14:24:03")
 
 
 
