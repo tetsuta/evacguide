@@ -4,7 +4,7 @@ require_relative './aws'
 require_relative './config'
 
 class Trace
-  attr_reader :id
+  attr_reader :id, :is_valid
 
   def initialize(raw_trace)
     @id = raw_trace["application"]
@@ -12,6 +12,7 @@ class Trace
     @lat_list = raw_trace["lat"]
     @lon_list = raw_trace["lon"]
     @size = @time_list.size
+    @is_valid = true
 
     # ------------------------------
     # 緊急デバッグ(2024-1-25(Thu))
@@ -23,12 +24,22 @@ class Trace
     @lat_list = []
     @lon_list = []
 
+    num_of_entity = 0
     merged_list.each{|merged_data|
       elems = merged_data.split(",")
       @lat_list.push(elems[0])
       @lon_list.push(elems[1])
       @time_list.push(elems[2])
+      num_of_entity = elems.size
     }
+
+    # イレギュラーなデータへの対応
+    #  latに 3つの情報が入っていない場合は不適格とする
+    if num_of_entity < 3
+      @is_valid = false
+      return nil
+    end
+
     @size = @time_list.size
     # ------------------------------
 
@@ -189,6 +200,7 @@ class EVACGUIDE
     trace_set = {}
     @tracedb.get_all_items.each{|raw_trace|
       trace = Trace.new(raw_trace)
+      next unless trace.is_valid
 
       trace_history = trace.history(begin_time, end_time)
       if trace_history.size > 0
@@ -216,6 +228,7 @@ class EVACGUIDE
     trace_list = []
     @tracedb.get_all_items.each{|raw_trace|
       trace = Trace.new(raw_trace)
+      next unless trace.is_valid
 
       latest_info = trace.latest_info(begin_time, end_time)
       if latest_info != nil
