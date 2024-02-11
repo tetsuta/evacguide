@@ -670,7 +670,6 @@ var Evacquide = function() {
 	} else {
 	    var time_num = Date.parse(anreport.table);
 	    if ((now_num - time_num) < threshold_millisec) {
-		// mon("o:" + anreport.table)
 		var report_detail = anreport.table + "<br><a href='" + anreport.URL + "' target='_blank'><img src='" + anreport.URL + "' width='300' height='600'></a>";
 		var popup = L.popup({ maxWidth: 330, maxHeight: 660 }).setContent(report_detail);
 		var tooltip_text = "report at " + anreport.table;
@@ -679,14 +678,10 @@ var Evacquide = function() {
 		}).bindPopup(popup).bindTooltip(tooltip_text).addTo(map);
 		marker_set[anreport.table] = marker;
 	    } else {
-		// mon("x:" + anreport.table)
 	    }
 	}
     }
 
-    function mon(text){
-	$('#monitor').text(text);
-    }
 
     function send_route(route){
 	$.ajax({
@@ -904,8 +899,6 @@ var Evacquide = function() {
 
     function setupControlls() {
 	$(window).keyup(function(e) {
-	    // mon(e.key);
-
 	    if (e.key == "Control") {
 		on_control = false;
 	    }
@@ -918,12 +911,10 @@ var Evacquide = function() {
 	$(window).keydown(function(e) {
 	    if (e.key == "Control") {
 		on_control = true;
-		// mon("control");
 	    }
 	    if (e.key == "Shift") {
 		on_shift = true;
 		// $('#map').css('cursor', 'pointer');
-		// mon("shift");
 	    }
 	});
 
@@ -992,7 +983,6 @@ var Evacquide = function() {
 
 	$('#manual_update').on('click', function() {
 	    updateAllInfo();
-	    // mon("update done");
 	});
 
 	$('#clear_marker').on('click', function() {
