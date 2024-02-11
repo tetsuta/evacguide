@@ -570,6 +570,7 @@ var Evacquide = function() {
     }
 
     function update_trace_icon(trace_time_msec){
+	var active_sid_list = [];
 	for (let sid in shown_trace_set) {
 	    var max_time = 0;
 	    var recent_time_list = [];
@@ -588,6 +589,8 @@ var Evacquide = function() {
 	    if (trace_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_trace_set[sid][max_time].setZIndexOffset(20);
 		shown_trace_set[sid][max_time].setIcon(humanGrayIcon);
+	    } else {
+		active_sid_list.push(sid);
 	    }
 	    old_time_list.forEach(a_time => {
 		if (a_time != max_time) {
@@ -602,6 +605,7 @@ var Evacquide = function() {
 		}
 	    })
 	}
+	$('#active_user_num').val(active_sid_list.length);
     }
 
 
@@ -629,6 +633,7 @@ var Evacquide = function() {
 
 
     function update_history_icon(playback_time_msec){
+	var active_sid_list = [];
 	for (let sid in shown_history_set) {
 	    var max_time = 0;
 	    var recent_time_list = [];
@@ -647,6 +652,8 @@ var Evacquide = function() {
 	    if (playback_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_history_set[sid][max_time].setZIndexOffset(20);
 		shown_history_set[sid][max_time].setIcon(humanGrayIcon)
+	    } else {
+		active_sid_list.push(sid);
 	    }
 	    old_time_list.forEach(a_time => {
 		if (a_time != max_time) {
@@ -661,6 +668,7 @@ var Evacquide = function() {
 		}
 	    })
 	}
+	$('#active_user_num').val(active_sid_list.length);
     }
 
 
