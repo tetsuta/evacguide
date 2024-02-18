@@ -143,7 +143,11 @@ var Evacquide = function() {
 	});
 	map.zoomControl.setPosition('bottomright');
 
+	// original
 	map.setView([36.9485564412181, 140.904335975647], 17);
+
+	// for test
+	// map.setView([35.944327194347224,140.15561610460284], 17);
 
 	// for Kawasaki test
 	// map.setView([35.53063491789644,139.7006678581238], 17);
@@ -1206,9 +1210,10 @@ var Evacquide = function() {
 	// $('#pb_starttime').val("2024/1/24 13:09");
 
 	// for Onahama 矢印の変化を見る
-	$('#pb_starttime').val("2024/1/26 14:20:00");
+	// $('#pb_starttime').val("2024/1/26 14:20:00");
+	$('#pb_starttime').val("2024/02/15 14:14:42");
 
-	$('#pb_playback_speed').val(20);
+	$('#pb_playback_speed').val(30);
 
     }
 

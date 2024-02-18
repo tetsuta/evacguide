@@ -5,7 +5,7 @@ require_relative './config'
 require_relative './evacguide'
 require 'json'
 
-eg = EVACGUIDE.new()
+# eg = EVACGUIDE.new()
 
 # puts JSON.generate(eg.getTraces("2023/12/15 23:30"))
 # puts JSON.generate(eg.getTraces("2023/12/13 13:23"))
@@ -17,7 +17,39 @@ eg = EVACGUIDE.new()
 
 
 # eg.getRouteStatus()
-p eg.getAllTraces("2024/01/26 14:24:03")
+# p eg.getAllTraces("2024/02/15 14:00:00")
 
+tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
+
+# tracedb.get_all_items.each{|item|
+#   puts JSON.generate(item)
+# }
+# ---
+# ARGF.each{|line|
+#   data = JSON.parse(line.chomp)
+#   print data["application"]
+#   print "\t"
+#   puts line.size
+# }
+
+# items = tracedb.get_all_items()
+# items.each{|item|
+#   puts item["application"]
+# }
+
+# items = tracedb.tt("SessionID20240215")
+
+items = tracedb.get_cond_items({"application" => "SessionID20240215141"})
+puts "sum"
+puts items.size
+items.each{|item|
+  puts item["application"]
+}
+
+
+
+# ARGF.each{|line|
+#   puts line.size
+# }
 
 

@@ -222,11 +222,11 @@ class EVACGUIDE
     end_time = Time.parse(time)
     begin_time = end_time - TraceTimeRange
 
-    # puts begin_time
-    # puts end_time
+    datestr = end_time.strftime("%Y%m%d")
+    cond = {"application" => "SessionID#{datestr}"}
 
     trace_list = []
-    @tracedb.get_all_items.each{|raw_trace|
+    @tracedb.get_cond_items(cond).each{|raw_trace|
       trace = Trace.new(raw_trace)
       next unless trace.is_valid
 

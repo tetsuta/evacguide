@@ -299,20 +299,28 @@ aeon.iwaki.02
 
      同じ primary keyで put-itemすると、重複するものは上書きされる
 
-
-
 **** scan
      aws dynamodb scan --table-name eg_report
 
+**** scan 条件付き
+     aws dynamodb scan \
+     --table-name Oishi4 \
+     --filter-expression 'begins_with(application, :application)' \
+     --expression-attribute-values  '{":application":{"S":"SessionID20240214"}}'
 
-**** get-item
+
+**** get-item --> 動かない
      aws dynamodb get-item --table-name eg_report  --key '{"user_id":{"N":"1"}}'
+     aws dynamodb get-item --table-name Oishi4  --key '{"application":{"S":"SessionID20240214194146058"} }'
+
 
 **** delete-item
      aws dynamodb delete-item --table-name eg_report  --key '{"key": {"S": "t0924"}}'
 
 
 **** reference
+     https://docs.aws.amazon.com/ja_jp/sdk-for-ruby/v3/developer-guide/ruby_dynamodb_code_examples.html
+
      https://qiita.com/ekzemplaro/items/93c0aef433a2b633ab4a
      https://www.wakuwakubank.com/posts/675-aws-cli-dynamodb/
 
