@@ -19,6 +19,10 @@
 
   軌跡のテスト用の日付：2023/12/13 13:23
 
+* console
+  https://533269855545.signin.aws.amazon.com/console
+
+
 * todo
 ** GOING APKファイルを起き QRコードを作る
    https://digital-bosai.net/package/latest.apk
