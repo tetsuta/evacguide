@@ -121,6 +121,14 @@ s.mount_proc('/'){|request, response|
       data["trace_history"] = ret_data["trace_history"]
       response.body = JSON.generate(data)
 
+    when "getDailyTraces"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("getDailyTraces")
+      time = userInput["time"]
+      ret_data = eg.getDailyTraces(time)
+      data["trace_history"] = ret_data["trace_history"]
+      response.body = JSON.generate(data)
+
     when "getTraces"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("getTraces")

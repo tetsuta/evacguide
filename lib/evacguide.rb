@@ -216,6 +216,39 @@ class EVACGUIDE
   end
 
 
+  # timeの日の中で time以降のすべての traceを返す
+  def getDailyTraces(time)
+    end_time = Time.now()
+    begin_time = Time.parse(time)
+
+    datestr = begin_time.strftime("%Y%m%d")
+    cond_list = []
+    cond_list.push({"application" => "SessionID#{datestr}"})
+    cond_list.push({"application" => "ARI_SessionID#{datestr}"})
+    cond_list.push({"application" => "NASI_SessionID#{datestr}"})
+
+    trace_set = {}
+
+    cond_list.each{|cond|
+      @tracedb.get_cond_items(cond).each{|raw_trace|
+        trace = Trace.new(raw_trace)
+        next unless trace.is_valid
+
+        trace_history = trace.history(begin_time, end_time)
+        if trace_history.size > 0
+          trace_set[trace.id] = trace_history
+        end
+      }
+    }
+    
+    data = {
+      "trace_history" => trace_set
+    }
+    return data
+
+  end
+
+
   ### tracedb内のすべての項目のうち
   ### timeから過去 TraceTimeRangeの間の最新の trace情報を返す
   def getTraces(time)

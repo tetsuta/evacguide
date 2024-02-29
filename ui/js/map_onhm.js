@@ -545,6 +545,21 @@ var Evacquide = function() {
     }
 
 
+    function getDailyTraces(time){
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getDailyTraces",
+		time: time
+	    }),
+        }).done(function(data) {
+	    trace_history = data.trace_history;
+        });
+    }
+
+
     function updateTraces(trace_time_str, trace_time_msec){
         $.ajax({
             type: 'POST',
@@ -1098,7 +1113,7 @@ var Evacquide = function() {
 		clearAllReport();
 
 		playback_time_str = $('#pb_starttime').val();
-		getAllTraces(playback_time_str);
+		getDailyTraces(playback_time_str);
 
 		playback_time_str = $('#pb_starttime').val();
 		playback_time_msec = Date.parse(playback_time_str);
@@ -1205,7 +1220,7 @@ var Evacquide = function() {
 		clearAllReport();
 
 		playback_time_str = $('#pb_starttime').val();
-		getAllTraces(playback_time_str);
+		getDailyTraces(playback_time_str);
 
 		playback_time_str = $('#pb_starttime').val();
 		playback_time_msec = Date.parse(playback_time_str);
