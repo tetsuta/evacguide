@@ -98,6 +98,15 @@ s.mount_proc('/'){|request, response|
       data["crosses"] = all_info["crosses"]
       response.body = JSON.generate(data)
 
+    when "getDailyReport"
+      $logger.info("connection: :#{request.peeraddr.to_s}")
+      $logger.info("getDailyReport")
+      time = userInput["time"]
+      all_info = eg.getDailyReport(time)
+      data["reports"] = all_info["reports"]
+      data["crosses"] = all_info["crosses"]
+      response.body = JSON.generate(data)
+
     when "getRouteStatus"
       $logger.info("connection: :#{request.peeraddr.to_s}")
       $logger.info("getRouteStatus")

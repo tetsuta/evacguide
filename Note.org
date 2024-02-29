@@ -24,8 +24,6 @@
 
 
 * todo
-** playbackのデータ読み込みは、その日の分だけにする
-
 ** lineを描く際に、距離が飛びすぎたらそれは無視する
 
 ** リアルタイムの軌跡は間引く
@@ -37,6 +35,7 @@
 ** PENDING 各交差点にダミーの数字を置く
 ** PENDING 全部の道に矢印を？
 ** PENDING モバイルで他の人の情報も出す
+** DONE playbackのデータ読み込みは、その日の分だけにする
 ** DONE APKファイルを起き QRコードを作る
    https://digital-bosai.net/package/latest.apk
 

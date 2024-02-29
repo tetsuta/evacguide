@@ -458,6 +458,23 @@ var Evacquide = function() {
     }
 
 
+    function getDailyReport(time){
+	var ret_data;
+        $.ajax({
+            type: 'POST',
+            url: new Config().getUrl() + '/',
+            async: false,
+            data: JSON.stringify({
+                mode: "getDailyReport",
+		time: time
+	    }),
+        }).done(function(data) {
+	    ret_data = data.reports;
+        });
+	return ret_data;
+    }
+
+
     function updateAllReport(){
         $.ajax({
             type: 'POST',

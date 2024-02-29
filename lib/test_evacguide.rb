@@ -20,6 +20,17 @@ require 'json'
 # p eg.getAllTraces("2024/02/15 14:00:00")
 
 tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
+reportdb = AWSD.new(AWS_REPORTDB, AWS_REGION)
+
+
+reportdb.get_sorted_all_items.each{|r|
+  p r
+}
+puts "=================================================="
+reportdb.get_cond_items({"SessionID" => "SessionID20240219"}).each{|r|
+  p r
+}
+puts "done"
 
 # tracedb.get_all_items.each{|item|
 #   puts JSON.generate(item)
@@ -40,13 +51,12 @@ tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
 # items = tracedb.tt("SessionID20240215")
 
 # items = tracedb.get_cond_items({"application" => "SessionID20240221"})
-items = tracedb.get_all_items()
-# p items
-puts "sum"
-puts items.size
-items.each{|item|
-  puts item["application"]
-}
+# items = tracedb.get_all_items()
+# puts "sum"
+# puts items.size
+# items.each{|item|
+#   puts item["application"]
+# }
 
 
 

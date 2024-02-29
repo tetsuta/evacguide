@@ -192,6 +192,24 @@ class EVACGUIDE
   end
 
 
+  # timeで指定された日のすべての reportを返す
+  # 実装したが、結果が返ってこない。DBの設定の問題かもしれない
+  def getDailyReport(time)
+    target_time = Time.parse(time)
+    datestr = target_time.strftime("%Y%m%d")
+    cond = {"SessionID" => "SessionID#{datestr}"}
+
+    @report_list = @reportdb.get_cond_items(cond).sort{|a,b|
+      Time.parse(a["table"]) <=> Time.parse(b["table"])
+    }
+
+    data = {
+      "reports" => @report_list
+    }
+    return data
+  end
+
+
   # time以降のすべての traceを返す
   def getAllTraces(time)
     end_time = Time.now()
