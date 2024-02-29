@@ -24,6 +24,7 @@ var Evacquide = function() {
     var on_auto_update = false;
     var on_track_traces = false;
     var on_trace_playback = false;
+    var on_line_playback = false;
 
     var route1v_cood = [[36.948068857805964,140.9049588464416],[36.948120333513614,140.9043203408177],[36.94796590628629,140.90429351285033],[36.94738680139588,140.90422912572856]];
     var route2v_cood = [[36.94816945043316,140.90366274118423],[36.94812336373498,140.90427562594417]];
@@ -144,7 +145,10 @@ var Evacquide = function() {
 	map.zoomControl.setPosition('bottomright');
 
 	// original
-	map.setView([36.9485564412181, 140.904335975647], 17);
+	// map.setView([36.9485564412181, 140.904335975647], 17);
+
+	map.setView([33.580615825869785,130.34001588821414], 17);
+
 
 	// for test
 	// map.setView([35.944327194347224,140.15561610460284], 17);
@@ -669,6 +673,17 @@ var Evacquide = function() {
     }
 
 
+    function put_line_history(line_set){
+	for (let sid in line_set) {
+	    var cood = [];
+	    line_set[sid].forEach(history => {
+		cood.push([history.lat, history.lon]);
+	    })
+	    var route = L.polyline(cood, {color:'red', weight:5, opacity:0.5}).addTo(map);
+	}
+    }
+
+
     function update_history_icon(playback_time_msec){
 	var active_sid_list = [];
 	for (let sid in shown_history_set) {
@@ -1064,6 +1079,114 @@ var Evacquide = function() {
 	});
 
 
+	$('#line_playback').on('click', function() {
+	    var playback_time_str;
+	    var playback_time_msec;
+	    var interval_time;
+	    var play_speed;
+	    var line_set = {};  // sid -> list of history
+
+	    if (on_line_playback == true) {
+		clearTimeout(trace_playback_timer);　
+		$('#line_playback').text("Playback Line Trace (stopped)");
+		$('#line_playback').removeClass("btn-primary");
+		$('#line_playback').addClass("btn-secondary");
+		on_line_playback = false;
+
+	    } else {
+		// 最初にすべてのReportを消す
+		clearAllReport();
+
+		playback_time_str = $('#pb_starttime').val();
+		getAllTraces(playback_time_str);
+
+		playback_time_str = $('#pb_starttime').val();
+		playback_time_msec = Date.parse(playback_time_str);
+		play_speed = Number($('#pb_playback_speed').val());
+
+		var all_reports = getAllReport();
+		if (all_reports.length > 0) {
+		    while (Date.parse(all_reports[0].table) < playback_time_msec) {
+			// 過去の reportsの表示
+			// report(all_reports[0]);
+
+			all_reports.shift();
+			if (all_reports.length == 0) {
+			    break;
+			}
+		    }
+		}
+
+		var route_history_list = getRouteHistory(playback_time_str);
+
+		var pb_countUp = function() {
+
+		    // reportの表示
+		    if (all_reports.length > 0) {
+			while (Date.parse(all_reports[0].table) < playback_time_msec) {
+			    report(all_reports[0]);
+			    all_reports.shift();
+			    if (all_reports.length == 0) {
+				break;
+			    }
+			}
+		    }
+
+		    // 矢印の表示
+		    if (route_history_list.length > 0) {
+			while (route_history_list[0].msec < playback_time_msec) {
+			    change_arrow(route_history_list[0]);
+			    route_history_list.shift();
+			    if (route_history_list.length == 0) {
+				break;
+			    }
+			}
+		    }
+
+		    
+		    for (let sid in trace_history) {
+			// console.log(sid);
+			// console.log(sid + ":" + trace_history[sid].length);
+
+			if (trace_history[sid].length > 0) {
+			    var stime = trace_history[sid][0].stime;
+
+			    // traceの表示
+			    while (stime * 1000 < playback_time_msec) {
+				ahistory = trace_history[sid].shift();
+
+				if (sid in line_set) {
+				    line_set[sid].push(ahistory);
+				} else {
+				    line_set[sid] = [ahistory]
+				}
+
+				if (trace_history[sid].length == 0) {
+				    break;
+				} else {
+				    stime = trace_history[sid][0].stime;
+				}
+			    }
+			}
+		    }
+		    put_line_history(line_set);
+
+		    playback_time_msec += 1000;
+		    playback_time_str = moment(playback_time_msec).format('YYYY/MM/DD HH:mm:ss');
+
+		    $('#pb_starttime').val(playback_time_str);
+		}
+		interval_time = Math.floor(1000.0 / play_speed);
+		trace_playback_timer = setInterval(pb_countUp, interval_time);
+
+		$('#line_playback').text("Playback Line Trace (running)");
+		$('#line_playback').removeClass("btn-secondary");
+		$('#line_playback').addClass("btn-primary");
+		on_line_playback = true;
+	    }
+	});
+
+
 	$('#trace_playback').on('click', function() {
 	    var playback_time_str;
 	    var playback_time_msec;
@@ -1089,10 +1212,11 @@ var Evacquide = function() {
 		play_speed = Number($('#pb_playback_speed').val());
 
 		var all_reports = getAllReport();
-		// 過去の reportsは表示する
 		if (all_reports.length > 0) {
 		    while (Date.parse(all_reports[0].table) < playback_time_msec) {
-			report(all_reports[0]);
+			// 過去の reportsの表示
+			// report(all_reports[0]);
+
 			all_reports.shift();
 			if (all_reports.length == 0) {
 			    break;
@@ -1211,7 +1335,8 @@ var Evacquide = function() {
 
 	// for Onahama 矢印の変化を見る
 	// $('#pb_starttime').val("2024/1/26 14:20:00");
-	$('#pb_starttime').val("2024/02/15 14:14:42");
+	// $('#pb_starttime').val("2024/02/15 14:14:42");
+	$('#pb_starttime').val("2024/02/19 23:04:00");
 
 	$('#pb_playback_speed').val(30);
 

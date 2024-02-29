@@ -39,7 +39,9 @@ tracedb = AWSD.new(AWS_TRACEDB, AWS_REGION)
 
 # items = tracedb.tt("SessionID20240215")
 
-items = tracedb.get_cond_items({"application" => "SessionID20240215141"})
+# items = tracedb.get_cond_items({"application" => "SessionID20240221"})
+items = tracedb.get_all_items()
+# p items
 puts "sum"
 puts items.size
 items.each{|item|

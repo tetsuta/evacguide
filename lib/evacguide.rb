@@ -223,17 +223,23 @@ class EVACGUIDE
     begin_time = end_time - TraceTimeRange
 
     datestr = end_time.strftime("%Y%m%d")
-    cond = {"application" => "SessionID#{datestr}"}
-
+    cond_list = []
+    cond_list.push({"application" => "SessionID#{datestr}"})
+    cond_list.push({"application" => "ARI_SessionID#{datestr}"})
+    cond_list.push({"application" => "NASI_SessionID#{datestr}"})
+    
     trace_list = []
-    @tracedb.get_cond_items(cond).each{|raw_trace|
-      trace = Trace.new(raw_trace)
-      next unless trace.is_valid
 
-      latest_info = trace.latest_info(begin_time, end_time)
-      if latest_info != nil
-        trace_list.push(latest_info)
-      end
+    cond_list.each{|cond|
+      @tracedb.get_cond_items(cond).each{|raw_trace|
+        trace = Trace.new(raw_trace)
+        next unless trace.is_valid
+
+        latest_info = trace.latest_info(begin_time, end_time)
+        if latest_info != nil
+          trace_list.push(latest_info)
+        end
+      }
     }
     
     data = {

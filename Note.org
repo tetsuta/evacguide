@@ -24,7 +24,20 @@
 
 
 * todo
-** GOING APKファイルを起き QRコードを作る
+** playbackのデータ読み込みは、その日の分だけにする
+
+** lineを描く際に、距離が飛びすぎたらそれは無視する
+
+** リアルタイムの軌跡は間引く
+
+** リアルタイムの軌跡で古いものは表示しない
+
+** 時計が今より時間がかかってたら、時間を飛ばす？
+
+** PENDING 各交差点にダミーの数字を置く
+** PENDING 全部の道に矢印を？
+** PENDING モバイルで他の人の情報も出す
+** DONE APKファイルを起き QRコードを作る
    https://digital-bosai.net/package/latest.apk
 
    <local>
@@ -35,10 +48,6 @@
    cd /var/www/html/package/
    sudo mv ~/iwaki_new_0210.apk ./
    sudo ln -s iwaki_new_0210.apk latest.apk
-   
-** PENDING 各交差点にダミーの数字を置く
-** PENDING 全部の道に矢印を？
-** PENDING モバイルで他の人の情報も出す
 ** DONE 青色のユニークな人数を表示する
 ** DONE 青からグレーになるまでの時間をパラメータ化する
 ** DONE 小名浜の新しい矢印に対応
@@ -319,7 +328,11 @@ aeon.iwaki.02
 
 
 **** reference
+     ruby
      https://docs.aws.amazon.com/ja_jp/sdk-for-ruby/v3/developer-guide/ruby_dynamodb_code_examples.html
+
+     レスポンスのサイズが 1MBを越えると自動的に pagingされる
+     https://docs.aws.amazon.com/ja_jp/amazondynamodb/latest/developerguide/Query.Pagination.html
 
      https://qiita.com/ekzemplaro/items/93c0aef433a2b633ab4a
      https://www.wakuwakubank.com/posts/675-aws-cli-dynamodb/
