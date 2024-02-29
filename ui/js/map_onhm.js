@@ -6,6 +6,8 @@ var Evacquide = function() {
     // この時間が経過すると、人や軌跡のアイコンをグレーにする
     var gray_time_threshold_millisec = 2 * 60 * 1000;
 
+    // 軌跡を描く際に緯度・軽度の差分がこの値より大きかったら無視する
+    var max_interval_of_lat_lon = 0.001;
     // ==================================================
     var now = new Date();
     var now_num = now.getTime();
@@ -68,6 +70,9 @@ var Evacquide = function() {
 
     // 描画した markerを記録する
     var marker_set = {};
+
+    // 描画した line
+    var drawn_line_list = [];
 
     var shown_trace_set = {};  // shown_trace_set[sid][time] = icon_marker
     var shown_history_set = {}; // shown_history_set[sid][time] = icon_marker
@@ -706,12 +711,27 @@ var Evacquide = function() {
 
 
     function put_line_history(line_set){
+	drawn_line_list.forEach(old_route => {
+	    map.removeLayer(old_route);
+	});
+
 	for (let sid in line_set) {
 	    var cood = [];
+	    var previous_history = line_set[sid][0];
+
 	    line_set[sid].forEach(history => {
-		cood.push([history.lat, history.lon]);
+		if ((Math.abs(previous_history.lat - history.lat) < max_interval_of_lat_lon) && (Math.abs(previous_history.lon - history.lon) < max_interval_of_lat_lon)) {
+		    cood.push([history.lat, history.lon]);
+		    previous_history = history;
+		}
 	    })
-	    var route = L.polyline(cood, {color:'red', weight:5, opacity:0.5}).addTo(map);
+	    if (sid.indexOf("NASI") !== -1) {
+		var route = L.polyline(cood, {color:'red', weight:5, opacity:0.5}).addTo(map);
+	    };
+	    if (sid.indexOf("ARI") !== -1) {
+		var route = L.polyline(cood, {color:'blue', weight:5, opacity:0.5}).addTo(map);
+	    };
+	    drawn_line_list.push(route);
 	}
     }
 
