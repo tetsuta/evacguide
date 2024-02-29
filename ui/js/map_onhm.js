@@ -262,7 +262,7 @@ var Evacquide = function() {
 	showInitialGuide();
 
 	// 最初にすべてを読み込む
-	// updateAllInfo();
+	// updateAllReport();
 
 	// ------------------------------
 	setupControlls();
@@ -449,7 +449,7 @@ var Evacquide = function() {
             url: new Config().getUrl() + '/',
             async: false,
             data: JSON.stringify({
-                mode: "getAllInfo"
+                mode: "getAllReport"
 	    }),
         }).done(function(data) {
 	    ret_data = data.reports;
@@ -458,13 +458,13 @@ var Evacquide = function() {
     }
 
 
-    function updateAllInfo(){
+    function updateAllReport(){
         $.ajax({
             type: 'POST',
             url: new Config().getUrl() + '/',
             async: false,
             data: JSON.stringify({
-                mode: "getAllInfo"
+                mode: "getAllReport"
 	    }),
         }).done(function(data) {
 	    data.reports.forEach(anreport => {
@@ -1060,7 +1060,7 @@ var Evacquide = function() {
 
 
 	$('#manual_update').on('click', function() {
-	    updateAllInfo();
+	    updateAllReport();
 	});
 
 	$('#clear_marker').on('click', function() {
@@ -1080,7 +1080,7 @@ var Evacquide = function() {
 	    } else {
 		startPolling();
 		var au_countUp = function() {
-		    updateAllInfo();
+		    updateAllReport();
 		    $('#result').text("update:" + counter++);
 		}
 		// 1秒(1000)ごとに動かす

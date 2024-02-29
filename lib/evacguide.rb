@@ -167,7 +167,7 @@ class EVACGUIDE
 
 
   # すべての reportを返す
-  def getAllInfo()
+  def getAllReport()
     if @polling_flag == false
       # puts "get_all_items"
       @report_list = @reportdb.get_sorted_all_items

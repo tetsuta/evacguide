@@ -90,10 +90,10 @@ s.mount_proc('/'){|request, response|
     mode = userInput["mode"]
 
     case mode
-    when "getAllInfo"
+    when "getAllReport"
       $logger.info("connection: :#{request.peeraddr.to_s}")
-      $logger.info("getAllInfo")
-      all_info = eg.getAllInfo()
+      $logger.info("getAllReport")
+      all_info = eg.getAllReport()
       data["reports"] = all_info["reports"]
       data["crosses"] = all_info["crosses"]
       response.body = JSON.generate(data)
