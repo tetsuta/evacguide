@@ -3,11 +3,18 @@ var Evacquide = function() {
     // この時間より古い報告は表示しない
     var threshold_millisec = 1000 * 60 * 60 * 24 * 365;
 
+    // この時間が経過すると、人や軌跡のアイコンを消す
+    var remove_time_threshold_millisec = 20 * 60 * 1000;
+
     // この時間が経過すると、人や軌跡のアイコンをグレーにする
     var gray_time_threshold_millisec = 2 * 60 * 1000;
 
     // 軌跡を描く際に緯度・軽度の差分がこの値より大きかったら無視する
     var max_interval_of_lat_lon = 0.001;
+
+    // 軌跡が 10を越えたときに間引く index
+    var remove_index_list = [5,3,1];
+
     // ==================================================
     var now = new Date();
     var now_num = now.getTime();
@@ -76,6 +83,8 @@ var Evacquide = function() {
 
     var shown_trace_set = {};  // shown_trace_set[sid][time] = icon_marker
     var shown_history_set = {}; // shown_history_set[sid][time] = icon_marker
+    var num_of_history = 0;
+
     var trace_history;
     var playback_time_str;
 
@@ -620,16 +629,38 @@ var Evacquide = function() {
 	    var max_time = 0;
 	    var recent_time_list = [];
 	    var old_time_list = [];
+	    var remove_time_list = [];
 	    for (let time in shown_trace_set[sid]) {
 		if (max_time < time) {
 		    max_time = time;
 		}
-		if (trace_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
+		if (trace_time_msec > (time * 1000 + remove_time_threshold_millisec)) {
+		    remove_time_list.push(time);
+		} else if (trace_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
 		    old_time_list.push(time);
 		} else {
 		    recent_time_list.push(time);
 		}
 	    }
+
+	    remove_time_list.forEach(time => {
+		if (time != max_time) {
+		    map.removeLayer(shown_trace_set[sid][time]);
+		    delete shown_trace_set[sid][time];
+		}
+	    });
+
+	    while (old_time_list.length > 10) {
+		remove_index_list.forEach(index => {
+		    time = old_time_list[index];
+	    	    if (time != max_time) {
+	    		map.removeLayer(shown_trace_set[sid][time]);
+	    		delete shown_trace_set[sid][time];
+			old_time_list.splice(index, 1);
+	    	    }
+		});
+	    }
+
 	    // console.log(sid + ":" + max_time);
 	    if (trace_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_trace_set[sid][max_time].setZIndexOffset(20);
@@ -742,16 +773,40 @@ var Evacquide = function() {
 	    var max_time = 0;
 	    var recent_time_list = [];
 	    var old_time_list = [];
+	    var remove_time_list = [];
 	    for (let time in shown_history_set[sid]) {
 		if (max_time < time) {
 		    max_time = time;
 		}
-		if (playback_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
+		if (playback_time_msec > (time * 1000 + remove_time_threshold_millisec)) {
+		    remove_time_list.push(time);
+		} else if (playback_time_msec > (time * 1000 + gray_time_threshold_millisec)) {
 		    old_time_list.push(time);
 		} else {
 		    recent_time_list.push(time);
 		}
 	    }
+
+	    remove_time_list.forEach(time => {
+		if (time != max_time) {
+		    map.removeLayer(shown_history_set[sid][time]);
+		    delete shown_history_set[sid][time];
+		    num_of_history -= 1;
+		}
+	    });
+
+	    while (old_time_list.length > 10) {
+		remove_index_list.forEach(index => {
+		    time = old_time_list[index];
+	    	    if (time != max_time) {
+	    		map.removeLayer(shown_history_set[sid][time]);
+	    		delete shown_history_set[sid][time];
+	    		num_of_history -= 1;
+			old_time_list.splice(index, 1);
+	    	    }
+		});
+	    }
+
 	    // console.log(sid + ":" + max_time);
 	    if (playback_time_msec > (max_time * 1000 + gray_time_threshold_millisec)) {
 		shown_history_set[sid][max_time].setZIndexOffset(20);
@@ -764,13 +819,13 @@ var Evacquide = function() {
 		    shown_history_set[sid][a_time].setZIndexOffset(10);
 		    shown_history_set[sid][a_time].setIcon(traceGrayIcon)
 		}
-	    })
+	    });
 	    recent_time_list.forEach(a_time => {
 		if (a_time != max_time) {
 		    shown_history_set[sid][a_time].setZIndexOffset(500);
 		    shown_history_set[sid][a_time].setIcon(traceIcon)
 		}
-	    })
+	    });
 	}
 	$('#active_user_num').val(active_sid_list.length);
     }
@@ -1278,6 +1333,7 @@ var Evacquide = function() {
 
 		var route_history_list = getRouteHistory(playback_time_str);
 
+		num_of_history = 0;
 		var pb_countUp = function() {
 
 		    // reportの表示
@@ -1313,6 +1369,7 @@ var Evacquide = function() {
 			    while (stime * 1000 < playback_time_msec) {
 				ahistory = trace_history[sid].shift();
 				put_history(sid, ahistory);
+				num_of_history += 1;
 				if (trace_history[sid].length == 0) {
 				    break;
 				} else {
@@ -1321,6 +1378,7 @@ var Evacquide = function() {
 			    }
 			}
 		    }
+		    console.log(num_of_history);
 		    update_history_icon(playback_time_msec);
 
 		    playback_time_msec += 1000;
@@ -1388,7 +1446,14 @@ var Evacquide = function() {
 	// for Onahama 矢印の変化を見る
 	// $('#pb_starttime').val("2024/1/26 14:20:00");
 	// $('#pb_starttime').val("2024/02/15 14:14:42");
-	$('#pb_starttime').val("2024/02/19 23:04:00");
+
+	// muromi line test
+	// $('#pb_starttime').val("2024/02/19 23:04:00");
+
+	// muromi lawson test
+	$('#pb_starttime').val("2024/02/21 13:50:00");
+
+
 
 	$('#pb_playback_speed').val(30);
 
